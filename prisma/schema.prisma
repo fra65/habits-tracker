@@ -24,10 +24,3 @@ model users {
   password     String        @db.VarChar(255)
   user_profile user_profile?
 }
-
-
-model test {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique(map: "email_UNIQUE") @db.VarChar(60)
-
-}
