@@ -1,19 +1,21 @@
+import { auth } from "@/lib/auth";
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+export default auth((req) => {
+  const { pathname } = req.nextUrl;
 
-export function middleware(request: NextRequest) {
+  if (req.auth) {
+    if (pathname === "/login" || pathname === "/signup") {
+      return Response.redirect(new URL("/dashboard", req.nextUrl.origin));
+    }
+  } else {
+    if (pathname !== "/login" && pathname !== "/signup" && pathname !== "/") {
+      return Response.redirect(new URL("/login", req.nextUrl.origin));
+    }
+  }
+});
 
-  // Permetti la richiesta
-  return NextResponse.next();
-
-}
-
-// Configura le rotte dove applicare il middleware (opzionale)
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    '/:path((?!api|_next/static|_next/image|favicon.ico|robots.txt).*)',
+  ],
 };
-
-// export { auth as middleware } from "@/lib/auth"
-

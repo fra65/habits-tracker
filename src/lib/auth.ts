@@ -2,10 +2,12 @@
 import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import GitHub from "next-auth/providers/github"
+import Google from "next-auth/providers/google"
 
 export const authOption = {
     providers: [
         GitHub,
+        Google,
         Credentials({
             // You can specify which fields should be submitted, by adding keys to the `credentials` object.
             // e.g. domain, username, password, 2FA token, etc.
@@ -35,6 +37,38 @@ export const authOption = {
         }),        
     ],
     pages: {},
+    callbacks: {
+
+        // Controlla se l’utente è autorizzato ad accedere (usato dal middleware)
+        authorized: async ({ auth, request }) => {
+            // Se l’utente è autenticato, autorizza l’accesso
+            if (auth?.user) return true;
+
+            // Permetti sempre l’accesso alle pagine di login e registrazione per utenti non autenticati
+            if (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/register") {
+            return true;
+            }
+
+            // Blocca l’accesso a tutte le altre pagine se non autenticato
+            return false;
+        },
+
+        // Opzionale: personalizza cosa viene salvato nella sessione
+        // session: async ({ session, token }) => {
+        //     // Aggiungi dati extra alla sessione se vuoi
+        //     session.user.id = token.sub;
+        //     return session;
+        // },
+
+        // // Opzionale: personalizza il token JWT
+        // jwt: async ({ token, user }) => {
+        //     if (user) {
+        //     token.sub = user.id;
+        //     }
+        //     return token;
+        // }
+    }
+
 
 } satisfies NextAuthConfig
  

@@ -27,30 +27,6 @@ export default function SignInForm() {
     signIn("credentials", data)
   }
 
-  // const { data: session } = useSession();
-  // const router = useRouter();
-
-  // React.useEffect(() => {
-
-  //   setIsClient(true)
-
-  //   if (session) {
-  //     router.push("/dashboard");
-  //   }
-  // }, []);
-
-  // if (!isClient) return null; // aspetta che la sessione sia caricata
-
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   await signIn("credentials", {
-  //     email,
-  //     callbackUrl: "/dashboard",
-  //     redirect: false,
-  //   });
-  // };
-
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader>
@@ -68,6 +44,21 @@ export default function SignInForm() {
         >
           <Button type="submit" className="flex-1">
             Accedi con GitHub
+          </Button>
+        </form>
+
+        <Separator />
+
+        {/* Form Google */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            signIn("google", { callbackUrl: "/dashboard" });
+          }}
+          className="flex gap-2"
+        >
+          <Button type="submit" className="flex-1">
+            Accedi con Google
           </Button>
         </form>
 
