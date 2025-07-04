@@ -1,7 +1,10 @@
 import NextAuth, { NextAuthConfig } from "next-auth"
+import GitHub from "next-auth/providers/github"
 
 export const authOption = {
-    providers: [],
+    providers: [
+        GitHub
+    ],
     pages: {}
 } satisfies NextAuthConfig
  

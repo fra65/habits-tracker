@@ -1,3 +1,4 @@
+import Signin from "@/modules/auth/components/github/signinBtn"
 import LoginForm from "@/modules/auth/components/forms/LoginForm"
 export default function LoginPage () {
 
@@ -9,6 +10,7 @@ export default function LoginPage () {
             Accedi
             </h1>
             <LoginForm />
+            <Signin />
         </div>
         </div>
 

@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authSchema, LoginInput } from "../../validation";
+import { authSchema, LoginInput } from "../../utils/validation";
 
 import {
   Form,

@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { authSchema, SignupInput } from "../../validation";
+import { authSchema, SignupInput } from "../../utils/validation";
 
 import {
   Form,
