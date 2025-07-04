@@ -1,19 +1,20 @@
-import Signin from "@/modules/auth/components/github/signinBtn"
-import LoginForm from "@/modules/auth/components/forms/LoginForm"
-export default function LoginPage () {
+    /* eslint-disable react-hooks/rules-of-hooks */
+    import Signin from "@/modules/auth/components/github/signinForm"
 
-    return(
+    export default async function LoginPage () {
 
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
-        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-            <h1 className="text-2xl font-semibold text-center mb-6">
-            Accedi
-            </h1>
-            <LoginForm />
-            <Signin />
-        </div>
-        </div>
+        return(
 
-    )
+            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+                <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+                    {/* <h1 className="text-2xl font-semibold text-center mb-6">
+                    Accedi
+                    </h1> */}
+                    {/* <LoginForm /> */}
+                    <Signin />
+                </div>
+            </div>
 
-}
+        )
+
+    }
