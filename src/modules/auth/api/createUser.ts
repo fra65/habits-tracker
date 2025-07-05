@@ -10,9 +10,9 @@ export async function createUser(username: string, email: string, password: stri
     });
 
     console.log('Risposta dal server:', response.data);
-    alert('Registrazione avvenuta con successo!');
+    return { success: true, data: response.data };
   } catch (error: any) {
     console.error('Errore durante la chiamata API:', error);
-    throw new Error(error.response?.data?.message || "Errore nell'invio dei dati");
+    throw new Error(error)
   }
 }

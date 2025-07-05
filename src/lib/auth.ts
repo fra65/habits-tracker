@@ -45,7 +45,7 @@ export const authOption = {
             if (auth?.user) return true;
 
             // Permetti sempre l’accesso alle pagine di login e registrazione per utenti non autenticati
-            if (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/register") {
+            if (request.nextUrl.pathname === "/login" || request.nextUrl.pathname === "/signup") {
             return true;
             }
 

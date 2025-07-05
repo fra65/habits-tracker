@@ -5,6 +5,9 @@ import { hashPassword } from "@/modules/auth/utils/hashPassword";
 
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
+
+  console.log('Controllo username:', username);
+
   try {
     // Cerca un utente con il username fornito
     const user = await prisma.user.findUnique({
@@ -28,7 +31,7 @@ export async function createUser(data: CreateUserInput) {
   const hashedPassword = await hashPassword(data.password);
 
   // Creazione dell'utente nel DB
-  const user = await prisma.users.create({
+  const user = await prisma.user.create({
     data: {
       username: data.username,
       email: data.email,

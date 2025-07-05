@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
+import { PrismaClient } from "./generated/prisma";
 // Dichiara una proprietà globale per TypeScript
 declare global {
   // eslint-disable-next-line no-var
