@@ -34,7 +34,7 @@ export const authSchema = {
 
   login: z.object({
 
-    email: z.string().email("Inserisci una email valida").trim(),
+    username: z.string().min(1, "Username obbligatorio").max(20, "Username troppo lungo").trim(),
     password: z.string().min(8, "La password deve essere lunga almeno 8 caratteri"),
 
   }),

@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { authSchema } from "@/modules/auth/schema/validation"
+import { loginUser } from "@/modules/auth/services/auth.service"
+import { LoginUserInput } from "@/modules/auth/types/LoginUserInput"
+import { hashPassword } from "@/modules/auth/utils/hashPassword"
 import NextAuth, { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import GitHub from "next-auth/providers/github"
@@ -12,20 +16,23 @@ export const authOption = {
             // You can specify which fields should be submitted, by adding keys to the `credentials` object.
             // e.g. domain, username, password, 2FA token, etc.
             credentials: {
-                email: {},
+                username: {},
                 password: {},
             },
             authorize: async (credentials) => {
-                const user = {
-                    email: "io@gmail.com",
-                    password: "psw123",
+
+                const parsed = authSchema.login.safeParse(credentials);
+
+                if (!parsed.success) {
+                    console.error(parsed.error.format());
+                    throw new Error("Credenziali non valide");
                 }
-        
-                // // logic to salt and hash password
-                // const pwHash = saltAndHashPassword(credentials.password)
-        
-                // // logic to verify if the user exists
-                // user = await getUserFromDb(credentials.email, pwHash)
+
+                parsed.data.password = (await hashPassword(parsed.data.password)).toString()
+
+                const input: LoginUserInput = parsed.data;
+
+                const user = await loginUser(input)
         
                 if (!user) {
                     throw new Error("Invalid credentials.")
