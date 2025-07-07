@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { authSchema, LoginInput } from "../../schema/validation";
+import { authSchema, LoginInput } from "../../schema/auth.schema";
 
 export default function LoginForm() {
   const [isMounted, setIsMounted] = useState(false);

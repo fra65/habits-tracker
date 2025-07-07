@@ -2,7 +2,7 @@
 import { LoginUserInput } from "../types/LoginUserInput";
 import { LoginUserOutput } from "../types/LoginUserOutput";
 import prisma from "@/prisma";
-import { checkPassword } from "../utils/hashPassword";
+import { checkPassword } from "../utils/managePassword";
 
 export async function loginUser(credentials: LoginUserInput): Promise<LoginUserOutput | null> {
   // Trova l'utente con l'username fornito

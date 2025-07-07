@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import prisma from "@/prisma";
 import { CreateUserInput } from "../types/createUserInput";
-import { hashPassword } from "@/modules/auth/utils/hashPassword";
+import { hashPassword } from "@/modules/auth/utils/managePassword";
 
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {

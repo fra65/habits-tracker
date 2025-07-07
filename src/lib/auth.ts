@@ -1,7 +1,7 @@
 // auth.ts (il tuo file esistente)
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { authSchema } from "@/modules/auth/schema/validation"
+import { authSchema } from "@/modules/auth/schema/auth.schema"
 import { loginUser } from "@/modules/auth/services/auth.service"
 import { LoginUserInput } from "@/modules/auth/types/LoginUserInput"
 // import { hashPassword } from "@/modules/auth/utils/hashPassword" // Commenta o rimuovi se non usata direttamente qui

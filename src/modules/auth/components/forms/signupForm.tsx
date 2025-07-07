@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
-import { authSchema, SignupInput } from "../../schema/validation";
-import { createUser } from "../../api/createUser";
+import { authSchema, SignupInput } from "../../schema/auth.schema";
+import { createUser } from "../../../user/api/createUser";
 import Link from "next/link";
 import { z } from "zod";
 import { useRouter } from "next/navigation"; // Importa useRouter
