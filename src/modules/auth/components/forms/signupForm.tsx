@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Eye, EyeOff } from "lucide-react"
 import { authSchema } from "../../schema/validation"
 import { createUser } from "../../api/createUser"
+import Link from "next/link"
 
 function PasswordInput({
   id,
@@ -90,30 +91,35 @@ export default function SignupForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-        <div className="space-y-2">
-          <Label htmlFor="username">Username</Label>
-          <Input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="Il tuo username"
-            value={formData.username}
-            onChange={handleInputChange}
-            required
-          />
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="nome@esempio.com"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-          />
+        <div className="w-full flex justify-center gap-4">
+
+          <div className="space-y-2">
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Il tuo username"
+              value={formData.username}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="nome@esempio.com"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+
         </div>
 
         <div className="space-y-2">
@@ -151,6 +157,17 @@ export default function SignupForm() {
         >
           Registrati
         </Button>
+
+          <div className="flex flex-col gap-4">
+            
+            <Link href="/login" className="text-blue-500 hover:text-blue-700 transition-all duration-300 ease">
+              Hai già un account? Accedi
+            </Link>
+
+            {/* <Link href='/reset-password' className="text-blue-500 hover:text-blue-700 transition-all duration-300 ease">Non hai un account? Registrati</Link> */}
+
+          </div>
+
       </form>
     </div>
   )

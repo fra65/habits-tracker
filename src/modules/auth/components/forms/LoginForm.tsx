@@ -6,9 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { MailIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-// import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
 
@@ -47,39 +46,45 @@ export default function LoginForm() {
   return (
     <Card className="max-w-md mx-auto">
       <CardHeader>
+        <Link href='/'>
+          <Button type="button">HOME</Button>
+        </Link>
         <CardTitle className="text-center">Accedi</CardTitle>
       </CardHeader>
 
       <CardContent className="space-y-6">
-        {/* Form GitHub */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            signIn("github", { callbackUrl: "/dashboard" });
-          }}
-          className="flex gap-2"
-        >
-          <Button type="submit" className="flex-1">
-            Accedi con GitHub
-          </Button>
-        </form>
 
-        <Separator />
+        <div className="flex flex-col gap-2">
 
-        {/* Form Google */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            signIn("google", { callbackUrl: "/dashboard" });
-          }}
-          className="flex gap-2"
-        >
-          <Button type="submit" className="flex-1">
-            Accedi con Google
-          </Button>
-        </form>
+          {/* Form GitHub */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              signIn("github", { callbackUrl: "/dashboard" });
+            }}
+            className="flex gap-2"
+          >
+            <Button type="submit" variant={"outline"} className="flex-1 border-black hover:bg-black hover:text-white cursor-pointer transition-all duration-300 ease">
+              Accedi con GitHub
+            </Button>
+          </form>
 
-        <Separator />
+          {/* Form Google */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              signIn("google", { callbackUrl: "/dashboard" });
+            }}
+            className="flex gap-2"
+          >
+            <Button type="submit" variant={"outline"} className="flex-1 border-black hover:bg-black hover:text-white cursor-pointer transition-all duration-300 ease">
+              Accedi con Google
+            </Button>
+          </form>
+
+        </div>
+
+        <Separator  />
 
         {/* Form Username */}
         <form
@@ -109,10 +114,17 @@ export default function LoginForm() {
               required
             />
           </div>
-          <Button type="submit" className="w-full">
-            <MailIcon className="mr-2 h-4 w-4" />
-            Accedi con Credenziali
+          <Button type="submit" className="w-full cursor-pointer">
+            Accedi
           </Button>
+
+          <div className="flex flex-col gap-4">
+
+            <Link href='/signup' className="text-blue-500 hover:text-blue-700 transition-all duration-300 ease">Non hai un account? Registrati</Link>
+
+            {/* <Link href='/reset-password' className="text-blue-500 hover:text-blue-700 transition-all duration-300 ease">Non hai un account? Registrati</Link> */}
+
+          </div>
 
         </form>
       </CardContent>
