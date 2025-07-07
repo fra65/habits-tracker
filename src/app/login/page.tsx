@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import LoginForm from "@/modules/auth/components/forms/loginForm"
+import LoginForm from "@/modules/auth/components/forms/LoginForm"
 
 export default async function LoginPage () {
 
