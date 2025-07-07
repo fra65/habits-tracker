@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 export default function LoginForm() {
 
   const [isMounted, setIsMounted] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [psw, setPsw] = useState("");
 
   useEffect(() => {
@@ -22,9 +22,26 @@ export default function LoginForm() {
 
   if (!isMounted) return null; // o un placeholder
 
-  const credentialsAction = (formData: FormData) => {
+  const credentialsAction = async (formData: FormData) => {
+
     const data = Object.fromEntries(formData.entries());
-    signIn("credentials", data)
+
+    console.log("dati passati: " + JSON.stringify(data));
+
+    const result = await signIn("credentials", {
+    ...data,
+    redirect: false, // importante per evitare reload automatico
+  });
+
+  if (result?.error) {
+    // mostra errore all’utente
+    
+    console.error("Errore login:", result.error);
+    // gestisci visualizzazione messaggio errore
+  } else if (result?.ok) {
+    // login riuscito, fai redirect manuale
+    window.location.href = "/dashboard"; // o usa router.push se usi Next.js router
+  }
   }
 
   return (
@@ -64,18 +81,27 @@ export default function LoginForm() {
 
         <Separator />
 
-        {/* Form Email */}
-        <form action={credentialsAction} className="space-y-4">
+        {/* Form Username */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault(); // blocca il comportamento di default (reload)
+            const formData = new FormData(e.currentTarget); // crea FormData dal form
+            credentialsAction(formData); // chiama la funzione con i dati
+          }}
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              name="username" 
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
 
             <Input
+              name="password" 
               type="password"
               placeholder="••••••••"
               value={psw}

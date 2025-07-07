@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { authSchema } from "@/modules/auth/schema/validation"
 import { loginUser } from "@/modules/auth/services/auth.service"
@@ -21,22 +22,28 @@ export const authOption = {
             },
             authorize: async (credentials) => {
 
+                // console.log("Authorize credentials:", credentials);
+
                 const parsed = authSchema.login.safeParse(credentials);
 
+                // console.log(credentials)
+
                 if (!parsed.success) {
-                    console.error(parsed.error.format());
+                    console.error("Validazione fallita", parsed.error.format());
                     throw new Error("Credenziali non valide");
                 }
 
-                parsed.data.password = (await hashPassword(parsed.data.password)).toString()
-
                 const input: LoginUserInput = parsed.data;
 
+                console.log("Psw dell'utente: ", credentials.password)
                 const user = await loginUser(input)
         
                 if (!user) {
-                    throw new Error("Invalid credentials.")
+                    console.log("Utente "+ credentials.username + "non trovato")
+                    return null
                 }
+
+                // console.log(user)
         
                 // return user object with their profile data
                 return user
@@ -44,6 +51,9 @@ export const authOption = {
         }),        
     ],
     pages: {},
+    session: {
+        strategy: 'jwt'
+    },
     callbacks: {
 
         // Controlla se l’utente è autorizzato ad accedere (usato dal middleware)
@@ -60,20 +70,22 @@ export const authOption = {
             return false;
         },
 
-        // Opzionale: personalizza cosa viene salvato nella sessione
-        // session: async ({ session, token }) => {
-        //     // Aggiungi dati extra alla sessione se vuoi
-        //     session.user.id = token.sub;
-        //     return session;
-        // },
+        session: async ({ session, token }) => {
+            
+            if (session.user) {
+                session.user.username = token.username as string | null | undefined ?? null;
+            }
 
-        // // Opzionale: personalizza il token JWT
-        // jwt: async ({ token, user }) => {
-        //     if (user) {
-        //     token.sub = user.id;
-        //     }
-        //     return token;
-        // }
+            return session;
+        },
+        jwt: async ({ token, user }) => {
+
+            if (user) {
+                token.username = (user as any).username ?? null;
+            }
+
+            return token;
+        },
     }
 
 

@@ -26,7 +26,15 @@ const UserAvatar = () => {
 
   return (
     <div>
-      <p>Signed in as {session.user?.name}</p>
+      <p>
+        Signed in as{" "}
+        {session.user?.name
+          ? session.user.name
+          : session.user?.username
+          ? session.user.username
+          : "Unknown User"
+        }
+      </p>
     </div>
   );
 };
