@@ -17,9 +17,6 @@ export async function loginUser(credentials: LoginUserInput): Promise<LoginUserO
     return null;
   }
 
-  console.log("Password inserita: ", credentials.password)
-  console.log("Password dal db: ", user.password)
-
   // Verifica se la password fornita corrisponde a quella hashata nel DB
   const isPasswordValid = await checkPassword(credentials.password, user.password)
 

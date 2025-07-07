@@ -36,11 +36,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
                 const input: LoginUserInput = parsed.data;
 
-                console.log("Psw dell'utente: ", credentials.password)
                 const user = await loginUser(input)
         
                 if (!user) {
-                    console.log("Utente "+ credentials.username + "non trovato")
                     return null
                 }
                 return user

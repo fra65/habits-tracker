@@ -6,8 +6,6 @@ import { hashPassword } from "@/modules/auth/utils/hashPassword";
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
 
-  console.log('Controllo username:', username);
-
   try {
     // Cerca un utente con il username fornito
     const user = await prisma.user.findUnique({

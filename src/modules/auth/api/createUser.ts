@@ -9,10 +9,15 @@ export async function createUser(username: string, email: string, password: stri
       password,
     });
 
-    console.log('Risposta dal server:', response.data);
     return { success: true, data: response.data };
   } catch (error: any) {
-    console.error('Errore durante la chiamata API:', error);
-    throw new Error(error)
+    // Se Axios ha una risposta dal server, estrai il messaggio specifico
+    if (error.response && error.response.data) {
+      // Supponiamo che il backend mandi un messaggio in error.response.data.message
+      const message = error.response.data.message || "Credenziali già esistenti";
+      throw new Error(message);
+    }
+    // Altrimenti rilancia il messaggio generico di errore
+    throw new Error(error.message || "Errore imprevisto. Riprovare tra qualche minuto");
   }
 }
