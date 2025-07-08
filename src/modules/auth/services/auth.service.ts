@@ -3,6 +3,7 @@ import { LoginUserInput } from "../types/LoginUserInput";
 import { LoginUserOutput } from "../types/LoginUserOutput";
 import prisma from "@/prisma";
 import { checkPassword } from "../utils/managePassword";
+import { generateResetToken } from "../utils/tokenUtils";
 
 export async function loginUser(credentials: LoginUserInput): Promise<LoginUserOutput | null> {
   // Trova l'utente con l'username fornito
@@ -30,4 +31,22 @@ export async function loginUser(credentials: LoginUserInput): Promise<LoginUserO
     email: user.email,
     error: null
   };
+}
+
+
+export async function createPasswordResetToken(userId: number) {
+  const { token, hashedToken } = generateResetToken();
+
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 ora
+
+  await prisma.passwordResetToken.create({
+    data: {
+      userId,
+      token: hashedToken,
+      expiresAt,
+    },
+  });
+
+  // Restituisci il token in chiaro per inviarlo via email
+  return { token, expiresAt };
 }

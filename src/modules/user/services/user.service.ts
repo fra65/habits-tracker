@@ -2,6 +2,7 @@
 import prisma from "@/prisma";
 import { CreateUserInput } from "../types/createUserInput";
 import { hashPassword } from "@/modules/auth/utils/managePassword";
+import { UserOutput } from "../types/UserOutput";
 
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
@@ -21,6 +22,26 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
   }
 };
 
+export async function getUserByEmail(email: string): Promise<UserOutput | null> {
+
+  try {
+
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email
+      }
+    })
+
+    if(!user) return null
+
+    return user
+
+  } catch {
+    throw new Error("Email inesistente");
+
+  }
+  
+}
 
 
 // funzione di creazione user

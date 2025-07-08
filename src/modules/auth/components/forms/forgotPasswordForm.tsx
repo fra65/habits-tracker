@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import type React from "react"
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ForgotPasswordFormData, forgotPasswordSchema } from "../../schema/forgot-password.schema"
+import axios from "axios"
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const {
@@ -21,15 +23,35 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
-      // Simula l'invio dell'email
-      console.log("Invio email di recupero a:", data.email)
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      alert("Email di recupero inviata con successo!")
-    } catch (error) {
-      console.error("Errore nell'invio dell'email:", error)
-      alert("Errore nell'invio dell'email. Riprova.")
+      const email = data.email;
+
+      const response = await axios.post('/api/users/check-email', { email });
+
+      if (response.status === 200) {
+        const userId = response.data.user.id;
+        
+        // Ora chiama un'altra API per creare il token, ad esempio:
+        const tokenResponse = await axios.post('/api/password-reset/create-token', { userId, email });
+
+        if (tokenResponse.status === 201) {
+
+          alert('Token creato con successo. Controlla la tua email.');
+
+        } else {
+
+          alert('Errore nella creazione del token.');
+          
+        }
+      }
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        alert("Email non trovata.");
+      } else {
+        console.error(error);
+        alert("Errore nel processo di recupero password.");
+      }
     }
-  }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
