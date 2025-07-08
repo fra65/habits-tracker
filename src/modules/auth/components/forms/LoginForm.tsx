@@ -171,6 +171,13 @@ export default function LoginForm() {
             >
               Non hai un account? Registrati
             </Link>
+
+            <Link
+              href="/forgot-password"
+              className="text-blue-500 hover:text-blue-700 transition-all duration-300 ease"
+            >
+              Password dimenticata?
+            </Link>
           </div>
         </form>
       </CardContent>
