@@ -20,25 +20,23 @@ model user_profile {
 }
 
 model user {
-  id           Int           @id @default(autoincrement())
-  email        String        @unique(map: "email_UNIQUE") @db.VarChar(60)
-  password     String        @db.VarChar(255)
-  username     String        @unique(map: "username_UNIQUE") @db.VarChar(20)
-  createdAt    DateTime      @default(now())
-  user_profile user_profile?
-
-  PasswordResetToken PasswordResetToken[] @relation(map: "fk_user")
+  id                 Int                  @id @default(autoincrement())
+  email              String               @unique(map: "email_UNIQUE") @db.VarChar(60)
+  password           String               @db.VarChar(255)
+  username           String               @unique(map: "username_UNIQUE") @db.VarChar(20)
+  createdAt          DateTime             @default(now())
+  passwordresettoken passwordresettoken[]
+  user_profile       user_profile?
 }
 
-model PasswordResetToken {
+model passwordresettoken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique(map: "PasswordResetToken_token_key")
+  createdAt DateTime @default(now())
+  resetAt   DateTime @default(now())
+  userId    Int
+  expiresAt DateTime
+  user      user     @relation(fields: [userId], references: [id], map: "fk_user")
 
-  id         Int      @id @default(autoincrement())
-  token      String      @unique
-  createdAt      DateTime      @default(now())
-  resetAt      DateTime        @default(now())
-  expiresAt    DateTime
-
-  user        user    @relation(fields: [userId], references: [id], map: "fk_user")
-  userId      Int
-
+  @@index([userId], map: "fk_user")
 }

@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ForgotPasswordFormData, forgotPasswordSchema } from "../../schema/forgot-password.schema"
 import axios from "axios"
+import { useState } from "react"
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const {
@@ -21,37 +22,43 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
     resolver: zodResolver(forgotPasswordSchema),
   })
 
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const [feedbackType, setFeedbackType] = useState<"success" | "error" | null>(null);
+
   const onSubmit = async (data: ForgotPasswordFormData) => {
     try {
       const email = data.email;
-
       const response = await axios.post('/api/users/check-email', { email });
 
       if (response.status === 200) {
         const userId = response.data.user.id;
-        
-        // Ora chiama un'altra API per creare il token, ad esempio:
+
         const tokenResponse = await axios.post('/api/password-reset/create-token', { userId, email });
 
-        if (tokenResponse.status === 201) {
-
-          alert('Token creato con successo. Controlla la tua email.');
-
+        if (tokenResponse.status === 200) {
+          setFeedbackMessage('Token creato con successo. Controlla la tua email.');
+          setFeedbackType("success");
         } else {
-
-          alert('Errore nella creazione del token.');
-          
+          setFeedbackMessage('Errore nella creazione del token.');
+          setFeedbackType("error");
         }
       }
     } catch (error: any) {
       if (error.response?.status === 404) {
-        alert("Email non trovata.");
-      } else {
+        setFeedbackMessage("Email non trovata.");
+        setFeedbackType("error");
+      } else if (error.response?.status === 429) {
+        setFeedbackMessage(error.response.data.error || "Troppi tentativi, riprova più tardi.");
+        setFeedbackType("error")
+      }
+      else {
         console.error(error);
-        alert("Errore nel processo di recupero password.");
+        setFeedbackMessage("Errore nel processo di recupero password.");
+        setFeedbackType("error");
       }
     }
   };
+
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -86,6 +93,15 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
         By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
       </div>
+
+      {feedbackMessage && (
+        <p className={cn(
+          "text-center text-sm",
+          feedbackType === "success" ? "text-green-600" : "text-red-600"
+        )}>
+          {feedbackMessage}
+        </p>
+      )}
     </div>
   )
 }

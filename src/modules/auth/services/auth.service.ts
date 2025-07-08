@@ -33,13 +33,31 @@ export async function loginUser(credentials: LoginUserInput): Promise<LoginUserO
   };
 }
 
+export async function getUserActiveToken(userId: number) {
+
+  const activeTokens = await prisma.passwordresettoken.findMany({
+    where: {
+      userId,
+      expiresAt: {
+        gt: new Date(), // considera data + ora attuale
+      },
+    },
+    select: {
+      expiresAt: true
+    }
+  });
+
+  if(activeTokens) return activeTokens
+
+}
+
 
 export async function createPasswordResetToken(userId: number) {
   const { token, hashedToken } = generateResetToken();
 
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 ora
 
-  await prisma.passwordResetToken.create({
+  await prisma.passwordresettoken.create({
     data: {
       userId,
       token: hashedToken,
