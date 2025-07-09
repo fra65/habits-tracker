@@ -27,7 +27,6 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
   const router = useRouter();
 
   const token = searchParams.get("token") || "";
-  const email = searchParams.get("email") || "";
 
   const {
     register,
@@ -43,14 +42,13 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
   const onSubmit = async (data: ResetPasswordFormData) => {
     setFormMessage(null);
 
-    if (!token || !email) {
-      setFormMessage({ type: "error", text: "Token o email mancanti nell'URL. Impossibile procedere." });
+    if (!token) {
+      setFormMessage({ type: "error", text: "Token mancante nell'URL. Impossibile procedere." });
       return;
     }
 
     try {
       await axios.post("/api/password-reset", {
-        email,
         token,
         password: data.password,
       });
