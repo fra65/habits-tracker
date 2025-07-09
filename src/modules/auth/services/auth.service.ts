@@ -6,6 +6,7 @@ import { checkPassword } from "../utils/managePassword";
 import { generateResetToken } from "../utils/tokenUtils";
 import bcrypt from "bcrypt";
 import { createHash } from "crypto";
+import { updatePassword } from "@/modules/user/services/user.service";
 
 export async function loginUser(credentials: LoginUserInput): Promise<LoginUserOutput | null> {
   // Trova l'utente con l'username fornito
@@ -107,10 +108,7 @@ export async function resetPassword({ token, password }: ResetPasswordParams) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Aggiorna la password dell’utente
-    await prisma.user.update({
-      where: { id: userId },
-      data: { password: hashedPassword },
-    });
+    await updatePassword({userId, hashedPassword})
 
     // Elimina il record del token dopo aggiornamento
     await prisma.passwordresettoken.deleteMany({

@@ -3,6 +3,7 @@ import prisma from "@/prisma";
 import { CreateUserInput } from "../types/createUserInput";
 import { hashPassword } from "@/modules/auth/utils/managePassword";
 import { UserOutput } from "../types/UserOutput";
+import { UpdatePasswordInput } from "../types/UpdatePasswordInput";
 
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
@@ -66,4 +67,13 @@ export async function createUser(data: CreateUserInput) {
   });
 
   return user;
+}
+
+export async function updatePassword({userId, hashedPassword}: UpdatePasswordInput) {
+
+    // Aggiorna la password dell’utente
+    await prisma.user.update({
+      where: { id: userId as number  },
+      data: { password: hashedPassword },
+    });
 }
