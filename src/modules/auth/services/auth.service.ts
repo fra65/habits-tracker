@@ -29,9 +29,9 @@ export async function loginUser(credentials: LoginUserInput): Promise<LoginUserO
 
   // Se tutto è corretto, ritorna i dati dell'utente (ad esempio username ed email)
   return {
+    id: user.id,
     username: user.username,
-    email: user.email,
-    error: null
+    role: user.role
   };
 }
 

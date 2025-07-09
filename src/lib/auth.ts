@@ -1,73 +1,133 @@
-// auth.ts (il tuo file esistente)
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { authSchema } from "@/modules/auth/schema/auth.schema"
-import { loginUser } from "@/modules/auth/services/auth.service"
-import { LoginUserInput } from "@/modules/auth/types/LoginUserInput"
-// import { hashPassword } from "@/modules/auth/utils/hashPassword" // Commenta o rimuovi se non usata direttamente qui
-import NextAuth from "next-auth" // Rimuovi NextAuthConfig da qui
-import Credentials from "next-auth/providers/credentials"
-import GitHub from "next-auth/providers/github"
-import Google from "next-auth/providers/google"
 
-// Importa la configurazione base compatibile con Edge
-import authConfig from "./auth.config" // Assicurati che il percorso sia corretto
+// Importa lo schema di validazione per l'autenticazione
+import { authSchema } from "@/modules/auth/schema/auth.schema";
+// Importa la funzione per effettuare il login personalizzato (es. interrogare il DB)
+import { loginUser } from "@/modules/auth/services/auth.service";
+// Importa il tipo dell'input per il login
+import { LoginUserInput } from "@/modules/auth/types/LoginUserInput";
 
+// Importa NextAuth e i provider OAuth + Credentials
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+
+// Importa i tipi per sessione, utente e JWT per la tipizzazione TypeScript
+import type { Session, User } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+import type { AdapterUser } from "next-auth/adapters";
+
+// Funzione helper per normalizzare il ruolo (importata da utils)
+import { normalizeRole } from "@/utils/roleEnumHelper";
+
+// Importa la configurazione base (providers, session strategy, middleware edge compatibile)
+import authConfig from "./auth.config"; // Assicurati che il percorso sia corretto
+
+// Esporta la configurazione NextAuth con i provider e i callback personalizzati
 export const { handlers, signIn, signOut, auth } = NextAuth({
-    ...authConfig, // Espandi la configurazione base
-    providers: [
-        GitHub,
-        Google,
-        Credentials({
-            credentials: {
-                username: {},
-                password: {},
-            },
-            authorize: async (credentials) => {
-                // Questa è la logica completa di `authorize` che interagisce con il DB.
-                // Questa parte del codice verrà eseguita solo nel runtime Node.js,
-                // non nel middleware edge.
-                const parsed = authSchema.login.safeParse(credentials);
+  ...authConfig, // Espandi la configurazione base (providers, session strategy, middleware)
 
-                if (!parsed.success) {
-                    console.error("Validazione fallita", parsed.error.format());
-                    throw new Error("Credenziali non valide");
-                }
+  providers: [
+    GitHub, // Provider OAuth GitHub
+    Google, // Provider OAuth Google
+    Credentials({
+      credentials: {
+        username: {}, // Definisce i campi accettati per il login con credenziali
+        password: {},
+      },
+      // Funzione che gestisce il login con credenziali personalizzate
+      // Viene eseguita solo lato server (runtime Node.js), non nel middleware edge
+      authorize: async (credentials) => {
+        // Validazione dei dati di input con lo schema definito (es. Zod)
+        const parsed = authSchema.login.safeParse(credentials);
 
-                const input: LoginUserInput = parsed.data;
+        if (!parsed.success) {
+          // Se la validazione fallisce, logga l'errore e blocca l'autenticazione
+          console.error("Validazione fallita", parsed.error.format());
+          throw new Error("Credenziali non valide");
+        }
 
-                const user = await loginUser(input)
-        
-                if (!user) {
-                    return null
-                }
-                return user
-            },
-        }),        
-    ],
-    // Se avessi adapter per il database (es. PrismaAdapter), lo aggiungeresti qui:
-    // adapter: PrismaAdapter(prisma),
-    // E ti assicuri che la session strategy sia 'jwt' se hai un adapter incompatibile con Edge
-    // session: { strategy: 'jwt' }, // Già definito in authConfig, ma lo ribadiamo per chiarezza
-    callbacks: {
-        // Qui puoi estendere o modificare i callbacks definiti in authConfig.
-        // Il callback `authorized` non va qui, rimane in `auth.config.ts` per il middleware.
-        session: async ({ session, token }) => {
-            // Esempio: personalizzazione della sessione,
-            // Assicurati che questa logica sia compatibile con il server side (Node.js)
-            if (session.user) {
-                session.user.username = token.username as string | null | undefined ?? null;
-            }
+        // Estrai i dati validati
+        const input: LoginUserInput = parsed.data;
 
-            return session;
-        },
-        jwt: async ({ token, user }) => {
-            // Esempio: personalizzazione del JWT
-            if (user) {
-                token.username = (user as any).username ?? null;
-            }
+        // Chiama il servizio loginUser per verificare le credenziali e ottenere l'utente
+        const user = await loginUser(input);
 
-            return token;
-        },
-    }
-})
+        // Se l'utente non viene trovato o credenziali errate, ritorna null
+        if (!user) {
+          return null;
+        }
+
+        // Ritorna l'oggetto utente (deve contenere almeno id, username, role coerenti con i tipi)
+        return user;
+      },
+    }),
+  ],
+
+  callbacks: {
+    // Callback chiamato ogni volta che si crea o aggiorna la sessione lato client
+    session: async ({
+      session,
+      token,
+    }: {
+      session: Session;
+      token: JWT;
+    }) => {
+      if (session.user) {
+        // Copia l'id dal token JWT nella sessione (tipizzato come number)
+        session.user.id = token.id as number;
+
+        // Normalizza il ruolo usando la funzione helper e assegna "USER" come default se non valido
+        session.user.role = normalizeRole(token.role) ?? "USER";
+
+        // Copia lo username dal token o assegna null se non presente
+        session.user.username = token.username ?? null;
+      }
+      // Ritorna la sessione aggiornata
+      return session;
+    },
+
+    // Callback chiamato ogni volta che si crea o aggiorna il token JWT
+    jwt: async (params: {
+      token: JWT;
+      user?: User | AdapterUser; // user può essere User (DB) o AdapterUser (OAuth)
+      account?: any;
+      profile?: any;
+      trigger?: "signIn" | "signUp" | "update";
+      isNewUser?: boolean;
+      session?: any;
+    }): Promise<JWT> => {
+      const { token, user } = params;
+
+      if (user) {
+        // Normalizza l'id:
+        // Se è stringa numerica (es. OAuth), prova a convertirla in number
+        // Altrimenti mantieni la stringa (es. UUID)
+        token.id = typeof user.id === "string" ? parseInt(user.id, 10) || user.id : user.id;
+
+        // Definisce i ruoli validi come costanti
+        const validRoles = ["USER", "ADMIN", "MODERATOR"] as const;
+        type Role = (typeof validRoles)[number];
+
+        // Funzione interna per normalizzare il ruolo (simile a quella importata)
+        function normalizeRole(role: unknown): Role {
+          if (typeof role === "string" && validRoles.includes(role as Role)) {
+            return role as Role;
+          }
+          return "USER"; // default se ruolo non valido
+        }
+
+        // Normalizza e assegna il ruolo al token
+        token.role = normalizeRole((user as any).role);
+
+        // Copia lo username o assegna null se non presente
+        token.username = (user as any).username ?? null;
+      }
+
+      // Ritorna il token aggiornato
+      return token;
+    },
+  },
+});

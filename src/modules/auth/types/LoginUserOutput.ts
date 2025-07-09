@@ -1,5 +1,5 @@
 export interface LoginUserOutput {
-    username: string,
-    email: string,
-    error: string | null
+  id: number | string;
+  username: string;
+  role: "USER" | "ADMIN" | "MODERATOR";
 }
