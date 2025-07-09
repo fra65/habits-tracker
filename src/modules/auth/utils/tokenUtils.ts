@@ -1,10 +1,28 @@
 import { randomBytes, createHash } from 'crypto';
 
-export function generateResetToken() {
+interface ResetTokenResult {
+  token: string;
+  hashedToken: string;
+}
 
-    const token = randomBytes(32).toString('hex'); // token in chiaro, 64 caratteri esadecimali
-    const hashedToken = createHash('sha256').update(token).digest('hex'); // hash SHA-256
+export function generateResetToken(token?: string): ResetTokenResult {
+  let tokenToHash: string;
 
-    return { token, hashedToken };
+  if (token !== undefined) {
+    if (typeof token !== 'string') {
+      throw new TypeError('Il token deve essere una stringa.');
+    }
+    // Optional: valida che sia esadecimale (64 caratteri, 32 byte)
+    const hexRegex = /^[a-f0-9]{64}$/i;
+    if (!hexRegex.test(token)) {
+      throw new Error('Il token fornito non è un valore esadecimale valido di 64 caratteri.');
+    }
+    tokenToHash = token.toLowerCase();
+  } else {
+    tokenToHash = randomBytes(32).toString('hex');
+  }
 
+  const hashedToken = createHash('sha256').update(tokenToHash).digest('hex');
+
+  return { token: tokenToHash, hashedToken };
 }

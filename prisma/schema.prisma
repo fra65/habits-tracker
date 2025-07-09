@@ -25,8 +25,15 @@ model user {
   password           String               @db.VarChar(255)
   username           String               @unique(map: "username_UNIQUE") @db.VarChar(20)
   createdAt          DateTime             @default(now())
+  role               Role                 @default(USER) // 👈 Nuova colonna ENUM
   passwordresettoken passwordresettoken[]
   user_profile       user_profile?
+}
+
+enum Role {
+  USER
+  ADMIN
+  MODERATOR
 }
 
 model passwordresettoken {

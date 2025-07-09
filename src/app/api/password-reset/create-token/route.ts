@@ -27,11 +27,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const user = await createPasswordResetToken(userId)
+  const { token, expiresAt } = await createPasswordResetToken(userId);
 
-  if (!user) {
-    return NextResponse.json({ error: 'Utente non trovato' }, { status: 404 });
+  if (!token) {
+    return NextResponse.json({ error: 'Errore nella creazione del token' }, { status: 500 });
   }
-  
-  return NextResponse.json({ message: 'Utente trovato', user }, { status: 200 });
+
+  // Qui puoi decidere se restituire anche l'utente, oppure solo token e scadenza
+  return NextResponse.json(
+    { message: 'Token creato con successo', token, expiresAt },
+    { status: 200 }
+  );
 }

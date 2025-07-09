@@ -36,6 +36,14 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
         const tokenResponse = await axios.post('/api/password-reset/create-token', { userId, email });
 
         if (tokenResponse.status === 200) {
+          
+          const { token } = tokenResponse.data;
+
+          await axios.post('/api/email/send', {
+            email,
+            token,
+          });
+
           setFeedbackMessage('Token creato con successo. Controlla la tua email.');
           setFeedbackType("success");
         } else {
