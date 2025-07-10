@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 const UserAvatar = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status,  } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -27,9 +27,17 @@ const UserAvatar = () => {
   return (
     <div>
       <p>
-        {session?.user.id}
-        {session?.user.role}
+        Welcome 
+        {
+          session.user.name ?
+          session.user.name :
+          session.user.username ?
+          session.user.username :
+          "Unknown"
+        }
       </p>
+
+      {session.user.role === 'ADMIN' ? "BIG BOSS" : "Common user"}
     </div>
   );
 };
