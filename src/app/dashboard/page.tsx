@@ -5,11 +5,11 @@ import { SignOut } from '@/modules/auth/components/button/signoutBtn'
   // import { useSession } from 'next-auth/react'
   import { auth } from '@/lib/auth'
   import React from 'react'
+import ProfileInfoContainer from '@/modules/profile/components/info/profileInfoContainer'
 
   const page = async () => {
 
-    const session = await auth()
-    
+    const session = await auth()    
     return (
       <>
 
@@ -18,6 +18,10 @@ import { SignOut } from '@/modules/auth/components/button/signoutBtn'
           <UserAvatar />
 
           {session && session.user.role === 'ADMIN' ? '<Button>Admin Panel</Button>' : ""}
+
+          <br />
+
+          <ProfileInfoContainer />
 
           <SignOut />
       
