@@ -9,14 +9,14 @@
 
 ### API
 
-**- Global prefix:** /api
+- **Global prefix:** /api
 
 #### Special API Routes
 
-**- /api/auth:** Default configuration route API for AuthJS
-**- /api/email/send:** API to send email
-**- /api/test-connection:** API to check db connection
-**- /api/admin/:** Under this URI all function for admin (all users, all profiles, ecc...) while in normal api route is access for users, who can access just to them profile (but this is not included in URL params)
+- **/api/auth:** Default configuration route API for AuthJS
+- **/api/email/send:** API to send email
+- **/api/test-connection:** API to check db connection
+- **/api/admin/:** Under this URI all function for admin (all users, all profiles, ecc...) while in normal api route is access for users, who can access just to them profile (but this is not included in URL params)
 
 
 ---
