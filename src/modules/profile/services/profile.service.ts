@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ProfileOutput, ProfileOutputSchema } from "../schema/ProfileOutput";
+import { ProfileUpdateOutput, ProfileUpdateOutputSchema } from "../schema/ProfileUpdateOutputSchema";
 
 // FUNZIONE PER CREAZIONE
 
@@ -101,7 +102,7 @@ export async function getProfileId(userId: string | number): Promise<ProfileOutp
 
 // FUNZIONE PER UPDATE
 
-export async function updateUserProfile(userId: string | number, data: any): Promise<ProfileOutput | undefined | null> {
+export async function updateUserProfile(userId: string | number, data: any): Promise<ProfileUpdateOutput | undefined | null> {
 
     const updatedProfile = await prisma?.user_profile.update({
         where: {
@@ -114,14 +115,14 @@ export async function updateUserProfile(userId: string | number, data: any): Pro
 
     if(!updatedProfile) return null
     
-    const profile = ProfileOutputSchema.safeParse(updatedProfile)
+    const profile = ProfileUpdateOutputSchema.safeParse(updatedProfile)
 
     return profile.data;
 }
 
 // FUNZIONE PER DELETE
 
-export async function deleteUserProfile(userId: string | number): Promise<ProfileOutput | undefined | null> {
+export async function deleteUserProfile(userId: string | number): Promise<boolean | undefined | null> {
 
     try {
         
@@ -135,7 +136,7 @@ export async function deleteUserProfile(userId: string | number): Promise<Profil
 
         const profile = ProfileOutputSchema.safeParse(deletedProfile)
     
-        return profile.data;
+        return profile.data && true;
 
     } catch {
         throw new Error("Profilo inesistente");
