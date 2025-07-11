@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { ProfileOutput } from '../../schema/ProfileOutput'
 import getUserProfile from '../../api/getUser'
 import { Button } from '@/components/ui/button'
-import DeleteModal from '../forms/deleteModal'
+import DeleteModal from '../modals/deleteModal'
 
 const InfoProfilo = () => {
   const { data: session, status } = useSession()
