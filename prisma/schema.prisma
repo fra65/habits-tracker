@@ -21,18 +21,19 @@ model user_profile {
 
 model user {
   id                 Int                  @id @default(autoincrement())
-  email              String               @db.VarChar(60)
-  provider           String               @db.VarChar(30)          // nuovo campo provider
-  password           String?              @db.VarChar(255)         // password opzionale per utenti OAuth
-  username           String               @unique(map: "username_UNIQUE") @db.VarChar(20)
+  email              String?              @db.VarChar(60)
+  password           String?              @db.VarChar(255)
+  username           String?              @unique
   createdAt          DateTime             @default(now())
   role               Role                 @default(USER)
+  oauthId            String?              @db.VarChar(100)
+  provider           String               @db.VarChar(30)
   passwordresettoken passwordresettoken[]
   user_profile       user_profile?
 
-  @@unique([email, provider], map: "email_provider_UNIQUE") // vincolo unique combinato
+  @@unique([email, provider], map: "email_provider_UNIQUE")
+  @@unique([provider, oauthId], map: "provider_oauthId_UNIQUE")
 }
-
 
 model passwordresettoken {
   id        Int      @id @default(autoincrement())

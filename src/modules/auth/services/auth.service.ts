@@ -21,11 +21,14 @@ export async function loginUser(credentials: LoginUserInput): Promise<LoginUserO
     return null;
   }
 
-  // Verifica se la password fornita corrisponde a quella hashata nel DB
-  const isPasswordValid = await checkPassword(credentials.password, user.password)
+  if(user.password) {
 
-  if (!isPasswordValid) {
-    return null
+    // Verifica se la password fornita corrisponde a quella hashata nel DB
+    const isPasswordValid = await checkPassword(credentials.password, user.password)
+
+    if (!isPasswordValid) {
+      return null
+    }
   }
 
   // Se tutto è corretto, ritorna i dati dell'utente (ad esempio username ed email)
@@ -121,3 +124,4 @@ export async function resetPassword({ token, password }: ResetPasswordParams) {
     return { success: false, message: "Errore interno del server" };
   }
 }
+

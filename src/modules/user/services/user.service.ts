@@ -49,6 +49,32 @@ export async function getUserByEmail(email: string, provider: string): Promise<U
 }
 
 
+export async function getUserByAuthProvider(provider: string, oauthId: string) {
+  
+  try {
+
+    const dbUser = await prisma?.user.findUnique({
+      where: {
+        provider_oauthId: {
+          provider: provider,
+          oauthId: oauthId,
+        },
+      },
+    });
+
+    if(!dbUser) {
+      throw new Error("Utente non trovato")
+    }
+
+    return dbUser
+
+  } catch(e) {
+    throw new Error("Errore")
+  }
+
+}
+
+
 // funzione di creazione user
 export async function createUser(data: CreateUserInput) {
   // Hash della password prima di salvarla

@@ -24,7 +24,7 @@ import { normalizeRole } from "@/utils/roleEnumHelper";
 
 // Importa la configurazione base (providers, session strategy, middleware edge compatibile)
 import authConfig from "./auth.config"; // Assicurati che il percorso sia corretto
-import { createUser, createUserOauth, getUserByEmail } from "@/modules/user/services/user.service";
+import { createUser, createUserOauth, getUserByAuthProvider, getUserByEmail } from "@/modules/user/services/user.service";
 
 // Esporta la configurazione NextAuth con i provider e i callback personalizzati
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -94,66 +94,41 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     // Callback chiamato ogni volta che si crea o aggiorna la sessione lato client
-    session: async ({
-      session,
-      token,
-    }: {
-      session: Session;
-      token: JWT;
-    }) => {
+    session: async ({ session, token }) => {
       if (session.user) {
-        // Copia l'id dal token JWT nella sessione (tipizzato come number)
-        session.user.id = token.id as number;
-
-        // Normalizza il ruolo usando la funzione helper e assegna "USER" come default se non valido
+        session.user.id = token.id as string; // ← già corretto
         session.user.role = normalizeRole(token.role) ?? "USER";
-
-        // Copia lo username dal token o assegna null se non presente
         session.user.username = token.username ?? null;
       }
-      // Ritorna la sessione aggiornata
       return session;
     },
 
     // Callback chiamato ogni volta che si crea o aggiorna il token JWT
-    jwt: async (params: {
-      token: JWT;
-      user?: User | AdapterUser; // user può essere User (DB) o AdapterUser (OAuth)
-      account?: any;
-      profile?: any;
-      trigger?: "signIn" | "signUp" | "update";
-      isNewUser?: boolean;
-      session?: any;
-    }): Promise<JWT> => {
-      const { token, user } = params;
-
+    jwt: async ({ token, user, account }): Promise<JWT> => {
       if (user) {
-        // Normalizza l'id:
-        // Se è stringa numerica (es. OAuth), prova a convertirla in number
-        // Altrimenti mantieni la stringa (es. UUID)
-        token.id = typeof user.id === "string" ? parseInt(user.id, 10) || user.id : user.id;
+        try {
+          let dbUser;
 
-        // Definisce i ruoli validi come costanti
-        const validRoles = ["USER", "ADMIN", "MODERATOR"] as const;
-        type Role = (typeof validRoles)[number];
-
-        // Funzione interna per normalizzare il ruolo (simile a quella importata)
-        function normalizeRole(role: unknown): Role {
-          if (typeof role === "string" && validRoles.includes(role as Role)) {
-            return role as Role;
+          if (account && account.provider !== "credentials") {
+            // Login OAuth - recupera utente tramite email
+            dbUser = await getUserByEmail(user.email!, account.provider);
+          } else {
+            // Login con credenziali - user già contiene id numerico
+            dbUser = user as any; // tipizzato già come utente dal DB
           }
-          return "USER"; // default se ruolo non valido
+
+          if (dbUser) {
+            token.id = dbUser.id; // ← Usa sempre la PK dal DB
+            token.role = normalizeRole(dbUser.role);
+            token.username = dbUser.username ?? null;
+          } else {
+            console.warn("[JWT callback] Utente non trovato nel DB.");
+          }
+        } catch (error) {
+          console.error("[JWT callback] Errore nel recupero utente dal DB:", error);
         }
-
-        // Normalizza e assegna il ruolo al token
-        token.role = normalizeRole((user as any).role);
-
-        // Copia lo username o assegna null se non presente
-        token.username = (user as any).username ?? null;
       }
-
-      // Ritorna il token aggiornato
       return token;
     },
-  },
+},
 });

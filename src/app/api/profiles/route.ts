@@ -26,8 +26,12 @@ export async function POST(request: NextRequest) {
     // Aggiungi userId estratto dalla sessione
     const dataWithUserId = {
       ...body,
-      id: session.user.id,
+      id: Number(session.user.id),
     };
+
+    console.log("ID prima della validazione:", dataWithUserId.id);
+    console.log("ID di sessione: ", session.user.id)
+
 
     // Validazione dati in ingresso
     const parseResult = ProfileInputSchema.safeParse(dataWithUserId);

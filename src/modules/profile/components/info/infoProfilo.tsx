@@ -40,7 +40,7 @@ const InfoProfilo = () => {
       } catch (err: any) {
         // Se l'errore è 404 gestiscilo come profilo non trovato,
         // altrimenti mostra errore generico
-        if ((err.response?.status === 404) || err.response?.status === 500) {
+        if ((err.response?.status === 404)) {
           setNotFound(true)
           setProfile(null)
         } else {
