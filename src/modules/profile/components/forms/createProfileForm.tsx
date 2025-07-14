@@ -31,7 +31,7 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     is_completed: true,
   };
 
-//   console.log("Dati inviati per validazione:", data);
+  //console.log("Dati inviati per validazione:", data);
 
   // Validazione con Zod
   const result = ProfileInputClientSchema.safeParse(data);
@@ -55,7 +55,7 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
   try {
     const createdUser = await createProfile(result.data);
 
-    console.log("Risultato createProfile:", createdUser);
+    //console.log("Risultato createProfile:", createdUser);
 
     if (!createdUser) {
       setMessage("Impossibile creare il profilo. Riprova più tardi.");

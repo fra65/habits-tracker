@@ -3,7 +3,6 @@
 
 import React, { useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import axios from "axios";
 import { GalleryVerticalEnd, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +12,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ResetPasswordFormData, resetPasswordSchema } from "../../schema/reset-password.schema";
 import Link from "next/link";
+import { resetPassword } from "../../api/password-reset/resetPassword";
+import { getPasswordStrength } from "../../schema/password-strength.schema";
+// import axios from "axios";
 
 interface ResetPasswordFormProps {
   className?: string;
@@ -48,10 +50,17 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
     }
 
     try {
-      await axios.post("/api/password-reset", {
-        token,
-        password: data.password,
-      });
+
+      const result = await resetPassword(token, data.password)
+
+      // await axios.post("/api/password-reset", {
+      //   token,
+      //   password: data.password,
+      // });
+
+      if(!result) {
+        return null
+      }
 
       setFormMessage({
         type: "success",
@@ -70,26 +79,6 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
 
       setFormMessage({ type: "error", text: errorMsg });
     }
-  };
-
-  const getPasswordStrength = (password: string) => {
-    if (!password) return { strength: 0, label: "", color: "bg-gray-300" };
-
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-    const labels = ["Molto debole", "Debole", "Discreta", "Buona", "Forte"];
-    const colors = ["bg-red-500", "bg-orange-500", "bg-yellow-500", "bg-blue-500", "bg-green-500"];
-
-    return {
-      strength,
-      label: labels[strength - 1] || "",
-      color: colors[strength - 1] || "bg-gray-300",
-    };
   };
 
   const passwordStrength = getPasswordStrength(password || "");

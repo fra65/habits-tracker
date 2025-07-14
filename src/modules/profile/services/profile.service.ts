@@ -2,12 +2,13 @@
 
 import { ProfileOutput, ProfileOutputSchema } from "../schema/ProfileOutput";
 import { ProfileUpdateOutput, ProfileUpdateOutputSchema } from "../schema/ProfileUpdateOutputSchema";
+import prisma from "@/prisma";
 
 // FUNZIONE PER CREAZIONE
 
 export async function createUserProfile(data: any): Promise<ProfileOutput | undefined | null> {
 
-    // console.log("Dati ricevuti in createUserProfile:", data);
+    //console.log("Dati ricevuti in createUserProfile:", data);
 
     const createdProfile = await prisma?.user_profile.create({
         data: {
@@ -34,6 +35,7 @@ export async function createUserProfile(data: any): Promise<ProfileOutput | unde
 export async function getUserProfileById(userId: string | number): Promise<ProfileOutput | undefined | null> {
 
     try {
+
         
         const selectedProfile = await prisma?.user_profile.findUnique({
             where: {

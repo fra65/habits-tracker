@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     // Verifica sessione
     const session = await auth();
 
-    // console.log("Session:", session);
+    //console.log("Session:", session);
 
     if (!session) {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
       id: Number(session.user.id),
     };
 
-    console.log("ID prima della validazione:", dataWithUserId.id);
-    console.log("ID di sessione: ", session.user.id)
+    //console.log("ID prima della validazione:", dataWithUserId.id);
+    //console.log("ID di sessione: ", session.user.id)
 
 
     // Validazione dati in ingresso
@@ -87,6 +87,7 @@ export async function GET() {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
     }
 
+    //console.log(session.user.id)
     const isUserComplete = await getUserProfileById(session.user.id);
 
     if(!isUserComplete) {
@@ -113,7 +114,7 @@ export async function PUT(request: NextRequest) {
     // Verifica sessione
     const session = await auth();
 
-    // console.log("Session:", session);
+    //console.log("Session:", session);
 
     if (!session) {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
@@ -176,7 +177,7 @@ export async function DELETE() {
     // Verifica sessione
     const session = await auth();
 
-    // console.log("Session:", session);
+    //console.log("Session:", session);
 
     if (!session) {
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });

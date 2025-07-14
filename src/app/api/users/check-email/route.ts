@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   if (!email) {
     return NextResponse.json({ error: 'Email mancante' }, { status: 400 });
   }
-  const user = await getUserByEmail(email);
+  const user = await getUserByEmail(email, "credentials");
   if (!user) {
     return NextResponse.json({ error: 'Utente non trovato' }, { status: 404 });
   }
