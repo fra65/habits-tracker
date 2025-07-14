@@ -24,6 +24,7 @@ import { normalizeRole } from "@/utils/roleEnumHelper";
 
 // Importa la configurazione base (providers, session strategy, middleware edge compatibile)
 import authConfig from "./auth.config"; // Assicurati che il percorso sia corretto
+import { createUser, createUserOauth, getUserByEmail } from "@/modules/user/services/user.service";
 
 // Esporta la configurazione NextAuth con i provider e i callback personalizzati
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -67,6 +68,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
 
   callbacks: {
+
+    async signIn({ user, account }) {
+      if (account && account.provider !== "credentials") {
+
+        if(!user.email) {
+          return false;
+        }
+
+        // Verifica se l'utente esiste con email + provider
+        const existingUser = await getUserByEmail(user.email, account.provider)
+
+        if (!existingUser) {
+
+          // Crea utente senza password
+          await createUserOauth({
+            username: user.name ?? user.email?.split("@")[0] ?? "user",
+            email: user.email,
+            provider: account.provider
+          }) 
+
+        }
+      }
+      return true; // consenti il login
+    },
+
     // Callback chiamato ogni volta che si crea o aggiorna la sessione lato client
     session: async ({
       session,

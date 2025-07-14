@@ -15,7 +15,7 @@ export async function createUser(username: string, email: string, password: stri
     // Se Axios ha una risposta dal server, estrai il messaggio specifico
     if (error.response && error.response.data) {
       // Supponiamo che il backend mandi un messaggio in error.response.data.message
-      const message = error.response.data.message || "Credenziali già esistenti";
+      const message = error.response.data.message || "Username o email già esistenti";
       throw new Error(message);
     }
     // Altrimenti rilancia il messaggio generico di errore

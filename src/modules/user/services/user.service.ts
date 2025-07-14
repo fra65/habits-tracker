@@ -4,6 +4,7 @@ import { CreateUserInput } from "../types/createUserInput";
 import { hashPassword } from "@/modules/auth/utils/managePassword";
 import { UserOutput } from "../types/UserOutput";
 import { UpdatePasswordInput } from "../types/UpdatePasswordInput";
+import { CreateUserOauthInput } from "../types/createUserOauthInput";
 
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
@@ -59,6 +60,28 @@ export async function createUser(data: CreateUserInput) {
       username: data.username,
       email: data.email,
       password: hashedPassword,
+      provider: data.provider
+    },
+    // Se vuoi puoi selezionare solo alcuni campi da restituire
+    select: {
+      id: true,
+      username: true,
+      email: true,
+      createdAt: true,
+    },
+  });
+
+  return user;
+}
+
+// funzione di creazione user
+export async function createUserOauth(data: CreateUserOauthInput) {
+
+  // Creazione dell'utente nel DB
+  const user = await prisma.user.create({
+    data: {
+      username: data.username,
+      email: data.email,
       provider: data.provider
     },
     // Se vuoi puoi selezionare solo alcuni campi da restituire
