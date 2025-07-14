@@ -160,7 +160,7 @@ export default function SignupForm() {
     }
 
     try {
-      await createUser(formData.username, formData.email, formData.password);
+      await createUser(formData.username, formData.email, formData.password, "credentials");
       setSubmitSuccess("Registrazione avvenuta con successo! Reindirizzamento...");
       setTimeout(() => {
         router.push("/login");

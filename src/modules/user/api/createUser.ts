@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
-export async function createUser(username: string, email: string, password: string) {
+export async function createUser(username: string, email: string, password: string, provider: string) {
   try {
     const response = await axios.post('/api/users', {
       username,
       email,
       password,
+      provider
     });
 
     return { success: true, data: response.data };

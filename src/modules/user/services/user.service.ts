@@ -23,13 +23,16 @@ export const checkUsernameExists = async (username: string): Promise<boolean> =>
   }
 };
 
-export async function getUserByEmail(email: string): Promise<UserOutput | null> {
+export async function getUserByEmail(email: string, provider: string): Promise<UserOutput | null> {
 
   try {
 
     const user = await prisma.user.findUnique({
       where: {
-        email: email
+        email_provider: {
+          email: email,
+          provider: provider,
+        }
       }
     })
 
@@ -38,7 +41,7 @@ export async function getUserByEmail(email: string): Promise<UserOutput | null> 
     return user
 
   } catch {
-    throw new Error("Email inesistente");
+    throw new Error("Email o provider inesistente");
 
   }
   
@@ -56,6 +59,7 @@ export async function createUser(data: CreateUserInput) {
       username: data.username,
       email: data.email,
       password: hashedPassword,
+      provider: data.provider
     },
     // Se vuoi puoi selezionare solo alcuni campi da restituire
     select: {

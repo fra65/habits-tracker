@@ -8,8 +8,8 @@ export async function POST(request: NextRequest) {
 
   try {
 
-    const { username, email, password } = await request.json();
-    const user = await createUser({ username, email, password });
+    const { username, email, password, provider } = await request.json();
+    const user = await createUser({ username, email, password, provider });
 
     return NextResponse.json({ message: 'Utente creato con successo', user }, { status: 201 });
 

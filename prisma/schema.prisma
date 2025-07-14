@@ -9,26 +9,30 @@ datasource db {
 }
 
 model user_profile {
-  id           Int      @id
+  id           Int      @id @default(autoincrement())
   nome         String   @db.VarChar(50)
   cognome      String   @db.VarChar(50)
   data_nascita DateTime @db.DateTime(0)
   sesso        String?  @db.Char(1)
   is_complete  Int      @default(0) @db.TinyInt
   createdAt    DateTime @default(now())
-  user         user     @relation(fields: [id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_profile")
+  user         user     @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_profile")
 }
 
 model user {
   id                 Int                  @id @default(autoincrement())
-  email              String               @unique(map: "email_UNIQUE") @db.VarChar(60)
-  password           String               @db.VarChar(255)
+  email              String               @db.VarChar(60)
+  provider           String               @db.VarChar(30)          // nuovo campo provider
+  password           String?              @db.VarChar(255)         // password opzionale per utenti OAuth
   username           String               @unique(map: "username_UNIQUE") @db.VarChar(20)
   createdAt          DateTime             @default(now())
   role               Role                 @default(USER)
   passwordresettoken passwordresettoken[]
   user_profile       user_profile?
+
+  @@unique([email, provider], map: "email_provider_UNIQUE") // vincolo unique combinato
 }
+
 
 model passwordresettoken {
   id        Int      @id @default(autoincrement())

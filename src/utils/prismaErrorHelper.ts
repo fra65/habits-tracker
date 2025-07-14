@@ -17,35 +17,49 @@ export function handleUniqueConstraintError(error: unknown): UniqueFieldError | 
     const target = error.meta?.target;
 
     if (Array.isArray(target)) {
-      // Verifica se tra i campi c'è email o username
-      if (target.includes('email')) {
+      // Caso vincolo composito email+provider
+      const hasEmail = target.includes('email');
+      const hasProvider = target.includes('provider');
+
+      if (hasEmail && hasProvider) {
         return {
-          field: 'email',
-          message: 'L\'email è già in uso.',
+          field: 'email+provider',
+          message: "L'associazione email + provider è già in uso.",
         };
       }
+
+      // Controllo username
       if (target.includes('username')) {
         return {
           field: 'username',
-          message: 'Lo username è già in uso.',
+          message: "Lo username è già in uso.",
         };
       }
-      // Se altri campi unici, puoi aggiungere qui altri controlli
+
+      // Altri campi unici
       return {
         field: target.join(', '),
         message: `Il/i campo/i [${target.join(', ')}] è/sono già in uso.`,
       };
     } else if (typeof target === 'string') {
-      if (target === 'email') {
-        return {
-          field: 'email',
-          message: 'L\'email è già in uso.',
-        };
-      }
+      // Caso target singolo
       if (target === 'username') {
         return {
           field: 'username',
-          message: 'Lo username è già in uso.',
+          message: "Lo username è già in uso.",
+        };
+      }
+      if (target === 'email') {
+        return {
+          field: 'email',
+          message: "L'email è già in uso.",
+        };
+      }
+      if (target === 'provider') {
+        // Se mai usato come unico, gestisci qui
+        return {
+          field: 'provider',
+          message: "Il provider è già in uso.",
         };
       }
       return {
