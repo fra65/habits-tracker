@@ -5,6 +5,8 @@ import { hashPassword } from "@/modules/auth/utils/managePassword";
 import { UserOutput } from "../types/UserOutput";
 import { UpdatePasswordInput } from "../types/UpdatePasswordInput";
 import { CreateUserOauthInput } from "../types/createUserOauthInput";
+import { UserOutputAdmin, UserOutputToAdminSchema } from "../schema/usersOutputAdmin.schema";
+import z from "zod";
 
 // funzione per verificare se esiste un utente
 export const checkUsernameExists = async (username: string): Promise<boolean> => {
@@ -47,7 +49,6 @@ export async function getUserByEmail(email: string, provider: string): Promise<U
   }
   
 }
-
 
 export async function getUserByAuthProvider(provider: string, oauthId: string) {
   
@@ -129,4 +130,59 @@ export async function updatePassword({userId, hashedPassword}: UpdatePasswordInp
       where: { id: userId as number  },
       data: { password: hashedPassword },
     });
+}
+
+
+
+
+// !! ADMIN !!
+
+
+
+
+
+// GET DI TUTTI GLI UTENTI
+export async function getAllUsers(): Promise<UserOutputAdmin[] | null> {
+
+  const users = await prisma?.user.findMany({})
+
+  console.log("Users from DB:", users);
+
+  const validateUsers = z.array(UserOutputToAdminSchema).safeParse(users);
+  
+  if(!validateUsers.success) {
+    return null;
+  }
+
+  return validateUsers.data
+
+}
+
+
+// GET SINGOLO UTENTE
+export async function getUser(id: string): Promise<UserOutputAdmin | null> {
+  if (!id) {
+    return null; // oppure lancia un errore se preferisci
+  }
+
+  // Recupera un solo utente con prisma.findUnique o findFirst
+  const user = await prisma?.user.findUnique({
+    where: { id: Number(id) }, // se id è number nel DB, converti
+  });
+
+  // console.log("User from DB:", user);
+
+  if (!user) {
+    return null;
+  }
+
+  // Valida singolo utente (non array)
+  const validateUser = UserOutputToAdminSchema.safeParse(user);
+
+  if (!validateUser.success) {
+    console.error("Errore validazione utente:", validateUser.error);
+    return null;
+  }
+
+  return validateUser.data;
 }
