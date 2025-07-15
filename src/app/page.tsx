@@ -1,178 +1,275 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import {
+  CheckCircle,
+  TrendingUp,
+  Calendar,
+  BarChart3,
+  Users,
+  Star,
+  ArrowRight,
+  Shield,
+  Smartphone,
+} from "lucide-react"
+import Footer from "@/components/layout/footer"
+import Navbar from "@/components/layout/navbar"
+import HeroSection from "@/components/sections/heroSection"
 
-import { useState, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { TextPlugin } from 'gsap/TextPlugin';
-import Image from 'next/image';
-
-gsap.registerPlugin(TextPlugin);
-
-const screenshots = [
-  '/images/demo1.png',
-  '/images/demo2.png',
-  '/images/demo3.png',
-]; // Sostituisci con immagini reali o mockup
-
-function Navbar({ toggleTheme, theme }:  any) {
+export default function HabitsTrackerLanding() {
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md shadow-md flex justify-between items-center px-6 py-3 z-50">
-      <div className="font-bold text-xl text-red-700">HabTrack</div>
-      <div className="space-x-6 hidden md:flex text-red-700 font-medium">
-        <a href="#about" className="hover:underline">About</a>
-        <a href="#contact" className="hover:underline">Contact Us</a>
-      </div>
-      <div className="flex items-center gap-4">
-        <button
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className="text-red-700 hover:text-red-900 transition"
-        >
-          {theme === 'light' ? '🌙' : '☀️'}
-        </button>
-        <a
-          href="/login"
-          className="bg-red-700 text-white px-4 py-2 rounded-md shadow hover:bg-red-800 transition"
-        >
-          Inizia Ora
-        </a>
-      </div>
-    </nav>
-  );
-}
-
-function Hero() {
-  const titleRef = useRef(null);
-  const subtitleRef = useRef(null);
-
-  useEffect(() => {
-    gsap.to(titleRef.current, {
-      duration: 2,
-      text: "Trasforma la tua dedizione in abitudini vincenti",
-      ease: "power1.inOut",
-    });
-    gsap.to(subtitleRef.current, {
-      delay: 2,
-      duration: 2,
-      text:
-        "Crea, modifica e monitora le tue abitudini con feedback motivazionali e un calendario intuitivo.",
-      ease: "power1.inOut",
-    });
-  }, []);
-
-  return (
-    <section className="min-h-screen flex flex-col justify-center items-center text-center px-6 pt-24 bg-white">
-      <h1
-        ref={titleRef}
-        className="text-4xl md:text-6xl font-extrabold text-red-700 min-h-[3rem]"
-      ></h1>
-      <p
-        ref={subtitleRef}
-        className="mt-6 max-w-xl text-lg md:text-xl text-gray-700 min-h-[3rem]"
-      ></p>
-    </section>
-  );
-}
-
-function DemoGallery() {
-const containerRef = useRef<HTMLDivElement>(null);
+    <div className="w-full bg-background">
 
 
-  useEffect(() => {
-    if(containerRef.current) {
+      {/* Header */}
+      <Navbar />
 
-      gsap.from(containerRef.current.children, {
-        opacity: 0,
-        y: 40,
-        stagger: 0.3,
-        duration: 1,
-        ease: "power2.out",
-      });
 
-    }
-  }, []);
+      {/* Hero Section */}
+      <HeroSection />
 
-  return (
-    <section className="py-16 bg-gray-50 px-6 flex justify-center gap-8 flex-wrap max-w-6xl mx-auto">
-      {screenshots.map((src, i) => (
-        <div
-          key={i}
-          className="shadow-lg rounded-lg overflow-hidden w-64 h-480 md:h-96 bg-white"
-        >
-          <Image
-            src={src}
-            alt={`Screenshot app ${i + 1}`}
-            width={256}
-            height={384}
-            className="object-cover"
-            priority={i === 0}
-          />
+      {/* Features Section */}
+      <section id="features" className="py-20 px-8 bg-muted/30">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Tutto quello che ti serve per il successo</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Strumenti potenti e intuitivi per aiutarti a costruire abitudini durature
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Calendar className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle>Tracking Intelligente</CardTitle>
+                <CardDescription>Monitora le tue abitudini con un sistema intuitivo e personalizzabile</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
+                  <BarChart3 className="h-6 w-6 text-secondary" />
+                </div>
+                <CardTitle>Analisi Dettagliate</CardTitle>
+                <CardDescription>Visualizza i tuoi progressi con grafici e statistiche avanzate</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+                  <TrendingUp className="h-6 w-6 text-accent" />
+                </div>
+                <CardTitle>Obiettivi Personalizzati</CardTitle>
+                <CardDescription>Imposta obiettivi realistici e raggiungi traguardi significativi</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <Smartphone className="h-6 w-6 text-primary" />
+                </div>
+                <CardTitle>App Mobile</CardTitle>
+                <CardDescription>Accedi alle tue abitudini ovunque con la nostra app mobile</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
+                  <Users className="h-6 w-6 text-secondary" />
+                </div>
+                <CardTitle>Community</CardTitle>
+                <CardDescription>Connettiti con altri utenti e condividi i tuoi successi</CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
+              <CardHeader>
+                <div className="h-12 w-12 rounded-lg bg-accent/10 flex items-center justify-center mb-4">
+                  <Shield className="h-6 w-6 text-accent" />
+                </div>
+                <CardTitle>Sicurezza</CardTitle>
+                <CardDescription>I tuoi dati sono protetti con crittografia di livello enterprise</CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
         </div>
-      ))}
-    </section>
-  );
-}
+      </section>
 
-function Features() {
-  return (
-    <section
-      id="about"
-      className="max-w-4xl mx-auto py-16 px-6 text-gray-800 space-y-12"
-    >
-      <h2 className="text-3xl font-semibold text-red-700 text-center mb-8">
-        Funzionalità Principali
-      </h2>
+      {/* How it Works */}
+      <section className="py-20">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Come funziona</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Tre semplici passi per trasformare la tua vita
+            </p>
+          </div>
 
-      <article className="space-y-4">
-        <h3 className="text-xl font-bold">Gestione abitudini</h3>
-        <p>
-          Crea, modifica ed elimina abitudini personalizzando i giorni di
-          ripetizione per adattarle al tuo stile di vita.
-        </p>
-      </article>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="text-center">
+              <div className="h-16 w-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+                1
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Definisci le tue abitudini</h3>
+              <p className="text-muted-foreground">
+                Scegli le abitudini che vuoi sviluppare e imposta obiettivi realistici
+              </p>
+            </div>
 
-      <article className="space-y-4">
-        <h3 className="text-xl font-bold">Tracciamento e feedback</h3>
-        <p>
-          Monitora i tuoi progressi quotidiani e ricevi messaggi motivazionali
-          sia in caso di successo che di mancato completamento.
-        </p>
-      </article>
+            <div className="text-center">
+              <div className="h-16 w-16 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+                2
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Traccia i progressi</h3>
+              <p className="text-muted-foreground">
+                Registra quotidianamente i tuoi progressi con il nostro sistema intuitivo
+              </p>
+            </div>
 
-      <article className="space-y-4">
-        <h3 className="text-xl font-bold">Calendario storico</h3>
-        <p>
-          Visualizza lo storico delle tue abitudini con un calendario colorato:
-          rosso indica nessuna abitudine completata, giallo alcune, verde tutte
-          completate. Ogni giorno mostra un elenco delle abitudini da completare.
-        </p>
-      </article>
-    </section>
-  );
-}
+            <div className="text-center">
+              <div className="h-16 w-16 rounded-full bg-accent text-accent-foreground flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+                3
+              </div>
+              <h3 className="text-xl font-semibold mb-4">Celebra i successi</h3>
+              <p className="text-muted-foreground">Visualizza i tuoi risultati e celebra ogni traguardo raggiunto</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-export default function Home() {
-  const [theme, setTheme] = useState('light');
+      {/* Testimonials */}
+      <section id="testimonials" className="py-20 px-8 bg-muted/30">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Cosa dicono i nostri utenti</h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Migliaia di persone hanno già trasformato le loro vite con HabitFlow
+            </p>
+          </div>
 
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <CardDescription className="text-base">
+                  &quot;HabitFlow ha completamente cambiato il mio approccio alle abitudini. Finalmente riesco a essere
+                  costante!&quot;
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-3">
+                  <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-medium">MR</span>
+                  </div>
+                  <div>
+                    <div className="font-medium">Marco Rossi</div>
+                    <div className="text-sm text-muted-foreground">Imprenditore</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <CardDescription className="text-base">
+                  &quot;L&apos;interfaccia è bellissima e le statistiche mi motivano ogni giorno. Non potrei più farne a meno!&quot;
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-3">
+                  <div className="h-10 w-10 rounded-full bg-secondary/10 flex items-center justify-center">
+                    <span className="text-sm font-medium">LB</span>
+                  </div>
+                  <div>
+                    <div className="font-medium">Laura Bianchi</div>
+                    <div className="text-sm text-muted-foreground">Designer</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-  return (
-    <>
-      <Navbar toggleTheme={toggleTheme} theme={theme} />
-      <main className="pt-20 bg-white dark:bg-slate-900 transition-colors duration-500">
-        <Hero />
-        <DemoGallery />
-        <Features />
-        {/* Footer da aggiungere */}
-      </main>
-    </>
-  );
+            <Card className="border-0 shadow-lg">
+              <CardHeader>
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <CardDescription className="text-base">
+                  &quot;Grazie a HabitFlow ho sviluppato 5 nuove abitudini positive in soli 3 mesi. Incredibile!&quot;
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-3">
+                  <div className="h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center">
+                    <span className="text-sm font-medium">AG</span>
+                  </div>
+                  <div>
+                    <div className="font-medium">Andrea Gialli</div>
+                    <div className="text-sm text-muted-foreground">Studente</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">Inizia oggi il tuo percorso di crescita</h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Ricevi tramite email il nostro template cartaceo da stampare per tenere traccia dei tuoi progressi... direttamente in camera tua!
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Input type="email" placeholder="Inserisci la tua email" className="max-w-sm" />
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Inizia Gratis
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+
+            <div className="flex items-center justify-center space-x-6 text-sm text-muted-foreground">
+              <div className="flex items-center">
+                <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                Gratis per sempre
+              </div>
+              <div className="flex items-center">
+                <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                Nessuna carta richiesta
+              </div>
+              <div className="flex items-center">
+                <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                Cancellazione facile
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
+
+
+    </div>
+  )
 }

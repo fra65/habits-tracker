@@ -9,12 +9,12 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   const authPaths = ["/login", "/signup", "/forgot-password", "/reset-password"];
-  const protectedPaths = ["/dashboard", "reset-password"];
+  const protectedPaths = ["/pages/dashboard", "reset-password"];
 
   if (req.auth) {
     // Se l'utente è autenticato e sta cercando di accedere a una pagina di autenticazione, redirect alla dashboard
     if (authPaths.includes(pathname)) {
-      return Response.redirect(new URL("/dashboard", req.nextUrl.origin));
+      return Response.redirect(new URL("/pages/dashboard", req.nextUrl.origin));
     }
   } else {
     // Se l'utente non è autenticato e sta cercando di accedere a una pagina protetta, redirect al login

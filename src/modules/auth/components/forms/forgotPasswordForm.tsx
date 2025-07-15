@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { ForgotPasswordFormData, forgotPasswordSchema } from "../../schema/forgot-password.schema"
 import axios from "axios"
 import { useState } from "react"
+import Link from "next/link"
 
 export function ForgotPasswordForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
   const {
@@ -98,6 +99,16 @@ export function ForgotPasswordForm({ className, ...props }: React.ComponentProps
           </div>
         </div>
       </form>
+
+      <div className="flex flex-col items-center mt-0">
+        <Link
+          href="/login"
+          className="text-accent hover:text-accent-foreground transition-colors duration-300 ease-in-out text-sm"
+        >
+          Ti ricordi la password? Accedi
+        </Link>
+      </div>
+
       <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-primary">
         By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
       </div>
