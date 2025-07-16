@@ -1,17 +1,20 @@
   /* eslint-disable react-hooks/rules-of-hooks */
   /* eslint-disable react/jsx-no-undef */
-import { SignOut } from '@/modules/auth/components/button/signoutBtn'
   import UserAvatar from '@/modules/auth/components/button/UserAvatar'
   // import { useSession } from 'next-auth/react'
   import { auth } from '@/lib/auth'
   import React from 'react'
 import ProfileInfoContainer from '@/modules/profile/components/info/profileInfoContainer'
+import { ThemeToggle } from '@/components/button/theme-toggle'
 
   const page = async () => {
 
-    const session = await auth()    
+    const session = await auth()  
+
     return (
       <>
+
+        <ThemeToggle />
 
           <h1>Dashboard</h1>
 
@@ -23,7 +26,6 @@ import ProfileInfoContainer from '@/modules/profile/components/info/profileInfoC
 
           <ProfileInfoContainer />
 
-          <SignOut />
       
       </>
     )

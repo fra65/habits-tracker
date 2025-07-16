@@ -2,174 +2,133 @@
 
 import * as React from "react"
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
+  Calendar,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
+  History,
+  PieChartIcon,
   Settings2,
-  SquareTerminal,
+  Target,
 } from "lucide-react"
 
 import { NavMain } from "./navMain"
-import { NavProjects } from "./navProject"
 import { NavUser } from "./navUser"
 import { TeamSwitcher } from "./teamSwitcher"
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  SidebarTrigger,
+  SidebarFooter,
 } from '@/components/ui/sidebar'
+import { useSession } from "next-auth/react"
+import { SidebarSkeleton } from "../skeletons/sidebarSkeleton"
+import { NavSettings } from "./navSettings"
 
-// This is sample data.
+// Dati statici invariati
 const data = {
-  user: {
-    name: "gianni",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Habits Flow",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
+    }
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Today",
       url: "#",
-      icon: SquareTerminal,
+      icon: Calendar,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Models",
+      title: "Habits",
       url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
+      icon: Target,
     },
     {
-      title: "Documentation",
+      title: "History",
       url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      icon: History
     },
+    {
+      title: "Statistics",
+      url: "#",
+      icon: PieChartIcon
+    }
+  ],
+  navSettings: [
     {
       title: "Settings",
       url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      icon: Settings2
     },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+  ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session, status } = useSession()
+
+  const user = React.useMemo(() => {
+    if (!session?.user) return null
+    return {
+      name: session.user.name ?? session.user.username ?? "User",
+      email: session.user.email ?? "",
+      avatar: session.user.image ?? "/avatars/shadcn.jpg",
+    }
+  }, [session])
+
+  if (status === "loading") {
+    return <SidebarSkeleton />
+  }
+
+  if (!user) {
+    return <>Utente non autenticato</>
+  }
+
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <TeamSwitcher teams={data.teams} />
+        <SidebarTrigger style={{ cursor: "pointer" }} />
       </SidebarHeader>
-      <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+
+      <SidebarContent
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          overflow: "hidden",
+        }}
+      >
+        <div>
+          <NavMain items={data.navMain} />
+        </div>
+        <div>
+          <NavSettings items={data.navSettings} />
+        </div>
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
+
+      <SidebarFooter
+        style={{
+          width: "100%",
+          marginLeft: "auto",
+          marginRight: "auto",
+          
+        }}
+      >
+        <NavUser user={user} />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   )

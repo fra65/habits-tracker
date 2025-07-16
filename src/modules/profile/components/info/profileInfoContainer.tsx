@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import getIsCompleteProfile from '../../api/getIsComplete';
 import InfoProfilo from './infoProfilo';
 import CompletaProfilo from './completaProfilo';
+import { DashboardSkeleton } from '@/components/skeletons/dashboardSkeleton';
 
 const ProfileInfoContainer = () => {
   const { data: session, status } = useSession();
@@ -38,7 +39,7 @@ const ProfileInfoContainer = () => {
   }, [status, session]);
 
   if (status === 'loading' || loadingProfile) {
-    return <p>Loading...</p>;
+    return <DashboardSkeleton />
   }
 
   if (!session) {

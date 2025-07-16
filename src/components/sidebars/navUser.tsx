@@ -29,6 +29,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { useState } from "react"
+import { signOut } from "next-auth/react"
+
 
 export function NavUser({
   user,
@@ -41,6 +44,14 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
 
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  async function handleLogout() {
+
+    setIsLoggingOut(true)
+    await signOut({ redirectTo: "/login" })
+  }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -48,17 +59,17 @@ export function NavUser({
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              className="cursor-pointer data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <Avatar className="h-8 w-8 rounded-lg">
+              <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
                 <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg cursor-pointer">👤</AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
+              <div className="grid flex-1 text-left text-sm leading-tight cursor-pointer">
                 <span className="truncate font-semibold">{user.name}</span>
                 <span className="truncate text-xs">{user.email}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsUpDown className="ml-auto size-4 cursor-pointer" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -67,13 +78,13 @@ export function NavUser({
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
+            <DropdownMenuLabel className="p-0 font-normal cursor-pointer">
+              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm cursor-pointer">
+                <Avatar className="h-8 w-8 rounded-lg cursor-pointer">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg cursor-pointer">👤</AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
+                <div className="grid flex-1 text-left text-sm leading-tight cursor-pointer">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs">{user.email}</span>
                 </div>
@@ -81,29 +92,29 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
+              <DropdownMenuItem className="cursor-pointer">
+                <Sparkles className="mr-2 cursor-pointer" />
                 Upgrade to Pro
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
+              <DropdownMenuItem className="cursor-pointer">
+                <BadgeCheck className="mr-2 cursor-pointer" />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
+              <DropdownMenuItem className="cursor-pointer">
+                <CreditCard className="mr-2 cursor-pointer" />
                 Billing
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
+              <DropdownMenuItem className="cursor-pointer">
+                <Bell className="mr-2 cursor-pointer" />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer" disabled={isLoggingOut}>
+              <LogOut className="mr-2 cursor-pointer" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

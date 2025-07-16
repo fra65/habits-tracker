@@ -2,6 +2,7 @@
 import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,13 +20,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="it">
+    <html lang="it" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-black`}
       >
         <SessionProvider>
-          {/* Qui le pagine senza sidebar: landing, login, register */}
-          {children}
+
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+
+            {/* Qui le pagine senza sidebar: landing, login, register */}
+            {children}
+
+          </ThemeProvider>
+
         </SessionProvider>
       </body>
     </html>

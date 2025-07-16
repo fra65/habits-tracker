@@ -1,5 +1,6 @@
 'use client';
 
+import { DashboardSkeleton } from '@/components/skeletons/dashboardSkeleton';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
@@ -17,7 +18,7 @@ const UserAvatar = () => {
   }, [session, status, router]);
 
   if (status === 'loading') {
-    return <p>Loading...</p>; // opzionale: mostra qualcosa mentre carica
+    return <DashboardSkeleton /> // opzionale: mostra qualcosa mentre carica
   }
 
   if (!session) {

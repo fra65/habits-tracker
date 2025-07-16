@@ -17,7 +17,7 @@ import {
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
 
-export function NavMain({
+export function NavSettings({
   items,
 }: {
   items: {
@@ -45,7 +45,7 @@ export function NavMain({
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton 
-                  tooltip={item.title}
+                  tooltip={item.title} 
                   className="cursor-pointer"
                 >
                   {item.icon && <item.icon className="cursor-pointer" />}
