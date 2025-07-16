@@ -1,10 +1,8 @@
 "use client"
 
 import {
-  BadgeCheck,
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
   User,
 } from "lucide-react"
@@ -31,6 +29,7 @@ import {
 } from '@/components/ui/sidebar'
 import { useState } from "react"
 import { signOut } from "next-auth/react"
+import Link from "next/link"
 
 
 export function NavUser({
@@ -91,23 +90,20 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+            <DropdownMenuGroup>      
               <DropdownMenuItem className="cursor-pointer">
-                <User className="mr-2 cursor-pointer" />
-                Profile
+                <Link href='/pages/profile' className="flex align-middle">
+                  <div className="flex align-middle w-full">
+                    <User className="mr-2 cursor-pointer" />
+                    Profile
+                  </div>
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="cursor-pointer">
-                <BadgeCheck className="mr-2 cursor-pointer" />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <CreditCard className="mr-2 cursor-pointer" />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
+
+            <DropdownMenuItem className="cursor-pointer">
                 <Bell className="mr-2 cursor-pointer" />
                 Notifications
               </DropdownMenuItem>

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from "react"
 import {
@@ -10,70 +10,31 @@ import {
   Settings2,
   Target,
 } from "lucide-react"
-
-import { NavMain } from "./navMain"
-import { NavUser } from "./navUser"
-import { TeamSwitcher } from "./teamSwitcher"
-
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarRail,
-  SidebarTrigger,
   SidebarFooter,
 } from '@/components/ui/sidebar'
 import { useSession } from "next-auth/react"
 import { SidebarSkeleton } from "../skeletons/sidebarSkeleton"
+import { NavMain } from "./navMain"
+import { NavUser } from "./navUser"
+import { TeamSwitcher } from "./teamSwitcher"
 import { NavSettings } from "./navSettings"
 import { NavAdmin } from "./navAdmin"
 
-// Dati statici invariati
 const data = {
-  teams: [
-    {
-      name: "Habits Flow",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    }
-  ],
+  teams: [{ name: "Habits Flow", logo: GalleryVerticalEnd, plan: "Enterprise" }],
   navMain: [
-    {
-      title: "Today",
-      url: "#",
-      icon: Calendar,
-      isActive: true,
-    },
-    {
-      title: "Habits",
-      url: "#",
-      icon: Target,
-    },
-    {
-      title: "History",
-      url: "#",
-      icon: History
-    },
-    {
-      title: "Statistics",
-      url: "#",
-      icon: PieChartIcon
-    }
+    { title: "Today", url: "#", icon: Calendar, isActive: true },
+    { title: "Habits", url: "#", icon: Target },
+    { title: "History", url: "#", icon: History },
+    { title: "Statistics", url: "#", icon: PieChartIcon },
   ],
-  navSettings: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2
-    },
-  ],
-  navAdmin: [
-    {
-      title: "ADMIN",
-      url: "#",
-      icon: Lock
-    },
-  ]
+  navSettings: [{ title: "Settings", url: "#", icon: Settings2 }],
+  navAdmin: [{ title: "ADMIN", url: "#", icon: Lock }],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -97,48 +58,28 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
+    <Sidebar
+      collapsible="icon"
+      {...props}
+      className="relative overflow-visible" // serve per visualizzare trigger fuori dai bordi
+    >
+      <SidebarHeader className="flex flex-row items-center justify-between pr-0">
         <TeamSwitcher teams={data.teams} />
-        <SidebarTrigger style={{ cursor: "pointer" }} />
+        {/* Rimosso SidebarTrigger da header */}
       </SidebarHeader>
 
-      <SidebarContent
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          height: "100%",
-          overflow: "hidden",
-        }}
-      >
+      <SidebarContent className="flex flex-col justify-between h-full overflow-hidden">
         <div>
           <NavMain items={data.navMain} />
-          {
-            session?.user.role === 'ADMIN'
-            && <NavAdmin items={data.navAdmin} />
-          }
+          {session?.user.role === "ADMIN" && <NavAdmin items={data.navAdmin} />}
         </div>
+
         <div>
           <NavSettings items={data.navSettings} />
         </div>
       </SidebarContent>
 
-      <SidebarFooter
-        style={{
-          width: "100%",
-          marginLeft: "auto",
-          marginRight: "auto",
-          
-        }}
-      >
+      <SidebarFooter className="w-full mx-auto">
         <NavUser user={user} />
       </SidebarFooter>
 

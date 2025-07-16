@@ -33,8 +33,10 @@ export default function Navbar() {
         
 
         <div className="flex items-center space-x-4">
-          <ThemeToggle />
-          
+          <div>
+            <ThemeToggle />
+          </div>
+
           <Link href='/pages/dashboard'>
             <Button size="sm" className="bg-primary hover:bg-primary/90 cursor-pointer">
               Inizia Ora
