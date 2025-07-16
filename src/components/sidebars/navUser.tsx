@@ -6,7 +6,7 @@ import {
   ChevronsUpDown,
   CreditCard,
   LogOut,
-  Sparkles,
+  User,
 } from "lucide-react"
 
 import {
@@ -93,8 +93,8 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem className="cursor-pointer">
-                <Sparkles className="mr-2 cursor-pointer" />
-                Upgrade to Pro
+                <User className="mr-2 cursor-pointer" />
+                Profile
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

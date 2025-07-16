@@ -5,6 +5,7 @@ import {
   Calendar,
   GalleryVerticalEnd,
   History,
+  Lock,
   PieChartIcon,
   Settings2,
   Target,
@@ -25,6 +26,7 @@ import {
 import { useSession } from "next-auth/react"
 import { SidebarSkeleton } from "../skeletons/sidebarSkeleton"
 import { NavSettings } from "./navSettings"
+import { NavAdmin } from "./navAdmin"
 
 // Dati statici invariati
 const data = {
@@ -63,6 +65,13 @@ const data = {
       title: "Settings",
       url: "#",
       icon: Settings2
+    },
+  ],
+  navAdmin: [
+    {
+      title: "ADMIN",
+      url: "#",
+      icon: Lock
     },
   ]
 }
@@ -112,6 +121,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       >
         <div>
           <NavMain items={data.navMain} />
+          {
+            session?.user.role === 'ADMIN'
+            && <NavAdmin items={data.navAdmin} />
+          }
         </div>
         <div>
           <NavSettings items={data.navSettings} />
