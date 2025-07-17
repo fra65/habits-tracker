@@ -1,13 +1,13 @@
 import axios from "axios";
-import { UserOutputAdmin } from "../schema/usersOutputAdmin.schema";
+import { OutputUserWithProfile } from "../schema/usersOutputAdmin.schema";
 
 type GetUsersResult = {
-  data: UserOutputAdmin[] | null;
+  data: OutputUserWithProfile[] | null;
   message: string | null;
   error: boolean;
 };
 
-export async function getUsers(): Promise<GetUsersResult> {
+export async function getUsersWithProfile(): Promise<GetUsersResult> {
 
   try {
     const response = await axios.get(`/api/admin/users`);

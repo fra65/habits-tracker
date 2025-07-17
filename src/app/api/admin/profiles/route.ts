@@ -1,7 +1,7 @@
 // FUNZIONE PER VEDERE TUTTI GLI UTENTI (SENZA INFO SENSIBILI)
 
 import { auth } from "@/lib/auth";
-import { getAllUsersWithProfile } from "@/modules/user/services/user.service";
+import { getAllProfiles } from "@/modules/profile/services/profile.service";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -20,13 +20,13 @@ export async function GET() {
     }
 
     //console.log(session.user.id)
-    const users = await getAllUsersWithProfile();
+    const profiles = await getAllProfiles();
 
-    if(!users) {
-      return NextResponse.json({ error: "Utenti inesistenti" }, { status: 404 });
+    if(!profiles) {
+      return NextResponse.json({ error: "Profili inesistenti" }, { status: 404 });
     }
 
-    return NextResponse.json(users, { status: 201 });
+    return NextResponse.json(profiles, { status: 201 });
 
   } catch(error) {
         console.error("Errore nel recupero del profilo:", error);

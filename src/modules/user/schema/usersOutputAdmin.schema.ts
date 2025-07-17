@@ -1,11 +1,24 @@
 import { z } from "zod";
 
-export const UserOutputToAdminSchema = z.object({
-  id: z.number(), // id è number
-  username: z.string().min(3, "Username troppo corto"),
-  email: z.string().email("Email non valida"),
-  role: z.enum(["ADMIN", "USER", "MODERATOR"]), // ruoli in maiuscolo come nel DB
-  provider: z.string().min(1, "Provider obbligatorio"),
+const UserProfileSchema = z.object({
+  id: z.number(),
+  nome: z.string().min(1, "Nome obbligatorio"),
+  cognome: z.string().min(1, "Cognome obbligatorio"),
+  data_nascita: z.preprocess(
+    (val) => val instanceof Date ? val.toISOString() : val,
+    z.string().min(1, "Data di nascita obbligatoria")
+  ),
+  sesso: z.string().min(1, "Sesso obbligatorio").nullable(),
+  // aggiungi qui altri campi del profilo se servono
 });
 
-export type UserOutputAdmin = z.infer<typeof UserOutputToAdminSchema>;
+export const OutputUserWithProfileSchema = z.object({
+  id: z.number(),
+  username: z.string().min(3, "Username troppo corto").nullable(), // nullable perché da Prisma può arrivare null
+  email: z.string().email("Email non valida").nullable(),         // nullable perché da Prisma può arrivare null
+  role: z.enum(["ADMIN", "USER", "MODERATOR"]),
+  provider: z.string().min(1, "Provider obbligatorio"),
+  user_profile: UserProfileSchema.nullable(), // <-- ANNIDATO QUI!
+});
+
+export type OutputUserWithProfile = z.infer<typeof OutputUserWithProfileSchema>;

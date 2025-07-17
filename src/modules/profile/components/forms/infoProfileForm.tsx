@@ -4,7 +4,7 @@
 import React, { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { useSession } from "next-auth/react"
-import getUserProfile from "../../api/getUser"
+import getUserProfile from "../../api/getProfile"
 import { ProfileSkeleton } from "@/components/skeletons/profileSkeleton"
 import { Button } from "@/components/ui/button"
 import DeleteModal from "../modals/deleteModal"

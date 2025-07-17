@@ -5,7 +5,7 @@ import { hashPassword } from "@/modules/auth/utils/managePassword";
 import { UserOutput } from "../types/UserOutput";
 import { UpdatePasswordInput } from "../types/UpdatePasswordInput";
 import { CreateUserOauthInput } from "../types/createUserOauthInput";
-import { UserOutputAdmin, UserOutputToAdminSchema } from "../schema/usersOutputAdmin.schema";
+import { OutputUserWithProfile, OutputUserWithProfileSchema } from "../schema/usersOutputAdmin.schema";
 import z from "zod";
 
 // funzione per verificare se esiste un utente
@@ -141,16 +141,18 @@ export async function updatePassword({userId, hashedPassword}: UpdatePasswordInp
 
 
 
-// GET DI TUTTI GLI UTENTI
-export async function getAllUsers(): Promise<UserOutputAdmin[] | null> {
+// GET DI TUTTI GLI UTENTI CON ANCHE IL PROFILO
+export async function getAllUsersWithProfile(): Promise<OutputUserWithProfile[] | null> {
 
-  const users = await prisma?.user.findMany({})
-
-  // console.log("Users from DB:", users);
-
-  const validateUsers = z.array(UserOutputToAdminSchema).safeParse(users);
+  const users = await prisma?.user.findMany({
+    include: {
+      user_profile: true
+    }
+  })
   
-  if(!validateUsers.success) {
+  const validateUsers = z.array(OutputUserWithProfileSchema).safeParse(users);
+
+  if (!validateUsers.success) {
     return null;
   }
 
@@ -160,7 +162,7 @@ export async function getAllUsers(): Promise<UserOutputAdmin[] | null> {
 
 
 // GET SINGOLO UTENTE
-export async function getUser(id: string): Promise<UserOutputAdmin | null> {
+export async function getUser(id: string): Promise<OutputUserWithProfile | null> {
   if (!id) {
     return null; // oppure lancia un errore se preferisci
   }
@@ -177,7 +179,7 @@ export async function getUser(id: string): Promise<UserOutputAdmin | null> {
   }
 
   // Valida singolo utente (non array)
-  const validateUser = UserOutputToAdminSchema.safeParse(user);
+  const validateUser = OutputUserWithProfileSchema.safeParse(user);
 
   if (!validateUser.success) {
     console.error("Errore validazione utente:", validateUser.error);

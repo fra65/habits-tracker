@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import z from "zod";
+import { ProfileOutputAdmin, ProfileOutputAdminSchema } from "../schema/ProfileOutputAdmin";
 import { ProfileOutput, ProfileOutputSchema } from "../schema/ProfileOutput";
 import { ProfileUpdateOutput, ProfileUpdateOutputSchema } from "../schema/ProfileUpdateOutputSchema";
 import prisma from "@/prisma";
@@ -146,3 +148,55 @@ export async function deleteUserProfile(userId: number): Promise<boolean | undef
     }
 
 }
+
+
+
+
+// ADMIN
+
+
+// GET DI TUTTI GLI UTENTI
+export async function getAllProfiles(): Promise<ProfileOutputAdmin[] | null> {
+
+  const profiles = await prisma?.user_profile.findMany({})
+
+  // console.log("Users from DB:", users);
+
+  const validateUsers = z.array(ProfileOutputAdminSchema).safeParse(profiles);
+  
+  if(!validateUsers.success) {
+    return null;
+  }
+
+  return validateUsers.data
+
+}
+
+
+// GET SINGOLO UTENTE
+// export async function getUser(id: string): Promise<UserOutputAdmin | null> {
+//   if (!id) {
+//     return null; // oppure lancia un errore se preferisci
+//   }
+
+//   // Recupera un solo utente con prisma.findUnique o findFirst
+//   const user = await prisma?.user.findUnique({
+//     where: { id: Number(id) }, // se id è number nel DB, converti
+//   });
+
+//   // console.log("User from DB:", user);
+
+//   if (!user) {
+//     return null;
+//   }
+
+//   // Valida singolo utente (non array)
+//   const validateUser = UserOutputToAdminSchema.safeParse(user);
+
+//   if (!validateUser.success) {
+//     console.error("Errore validazione utente:", validateUser.error);
+//     return null;
+//   }
+
+//   return validateUser.data;
+// }
