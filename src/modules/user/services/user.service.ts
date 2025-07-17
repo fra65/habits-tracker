@@ -146,7 +146,7 @@ export async function getAllUsers(): Promise<UserOutputAdmin[] | null> {
 
   const users = await prisma?.user.findMany({})
 
-  console.log("Users from DB:", users);
+  // console.log("Users from DB:", users);
 
   const validateUsers = z.array(UserOutputToAdminSchema).safeParse(users);
   

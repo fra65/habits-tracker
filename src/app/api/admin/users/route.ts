@@ -11,11 +11,12 @@ export async function GET() {
     const session = await auth()
     
     if (!session) {
-      return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
+      return NextResponse.json({ error: "Non autenticato" }, { status: 402 });
     }
 
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
+
+    if (session.user?.role !== 'ADMIN') {
+      return NextResponse.json({ error: "Non autorizzato: " }, { status: 401 });
     }
 
     //console.log(session.user.id)
