@@ -4,8 +4,9 @@ import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import getIsCompleteProfile from '../../api/getIsComplete';
 import InfoProfilo from './infoProfilo';
-import CompletaProfilo from './completaProfilo';
+// import CompletaProfilo from './completaProfilo';
 import { DashboardSkeleton } from '@/components/skeletons/dashboardSkeleton';
+import { CompletaProfiloToast } from './completaProfiloToast';
 
 const ProfileInfoContainer = () => {
   const { data: session, status } = useSession();
@@ -57,7 +58,7 @@ const ProfileInfoContainer = () => {
 
   return (
     <>
-      {isComplete ? <InfoProfilo /> : <CompletaProfilo />}
+      {isComplete ? <InfoProfilo /> : <CompletaProfiloToast />}
     </>
   );
 };

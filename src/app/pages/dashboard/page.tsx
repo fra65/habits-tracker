@@ -1,11 +1,9 @@
-"use client"
-
 import React from "react"
-import { useSidebar } from "@/components/ui/sidebar"
+// import { useSidebar } from "@/components/ui/sidebar"
 import DashboardSection from "@/components/sections/dashboardSection"
 
 export default function Page() {
-  const { sidebarWidth } = useSidebar()
+  // const { sidebarWidth } = useSidebar()
 
-  return <DashboardSection sidebarWidth={sidebarWidth} />
+  return <DashboardSection />
 }

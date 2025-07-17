@@ -32,14 +32,13 @@ export async function createUserProfile(data: any): Promise<ProfileOutput | unde
 
 // FUNZIONE PER RECUPERO INFO
 
-export async function getUserProfileById(userId: string | number): Promise<ProfileOutput | undefined | null> {
+export async function getUserProfileById(userId: number): Promise<ProfileOutput | undefined | null> {
 
     try {
-
         
         const selectedProfile = await prisma?.user_profile.findUnique({
             where: {
-                id: userId as number
+                id: Number(userId)
             }
         })
 
@@ -49,7 +48,8 @@ export async function getUserProfileById(userId: string | number): Promise<Profi
     
         return profile.data;
 
-    } catch {
+    } catch (err) {
+        console.error("Errore Prisma o validazione:", err)
         throw new Error("Profilo inesistente");
 
     }
@@ -108,7 +108,7 @@ export async function updateUserProfile(userId: string | number, data: any): Pro
 
     const updatedProfile = await prisma?.user_profile.update({
         where: {
-            id: userId as number
+            id: Number(userId)
         },
         data: {
             ...data
@@ -124,13 +124,13 @@ export async function updateUserProfile(userId: string | number, data: any): Pro
 
 // FUNZIONE PER DELETE
 
-export async function deleteUserProfile(userId: string | number): Promise<boolean | undefined | null> {
+export async function deleteUserProfile(userId: number): Promise<boolean | undefined | null> {
 
     try {
         
         const deletedProfile = await prisma?.user_profile.delete({
             where: {
-                id: userId as number
+                id: Number(userId)
             }
         })
 
