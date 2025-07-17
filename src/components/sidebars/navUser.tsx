@@ -90,15 +90,15 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>      
-              <DropdownMenuItem className="cursor-pointer">
-                <Link href='/pages/profile' className="flex align-middle">
+            <DropdownMenuGroup>     
+              <Link href='/pages/profile' className="flex align-middle">
+                <DropdownMenuItem className="cursor-pointer">
                   <div className="flex align-middle w-full">
                     <User className="mr-2 cursor-pointer" />
                     Profile
                   </div>
-                </Link>
-              </DropdownMenuItem>
+                </DropdownMenuItem>
+              </Link>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

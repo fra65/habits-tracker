@@ -3,7 +3,6 @@
 import * as React from "react"
 import {
   Calendar,
-  GalleryVerticalEnd,
   History,
   Lock,
   PieChartIcon,
@@ -26,7 +25,7 @@ import { NavSettings } from "./navSettings"
 import { NavAdmin } from "./navAdmin"
 
 const data = {
-  teams: [{ name: "Habits Flow", logo: GalleryVerticalEnd, plan: "Enterprise" }],
+  teams: [{ name: "Habits Flow", logo: Target, plan: "Enterprise" }],
   navMain: [
     { title: "Today", url: "#", icon: Calendar, isActive: true },
     { title: "Habits", url: "#", icon: Target },
