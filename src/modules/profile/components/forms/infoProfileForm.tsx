@@ -12,6 +12,7 @@ import { ProfileOutput } from "../../schema/ProfileOutput"
 import toInputDateValue from "../../utils/toInputDateValue"
 import updateProfile from "../../api/updateProfile"
 import { ProfileUpdateInputSchema } from "../../schema/ProfileUpdateInputSchema"
+import Link from "next/link"
 
 const SESSO_OPTIONS = [
   { value: "M", label: "Uomo" },
@@ -98,6 +99,19 @@ const InfoProfileForm = () => {
     updateProfile(validateData.data)
     setIsEditing(false)
     setProfile(editProfile as ProfileOutput)
+  }
+
+  if(!profile) {
+    return(
+      <div className="flex flex-col gap-2">
+        <h1>Profilo non ancora creato</h1>
+        <Link href='/pages/create-profile'>
+          <Button className="bg-primary">
+            Crea Ora
+          </Button>
+        </Link>
+      </div>
+    )
   }
 
   return (

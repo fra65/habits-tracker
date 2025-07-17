@@ -8,11 +8,13 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProfileInputClientSchema } from "../../schema/ProfileInput"
 import createProfile from "../../api/createProfile"
+import { useRouter } from "next/navigation"
 
 export default function CreateProfileForm() {
   // Stato per messaggi di feedback
   const [message, setMessage] = useState<string | null>(null)
   const [messageType, setMessageType] = useState<"error" | "success" | null>(null)
+  const router = useRouter()
 
 async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
   event.preventDefault();
@@ -61,8 +63,9 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
       setMessage("Impossibile creare il profilo. Riprova più tardi.");
       setMessageType("error");
     } else {
-      setMessage("Profilo creato con successo!");
+      setMessage("Profilo creato con successo! Reindirizzamento in corso...");
       setMessageType("success");
+      router.push('/pages/profile')
       form.reset();
     }
   } catch (error) {

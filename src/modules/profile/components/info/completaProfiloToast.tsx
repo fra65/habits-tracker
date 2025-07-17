@@ -26,7 +26,7 @@ export function CompletaProfiloToast() {
           Il tuo profilo non è completo, completa le informazioni mancanti.
         </p>
 
-        <Link href="/pages/profile" passHref>
+        <Link href="/pages/create-profile" passHref>
           <Button
             size="sm"
             variant="outline"
