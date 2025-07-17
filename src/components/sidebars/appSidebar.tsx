@@ -33,7 +33,20 @@ const data = {
     { title: "Statistics", url: "#", icon: PieChartIcon },
   ],
   navSettings: [{ title: "Settings", url: "#", icon: Settings2 }],
-  navAdmin: [{ title: "ADMIN", url: "#", icon: Lock }],
+
+  navAdmin: [
+    { 
+      title: "ADMIN", 
+      url: "#", 
+      icon: Lock , 
+      items: [
+        {
+          title: 'Users',
+          url: '/pages/users'
+        }
+      ]
+    }
+  ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
