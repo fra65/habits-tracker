@@ -100,11 +100,15 @@ const ProfilePreferencesForm = () => {
 
   // Salvataggio
   const handleSave = async () => {
+
     // Se vuoi validare anche lang, aggiungi campo schema ad hoc, ora la ignoriamo
     const validateData = ProfilePreferencesInputSchema.safeParse(editPreferences)
+
     if (!validateData.success) return
+
     // includi lang nei dati salvati se backend lo accetta
-    await updatePreferences({ ...validateData.data, lang: editPreferences.lang ?? "it" })
+    await updatePreferences({ ...validateData.data })
+
     setIsEditing(false)
     setPreferences(editPreferences as ProfilePreferencesOutput)
   }
