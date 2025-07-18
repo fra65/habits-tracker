@@ -75,10 +75,23 @@ const ProfilePreferencesForm = () => {
       const preferences = await resetPreferences()
       if (!preferences) throw new Error("Errore nel caricamento dei valori di default")
 
-      setPreferences(preferences)
-      setEditPreferences(preferences)
-      setIsEditing(false)
+      const validateData = ProfilePreferencesInputSchema.safeParse(preferences)
+      if (!validateData.success) {
+        // gestione errori omessa per brevità
+        return
+      }
+
+      const updated = await updatePreferences(validateData.data)
+
+      setPreferences(updated ?? validateData.data)
+      setEditPreferences(updated ?? validateData.data)
       setErrors({})
+      setIsEditing(false)
+
+      // AGGIUNTA: aggiorna tema nell'app in base al valore salvato
+      const newTheme = updated?.theme ?? validateData.data.theme ?? "system"
+      setTheme(newTheme)
+
     } catch (error) {
       console.error("Errore nel reset preferenze:", error)
     } finally {

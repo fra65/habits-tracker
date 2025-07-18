@@ -74,7 +74,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar
       collapsible="icon"
       {...props}
-      className="sticky mt-0 overflow-visible z-50" // serve per visualizzare trigger fuori dai bordi
+      className="relative overflow-visible" // serve per visualizzare trigger fuori dai bordi
     >
       <SidebarHeader className="flex flex-row items-center justify-between pr-0">
         <TeamSwitcher teams={data.teams} />
