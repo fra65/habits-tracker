@@ -29,6 +29,7 @@ model user {
   oauthId            String?              @db.VarChar(100)
   provider           String               @db.VarChar(30)
   passwordresettoken passwordresettoken[]
+  user_preferences   user_preferences?
   user_profile       user_profile?
 
   @@unique([email, provider], map: "email_provider_UNIQUE")
@@ -47,8 +48,37 @@ model passwordresettoken {
   @@index([userId], map: "fk_user")
 }
 
+model user_preferences {
+  id                  Int         @id @default(autoincrement())
+  theme               Theme       @default(system)
+  sidebarDefaultOpen  Boolean     @default(true)
+  sidebarOpenShortcut String      @default("b")
+  sidebarSide         SidebarSide @default(left)
+  sidebarType         SidebarType @default(floating)
+  lang                String      @db.VarChar(30) @default("it")
+  createdAt           DateTime    @default(now())
+  user                user        @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_preferences")
+}
+
 enum Role {
   USER
   ADMIN
   MODERATOR
+}
+
+enum Theme {
+  light
+  dark
+  system
+}
+
+enum SidebarSide {
+  left
+  right
+}
+
+enum SidebarType {
+  sidebar
+  floating
+  inset
 }

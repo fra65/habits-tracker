@@ -34,7 +34,7 @@ export async function createUserProfile(data: any): Promise<ProfileOutput | unde
 
 // FUNZIONE PER RECUPERO INFO
 
-export async function getUserProfileById(userId: number): Promise<ProfileOutput | undefined | null> {
+export async function getUserProfileById(userId: number | string): Promise<ProfileOutput | undefined | null> {
 
     try {
         
@@ -126,7 +126,7 @@ export async function updateUserProfile(userId: string | number, data: any): Pro
 
 // FUNZIONE PER DELETE
 
-export async function deleteUserProfile(userId: number): Promise<boolean | undefined | null> {
+export async function deleteUserProfile(userId: number | string): Promise<boolean | undefined | null> {
 
     try {
         
@@ -184,7 +184,7 @@ export async function getAllProfiles(): Promise<ProfileOutputAdmin[] | null> {
 //     where: { id: Number(id) }, // se id è number nel DB, converti
 //   });
 
-//   // console.log("User from DB:", user);
+//  console.log("User from DB:", user);
 
 //   if (!user) {
 //     return null;

@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator"
 import { auth } from "@/lib/auth"
 import ChangePasswordForm from "@/modules/profile/components/forms/changePasswordForm"
 import InfoProfileForm from "@/modules/profile/components/forms/infoProfileForm"
+import ProfilePreferencesForm from "@/modules/preferences/components/forms/profilePreferencesForm"
 import * as React from "react"
 
 const ProfilePage = async () => {
@@ -19,8 +20,11 @@ const ProfilePage = async () => {
   return (
     <main className="bg-background p-6 min-h-screen">
       <InfoProfileForm />
-      <Separator className="max-w-4xl mx-auto my-6" />
+      <Separator className="max-w-4xl mx-auto my-10" />
       <ChangePasswordForm />
+      <Separator className="max-w-4xl mx-auto my-10" />
+      <ProfilePreferencesForm />
+
     </main>
   )
 }
