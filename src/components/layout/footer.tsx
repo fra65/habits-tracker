@@ -15,13 +15,13 @@ export default function Footer() {
                         <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
                         <Target className="h-5 w-5 text-primary-foreground" />
                         </div>
-                        <span className="text-xl font-bold">HabitFlow</span>
+                        <span className="text-xl font-bold text-foreground">HabitFlow</span>
                     </div>
                     <p className="text-sm text-muted-foreground">Trasforma le tue abitudini, trasforma la tua vita.</p>
                     </div>
 
                     <div>
-                    <h3 className="font-semibold mb-4">Prodotto</h3>
+                    <h3 className="font-semibold mb-4 text-foreground">Prodotto</h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
                         <li>
                         <Link href="#" className="hover:text-foreground">
@@ -47,7 +47,7 @@ export default function Footer() {
                     </div>
 
                     <div>
-                    <h3 className="font-semibold mb-4">Supporto</h3>
+                    <h3 className="font-semibold mb-4 text-foreground">Supporto</h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
                         <li>
                         <Link href="#" className="hover:text-foreground">
@@ -73,7 +73,7 @@ export default function Footer() {
                     </div>
 
                     <div>
-                    <h3 className="font-semibold mb-4">Legale</h3>
+                    <h3 className="font-semibold mb-4 text-foreground">Legale</h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
                         <li>
                         <Link href="#" className="hover:text-foreground">

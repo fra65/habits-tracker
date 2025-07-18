@@ -145,7 +145,7 @@ const ProfilePreferencesForm = () => {
     <>
 
       <div className="max-w-4xl mx-auto mb-4">
-        <h1 className="font-medium text-muted-foreground">Preferenze Utente</h1>
+        <h1 className="font-medium text-foreground">Preferenze Utente</h1>
       </div>
       <form className="max-w-4xl mx-auto flex flex-col gap-4" onSubmit={e => e.preventDefault()}>
 

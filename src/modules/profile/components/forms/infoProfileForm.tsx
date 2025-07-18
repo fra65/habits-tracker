@@ -13,6 +13,7 @@ import toInputDateValue from "../../utils/toInputDateValue"
 import updateProfile from "../../api/updateProfile"
 import { ProfileUpdateInputSchema } from "../../schema/ProfileUpdateInputSchema"
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 const SESSO_OPTIONS = [
   { value: "M", label: "Uomo" },
@@ -117,7 +118,7 @@ const InfoProfileForm = () => {
   return (
     <>
       <div className="max-w-4xl mx-auto mb-4">
-        <h1 className="font-medium text-muted-foreground">Info Profilo</h1>
+        <h1 className="font-medium text-foreground">Info Profilo</h1>
       </div>
       <form
         id="form"
@@ -136,7 +137,7 @@ const InfoProfileForm = () => {
             disabled={!isEditing}
             value={isEditing ? editProfile.nome ?? "" : profile?.nome ?? ""}
             placeholder="Nome"
-            className="bg-input"
+            className="bg-input text-foreground"
             onChange={(e) => handleFieldChange("nome", e.target.value)}
           />
           {errors.nome && (
@@ -156,7 +157,7 @@ const InfoProfileForm = () => {
             disabled={!isEditing}
             value={isEditing ? editProfile.cognome ?? "" : profile?.cognome ?? ""}
             placeholder="Cognome"
-            className="bg-input"
+            className="bg-input text-foreground"
             onChange={(e) => handleFieldChange("cognome", e.target.value)}
           />
           {errors.cognome && (
@@ -181,7 +182,7 @@ const InfoProfileForm = () => {
                 : toInputDateValue(profile?.data_nascita)
             }
             placeholder="gg/mm/aaaa"
-            className="bg-input"
+            className="bg-input text-foreground"
             onChange={(e) => handleFieldChange("data_nascita", e.target.value)}
           />
           {errors.data_nascita && (
@@ -199,7 +200,10 @@ const InfoProfileForm = () => {
           <select
             id="sesso"
             disabled={!isEditing}
-            className="bg-input rounded-md border p-2 text-muted-foreground focus:ring-2 focus:ring-primary"
+            className={cn(
+              "rounded-md border p-2 focus:ring-2 focus:ring-primary",
+              isEditing ? "text-foreground bg-muted" : "text-muted-foreground bg-muted/60"
+            )}
             value={isEditing ? editProfile.sesso ?? "" : profile?.sesso ?? ""}
             onChange={(e) => handleFieldChange("sesso", e.target.value)}
           >
@@ -210,6 +214,7 @@ const InfoProfileForm = () => {
               </option>
             ))}
           </select>
+
           {errors.sesso && (
             <span className="text-sm text-red-500 mt-1">{errors.sesso}</span>
           )}

@@ -15,17 +15,17 @@ export default function Navbar() {
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
             <Target className="h-5 w-5 text-primary-foreground" />
           </div>
-          <span className="text-xl font-bold">HabitFlow</span>
+          <span className="text-foreground text-xl font-bold">HabitFlow</span>
         </div>
 
         <nav className="hidden md:flex items-center space-x-6">
-          <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link href="#features" className="text-foreground text-sm font-medium hover:text-primary transition-colors">
             Funzionalità
           </Link>
-          <Link href="#pricing" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link href="#pricing" className="text-foreground text-sm font-medium hover:text-primary transition-colors">
             Prezzi
           </Link>
-          <Link href="#testimonials" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link href="#testimonials" className="text-foreground text-sm font-medium hover:text-primary transition-colors">
             Recensioni
           </Link>
         </nav>

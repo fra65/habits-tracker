@@ -41,7 +41,7 @@ const DashboardSection = () => {
 
   return (
     <main className="w-full bg-background p-4 flex flex-col">
-      <h1 className="text-accent-sidebar-foreground font-bold uppercase w-full text-center">
+      <h1 className="text-foreground font-bold uppercase w-full text-center">
         Dashboard
       </h1>
 
