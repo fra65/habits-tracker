@@ -43,7 +43,7 @@ export default function DeleteModal({ onClose, onDeleteSuccess }: DeleteConfirmM
           <Button variant="outline" onClick={onClose} disabled={loading}>
             Annulla
           </Button>
-          <Button onClick={handleConfirmDelete} disabled={loading}>
+          <Button className='bg-destructive hover:bg-destructive/90 cursor-pointer' onClick={handleConfirmDelete} disabled={loading}>
             {loading ? 'Eliminazione...' : 'Conferma'}
           </Button>
         </div>

@@ -11,6 +11,7 @@ import { ProfilePreferencesOutput } from "../../schema/ProfilePreferencesOutput.
 import updatePreferences from "../../api/updatePreferences"
 import { ProfilePreferencesInputSchema } from "../../schema/ProfilePreferencesInput.schema"
 import resetPreferences from "../../api/resetPreferences"
+import ResetModal from "../modals/resetPreferencesModal"
 
 const THEME_OPTIONS = [
   { value: "system", label: "System (predefinito)" },
@@ -38,6 +39,7 @@ const ProfilePreferencesForm = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [editPreferences, setEditPreferences] = useState<Partial<ProfilePreferencesOutput & { lang?: string }>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [showModal, setShowModal] = useState(false)
 
   React.useEffect(() => {
     if (status === "authenticated") {
@@ -139,6 +141,7 @@ const ProfilePreferencesForm = () => {
         <h1 className="font-medium text-muted-foreground">Preferenze Utente</h1>
       </div>
       <form className="max-w-4xl mx-auto grid grid-cols-4 gap-6" onSubmit={e => e.preventDefault()}>
+
         {/* Tema */}
         <div className="flex flex-col">
           <label htmlFor="theme" className="mb-2 text-sm font-medium text-muted-foreground">
@@ -263,11 +266,21 @@ const ProfilePreferencesForm = () => {
           <Button
             type="button"
             className={`cursor-pointer rounded-md bg-destructive px-4 py-2 text-white hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear ${isEditing ? "hidden" : ""}`}
-            onClick={handleReset}
+            onClick={() => setShowModal(true)}
           >
             Ripristina
           </Button>
         </div>
+
+        {showModal && (
+          <ResetModal
+            onClose={() => setShowModal(false)}
+            onResetSuccess={() => {
+              setShowModal(false)
+              handleReset()
+            }}
+          />
+        )}
       </form>
     </>
   )
