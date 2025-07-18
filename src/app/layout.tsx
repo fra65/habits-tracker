@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { PreferencesProvider } from "@/contexts/PreferencesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,8 +34,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
 
-            {/* Qui le pagine senza sidebar: landing, login, register */}
-            {children}
+            <PreferencesProvider>
+              {/* Qui ora tutte le pagine, con accesso a session, tema e preferenze */}
+              {children}
+            </PreferencesProvider>
 
           </ThemeProvider>
 
