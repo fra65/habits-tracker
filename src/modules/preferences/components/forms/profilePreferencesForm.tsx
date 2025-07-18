@@ -30,15 +30,12 @@ const SIDEBAR_TYPE_OPTIONS = [
 
 const DEFAULT_SHORTCUT = "b";
 
-// visualizzato come: Ctrl + [lettera]
-// const getShortcutString = (value: string) => `Ctrl + ${value || DEFAULT_SHORTCUT}`;
-
 const ProfilePreferencesForm = () => {
   const { data: session, status } = useSession()
   const [preferences, setPreferences] = useState<ProfilePreferencesOutput | null>(null)
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
-  const [editPreferences, setEditPreferences] = useState<Partial<ProfilePreferencesOutput>>({})
+  const [editPreferences, setEditPreferences] = useState<Partial<ProfilePreferencesOutput & { lang?: string }>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   React.useEffect(() => {
@@ -47,29 +44,30 @@ const ProfilePreferencesForm = () => {
       getPreferences()
         .then((data: any) => {
           setPreferences(data)
-          setEditPreferences(data ?? {})
+          setEditPreferences({ ...data, lang: (data.lang ?? "it") })
         })
         .catch(() => {
           setPreferences(null)
-          setEditPreferences({})
+          setEditPreferences({ lang: "it" })
         })
         .finally(() => setLoading(false))
     } else {
       setPreferences(null)
-      setEditPreferences({})
+      setEditPreferences({ lang: "it" })
       setLoading(false)
     }
     setErrors({})
   }, [status])
 
   // Validazione campo singolo e gestione errori
-  const handleFieldChange = (field: keyof ProfilePreferencesOutput, value: any) => {
+  const handleFieldChange = (field: keyof (ProfilePreferencesOutput & { lang?: string }), value: any) => {
     setEditPreferences((prev: any) => ({
       ...prev,
       [field]: value,
     }))
-    const partial = { ...editPreferences, [field]: value }
-    const result = ProfilePreferencesInputSchema.safeParse(partial)
+    // Per validazione generale rimuovi eventualmente lang, se schema non lo prevede
+    const partialForValidation = { ...editPreferences, [field]: value }
+    const result = ProfilePreferencesInputSchema.safeParse(partialForValidation)
     if (!result.success) {
       const issues = result.error.issues.filter((i: any) => i.path[0] === field)
       setErrors((prev) => ({
@@ -100,11 +98,13 @@ const ProfilePreferencesForm = () => {
     )
   }
 
-  // Funzione di salvataggio
+  // Salvataggio
   const handleSave = async () => {
+    // Se vuoi validare anche lang, aggiungi campo schema ad hoc, ora la ignoriamo
     const validateData = ProfilePreferencesInputSchema.safeParse(editPreferences)
-    if (!validateData.success) return // puoi mostrare un alert se vuoi
-    await updatePreferences(validateData.data)
+    if (!validateData.success) return
+    // includi lang nei dati salvati se backend lo accetta
+    await updatePreferences({ ...validateData.data, lang: editPreferences.lang ?? "it" })
     setIsEditing(false)
     setPreferences(editPreferences as ProfilePreferencesOutput)
   }
@@ -119,10 +119,10 @@ const ProfilePreferencesForm = () => {
 
   return (
     <>
-      <div className="max-w-2xl mx-auto mb-4">
+      <div className="max-w-4xl mx-auto mb-4">
         <h1 className="font-medium text-muted-foreground">Preferenze Utente</h1>
       </div>
-      <form className="max-w-2xl mx-auto grid grid-cols-1 gap-6">
+      <form className="max-w-4xl mx-auto grid grid-cols-4 gap-6">
         {/* Tema */}
         <div className="flex flex-col">
           <label htmlFor="theme" className="mb-2 text-sm font-medium text-muted-foreground">
@@ -185,7 +185,6 @@ const ProfilePreferencesForm = () => {
               minLength={1}
               className="w-12 bg-input"
               onChange={e => {
-                // accetta solo lettere a-z/A-Z
                 const val = e.target.value.replace(/[^a-zA-Z]/g, '').slice(0, 1)
                 handleFieldChange("sidebarOpenShortcut", val)
               }}
@@ -218,7 +217,28 @@ const ProfilePreferencesForm = () => {
           )}
         </div>
 
-        <div className="flex justify-end">
+        {/* Lingua */}
+        <div className="flex flex-col col-span-1">
+          <label htmlFor="lang" className="mb-2 text-sm font-medium text-muted-foreground">
+            Lingua
+          </label>
+          <Input
+            id="lang"
+            type="text"
+            disabled={!isEditing}
+            value={editPreferences.lang ?? "it"}
+            onChange={e => handleFieldChange("lang", e.target.value)}
+            maxLength={30}
+            placeholder="it"
+            className="bg-input rounded-md border p-2 text-muted-foreground"
+          />
+          {errors.lang && (
+            <span className="text-sm text-red-500 mt-1">{errors.lang}</span>
+          )}
+        </div>
+
+        {/* Bottone Modifica/Salva */}
+        <div className="col-span-4 flex justify-end">
           <Button
             type="button"
             className="cursor-pointer rounded-md bg-primary px-4 py-2 text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear"
@@ -227,7 +247,7 @@ const ProfilePreferencesForm = () => {
                 handleSave()
               } else {
                 setIsEditing(true)
-                setEditPreferences(preferences ?? {})
+                setEditPreferences({ ...preferences, lang: preferences?.lang ?? "it" })
               }
             }}
           >

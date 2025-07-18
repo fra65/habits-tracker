@@ -10,6 +10,7 @@ export const ProfilePreferencesOutputSchema = z.object({
   sidebarOpenShortcut: z.string(),
   sidebarSide: SidebarSide,
   sidebarType: SidebarType,
+  lang: z.string(),
 })
 
 export type ProfilePreferencesOutput = z.infer<typeof ProfilePreferencesOutputSchema>
