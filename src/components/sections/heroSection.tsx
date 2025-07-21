@@ -1,15 +1,19 @@
 import { Zap, ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { useTranslations } from "next-intl";
 
 export default function HeroSection() {
+
+  const t = useTranslations('HomePage');
+
   return (
     <section className="py-20 md:py-32">
       <div className="container">
         <div className="mx-auto max-w-4xl text-center">
           <Badge variant="secondary" className="mb-6">
             <Zap className="mr-2 h-3 w-3" />
-            Nuovo: Statistiche avanzate disponibili
+              {t('title')}
           </Badge>
 
           <h1 className="text-foreground text-4xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-in">

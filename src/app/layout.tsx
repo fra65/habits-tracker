@@ -4,6 +4,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { PreferencesProvider } from "@/contexts/PreferencesContext";
+import {NextIntlClientProvider} from 'next-intl';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,8 +37,13 @@ export default function RootLayout({
           >
 
             <PreferencesProvider>
-              {/* Qui ora tutte le pagine, con accesso a session, tema e preferenze */}
-              {children}
+
+
+              <NextIntlClientProvider>
+                {children}
+              </NextIntlClientProvider>
+
+
             </PreferencesProvider>
 
           </ThemeProvider>

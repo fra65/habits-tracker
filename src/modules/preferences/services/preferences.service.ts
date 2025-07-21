@@ -1,3 +1,4 @@
+import { PreferencesLangOutput, PreferencesLangOutputSchema } from "../schema/PreferencesLangOutputSchema"
 import { ProfilePreferencesInputSchema } from "../schema/ProfilePreferencesInput.schema"
 import { ProfilePreferencesOutput, ProfilePreferencesOutputSchema } from "../schema/ProfilePreferencesOutput.schema"
 
@@ -65,4 +66,34 @@ export async function createUserPreferences(userId: number): Promise<ProfilePref
     const validatePreferences = ProfilePreferencesOutputSchema.safeParse(preferences)
     
     return validatePreferences.data;
+}
+
+
+
+// funzione per get di preferenze sulla lingua
+export async function getUserLangPreferences(userId: number): Promise<PreferencesLangOutput | null> {
+
+    const preferences = await prisma?.user_preferences.findUnique({
+        where: {
+            id: Number(userId)
+        },
+        select: {
+            lang: true
+        }
+    })
+
+
+    if (!preferences) return null
+
+    const validate = PreferencesLangOutputSchema.safeParse(preferences)
+
+    // console.log("Preferenze backend post validazione: ", validate.data)
+
+    if(!validate.success) {
+        console.error("Errore di validazione: ", validate.error)
+        return null
+    }
+
+    return validate.data
+
 }
