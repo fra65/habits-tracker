@@ -60,7 +60,7 @@ export default function ConfirmModal({ onClose, onConfirm }: ConfirmModalProps) 
           </>
         ) : (
           <div className="text-center text-green-700 font-semibold">
-            Modifiche salvate con successo.<br />La pagina si ricaricherà per applicare la nuova lingua...
+            Modifiche salvate con successo.<br />La pagina si ricaricherà per applicare le modifiche...
           </div>
         )}
       </div>

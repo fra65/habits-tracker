@@ -2,7 +2,6 @@
 "use client"
 
 import React, { useState } from "react"
-import { Input } from "@/components/ui/input"
 import { useSession } from "next-auth/react"
 import getPreferences from "../../api/getPreferences"
 import { ProfileSkeleton } from "@/components/skeletons/profileSkeleton"
@@ -170,16 +169,20 @@ const ProfilePreferencesForm = () => {
           <label htmlFor="lang" className="mb-2 text-sm font-medium text-muted-foreground">
             Lingua
           </label>
-          <Input
+          <select
             id="lang"
-            type="text"
             disabled={!isEditing}
             value={editPreferences.lang ?? preferences?.lang ?? "it"}
             onChange={e => handleFieldChange("lang", e.target.value)}
-            maxLength={30}
-            placeholder="it"
             className="bg-input rounded-md border p-2 text-muted-foreground"
-          />
+          >
+            <option value="it">
+              Italiano
+            </option>
+            <option value="en">
+              English
+            </option>
+          </select>
           {errors.lang && <span className="text-sm text-red-500 mt-1">{errors.lang}</span>}
         </div>
 
@@ -234,7 +237,6 @@ const ProfilePreferencesForm = () => {
             }}
           />
         )}
-
       </form>
     </>
   )
