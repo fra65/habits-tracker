@@ -1,5 +1,6 @@
 {
-  "HomePage": {
-    "title": "Hello world!"
+  "HeroSection": {
+    "hero-news-title": "Hello world!",
+    "hero-title": "Transform your <highlight>habits</highlight> in daily victories"
   }
 }

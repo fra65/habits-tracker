@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 
 export default function HeroSection() {
 
-  const t = useTranslations('HomePage');
+  const t = useTranslations('HeroSection');
 
   return (
     <section className="py-20 md:py-32">
@@ -13,11 +13,15 @@ export default function HeroSection() {
         <div className="mx-auto max-w-4xl text-center">
           <Badge variant="secondary" className="mb-6">
             <Zap className="mr-2 h-3 w-3" />
-              {t('title')}
+              {t('hero-news-title')}
           </Badge>
 
           <h1 className="text-foreground text-4xl md:text-6xl font-bold tracking-tight mb-6 animate-fade-in">
-            Trasforma le tue <span className="text-[var(--primary)]">abitudini</span> in successi quotidiani
+            {t.rich('hero-title', {
+              highlight: (chunks) => (
+                <span style={{ color: 'var(--primary)' }}>{chunks}</span>
+              )
+            })}
           </h1>
 
           <p className="text-xl text-[var(--muted-foreground)] mb-8 max-w-2xl mx-auto animate-fade-in">
