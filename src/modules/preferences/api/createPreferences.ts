@@ -3,9 +3,6 @@ import axios from "axios";
 export default async function createPreferences(userId: number) {
     try {
 
-        console.log("User ID:", userId);
-
-
         const response = await axios.post('/api/preferences', {userId})
 
         return response.data;

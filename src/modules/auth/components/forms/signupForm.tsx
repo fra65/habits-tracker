@@ -174,7 +174,11 @@ export default function SignupForm() {
         "credentials"
       );
 
-      // console.log("User created ID:", userCreated.data.user.id);
+      if (!userCreated.success) {
+        setErrors({});
+        setSubmitError("Email e/o username sono già in uso.");
+        return;
+      }
 
       // creo il record vuoto delle preferenze
       await createPreferences(userCreated.data.user.id);

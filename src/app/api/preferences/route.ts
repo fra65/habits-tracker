@@ -14,12 +14,7 @@ export async function POST(request: NextRequest) {
 
   try {
 
-    // console.log("Data received:", request);
-
     const data = await request.json()
-
-    console.log("Data received:", data.userId);
-
 
     const preferences = await createUserPreferences(data.userId);
 
