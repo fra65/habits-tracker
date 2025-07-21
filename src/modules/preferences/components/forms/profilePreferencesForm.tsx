@@ -12,6 +12,7 @@ import updatePreferences from "../../api/updatePreferences"
 import { ProfilePreferencesInputSchema } from "../../schema/ProfilePreferencesInput.schema"
 import resetPreferences from "../../api/resetPreferences"
 import ResetModal from "../modals/resetPreferencesModal"
+import ConfirmModal from "../modals/confirmPreferences"
 import { ThemeToggle } from "@/components/button/theme-toggle"
 import { useTheme } from "next-themes"
 
@@ -22,9 +23,9 @@ const ProfilePreferencesForm = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [editPreferences, setEditPreferences] = useState<Partial<ProfilePreferencesOutput & { lang?: string }>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [showModal, setShowModal] = useState(false)
+  const [showResetModal, setShowResetModal] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
-    // dentro il componente
   const { setTheme } = useTheme()
 
   React.useEffect(() => {
@@ -88,15 +89,41 @@ const ProfilePreferencesForm = () => {
       setErrors({})
       setIsEditing(false)
 
-      // AGGIUNTA: aggiorna tema nell'app in base al valore salvato
       const newTheme = updated?.theme ?? validateData.data.theme ?? "system"
       setTheme(newTheme)
-
     } catch (error) {
       console.error("Errore nel reset preferenze:", error)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSave = async () => {
+    const validateData = ProfilePreferencesInputSchema.safeParse(editPreferences)
+    if (!validateData.success) {
+      // gestione errori omessa per brevità
+      return false
+    }
+
+    try {
+      const updated = await updatePreferences(validateData.data)
+      setPreferences(updated ?? validateData.data)
+      setEditPreferences(updated ?? validateData.data)
+      setErrors({})
+      setIsEditing(false)
+
+      const newTheme = updated?.theme ?? validateData.data.theme ?? "system"
+      setTheme(newTheme)
+
+      return true
+    } catch (error) {
+      console.error("Errore salvataggio preferenze", error)
+      return false
+    }
+  }
+
+  const handleThemeChange = (newTheme: string) => {
+    handleFieldChange("theme", newTheme)
   }
 
   if (status === "loading" || loading) {
@@ -115,40 +142,12 @@ const ProfilePreferencesForm = () => {
     )
   }
 
-  const handleSave = async () => {
-    const validateData = ProfilePreferencesInputSchema.safeParse(editPreferences)
-    if (!validateData.success) {
-      // gestione errori omessa per brevità
-      return
-    }
-
-    try {
-      const updated = await updatePreferences(validateData.data)
-      setPreferences(updated ?? validateData.data)
-      setEditPreferences(updated ?? validateData.data)
-      setErrors({})
-      setIsEditing(false)
-
-      // AGGIUNTA: aggiorna tema nell'app in base al valore salvato
-      const newTheme = updated?.theme ?? validateData.data.theme ?? "system"
-      setTheme(newTheme)
-    } catch (error) {
-      console.error("Errore salvataggio preferenze", error)
-    }
-  }
-
-  const handleThemeChange = (newTheme: string) => {
-    handleFieldChange("theme", newTheme)
-  }
-
   return (
     <>
-
       <div className="max-w-4xl mx-auto mb-4">
         <h1 className="font-medium text-foreground">Preferenze Utente</h1>
       </div>
       <form className="max-w-4xl mx-auto flex flex-col gap-4" onSubmit={e => e.preventDefault()}>
-
         {errors._global && (
           <div className="col-span-4 mb-4 text-red-600 font-semibold">
             {errors._global}
@@ -190,7 +189,8 @@ const ProfilePreferencesForm = () => {
             className="cursor-pointer rounded-md bg-primary px-4 py-2 text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear"
             onClick={() => {
               if (isEditing) {
-                handleSave()
+                // Apri il modale di conferma quando si tenta di salvare
+                setShowConfirmModal(true)
               } else {
                 setIsEditing(true)
                 setEditPreferences({ ...preferences, lang: preferences?.lang ?? "it" })
@@ -204,21 +204,37 @@ const ProfilePreferencesForm = () => {
           <Button
             type="button"
             className={`cursor-pointer rounded-md bg-destructive px-4 py-2 text-white hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear ${isEditing ? "hidden" : ""}`}
-            onClick={() => setShowModal(true)}
+            onClick={() => setShowResetModal(true)}
           >
             Ripristina
           </Button>
         </div>
 
-        {showModal && (
+        {/* Modale reset preferenze */}
+        {showResetModal && (
           <ResetModal
-            onClose={() => setShowModal(false)}
+            onClose={() => setShowResetModal(false)}
             onResetSuccess={() => {
-              setShowModal(false)
+              setShowResetModal(false)
               handleReset()
             }}
           />
         )}
+
+        {/* Modale conferma salvataggio */}
+        {showConfirmModal && (
+          <ConfirmModal
+            onClose={() => setShowConfirmModal(false)}
+            onConfirm={async () => {
+              const success = await handleSave()
+              if (success) {
+                // Il modale gestisce il messaggio di successo e il reload, quindi NO chiusura qui
+              }
+              return success
+            }}
+          />
+        )}
+
       </form>
     </>
   )

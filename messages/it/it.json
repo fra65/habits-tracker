@@ -2,5 +2,14 @@
   "HeroSection": {
     "hero-news-title": "Ciao mondo!",
     "hero-title": "Trasforma le tue <highlight>abitudini</highlight> in successi quotidiani"
+  },
+  "Sidebar": {
+    "sb-today-item": "Oggi",
+    "sb-habits-item": "Abitudini",
+    "sb-history-item": "Storico",
+    "sb-statystics-item": "Statistiche",
+    "sb-admin-item": "Admin",
+    "sb-users-item": "Utenti",
+    "sb-settings-item": "Impostazioni"
   }
 }

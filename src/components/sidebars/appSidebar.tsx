@@ -24,33 +24,37 @@ import { NavUser } from "./navUser"
 import { TeamSwitcher } from "./teamSwitcher"
 import { NavSettings } from "./navSettings"
 import { NavAdmin } from "./navAdmin"
-
-const data = {
-  teams: [{ name: "Habits Flow", logo: Target, plan: "Enterprise" }],
-  navMain: [
-    { title: "Today", url: "#", icon: Calendar, isActive: true },
-    { title: "Habits", url: "#", icon: Target },
-    { title: "History", url: "#", icon: History },
-    { title: "Statistics", url: "#", icon: PieChartIcon },
-  ],
-  navSettings: [{ title: "Settings", url: "#", icon: Settings2 }],
-
-  navAdmin: [
-    { 
-      title: "ADMIN", 
-      url: "#", 
-      icon: Lock , 
-      items: [
-        {
-          title: 'Users',
-          url: '/pages/users'
-        }
-      ]
-    }
-  ],
-}
+import { useTranslations } from "next-intl"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+
+  const t = useTranslations('Sidebar');
+
+  const data = {
+    teams: [{ name: "Habits Flow", logo: Target, plan: "Enterprise" }],
+    navMain: [
+      { title: t('sb-today-item'), url: "#", icon: Calendar, isActive: true },
+      { title: t('sb-habits-item'), url: "#", icon: Target },
+      { title: t('sb-history-item'), url: "#", icon: History },
+      { title: t('sb-statystics-item'), url: "#", icon: PieChartIcon },
+    ],
+    navSettings: [{ title: t('sb-settings-item'), url: "#", icon: Settings2 }],
+
+    navAdmin: [
+      { 
+        title: t('sb-admin-item'), 
+        url: "#", 
+        icon: Lock , 
+        items: [
+          {
+            title: t('sb-users-item'),
+            url: '/pages/users'
+          }
+        ]
+      }
+    ],
+  }
+
   const { data: session, status } = useSession()
 
   const user = React.useMemo(() => {
