@@ -11,5 +11,70 @@
     "sb-admin-item": "Admin",
     "sb-users-item": "Utenti",
     "sb-settings-item": "Impostazioni"
+  },
+  "SidebarUser": {
+    "sbu-profile": "Profilo",
+    "sbu-logout": "Disconnetti"
+  },
+  "ProfilePage": {
+    "ip-title": "Info Profilo",
+    "ip-name-label": "Nome",
+    "ip-surname-label": "Cognome",
+    "ip-birthday-label": "Data di Nascita",
+    "ip-gender-label": "Sesso",
+
+    "GenderSelect": {
+      "gs-select": "Seleziona",
+      "gs-male": "Uomo",
+      "gs-female": "Donna",
+      "gs-other": "Altro",
+      "gs-not-spec": "Non Specificato"
+    },
+    
+    "ChangePassword": {
+      "cp-title": "Cambia Password",
+      "cp-desc": "Clicca qui per cambiare la password"
+    },
+
+    "Preferences": {
+      "p-title": "Preferenze Utente",
+      "p-theme-label": "Tema",
+      "p-lang-label": "Lingua",
+      "p-lang-it": "Italiano",
+      "p-lang-en": "Inglese (UK)"
+    },
+
+    "Buttons": {
+      "b-edit": "Modifica",
+      "b-save": "Salva",
+      "b-delete": "Elimina",
+      "b-reset": "Ripristina",
+      "b-change-password": "Cambia Password",
+      "b-confirm": "Conferma",
+      "b-cancel": "Annulla"
+    },
+
+    "Modals": {
+      "DeleteProfile": {
+        "dp-title": "Conferma Eliminazione",
+        "dp-desc": "Sei sicuro di eliminare il tuo profilo? Quest'azione è irreversibile"
+      },
+      "ChangePassword": {
+        "cp-title": "Cambia Password",
+        "cp-desc": "Cliccando su Continua verrà effettuato il logout, e sarai reindirizzato alla pagina di recupero password.",
+        "cp-advise": "Confermare?"
+      },
+      "ResetPreferences": {
+        "rp-title": "Conferma Ripristino",
+        "rp-desc": "Cliccando su Conferma, le preferenze verranno riportate alle impostazioni di fabbrica. Questa azione è irreversibile!"
+      },
+      "SavePreferences": {
+        "sp-title": "Conferma Modifica",
+        "sp-desc": "Sei sicuro di voler modificare le preferenze? Questa azione aggiornerà le impostazioni correnti.",
+        "sp-success": "Modifiche salvate con successo!",
+        "sp-reload": "La pagina si ricaricherà per applicare le modifiche..."
+      }
+    }
   }
+
 }

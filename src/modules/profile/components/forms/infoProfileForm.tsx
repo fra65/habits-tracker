@@ -14,13 +14,7 @@ import updateProfile from "../../api/updateProfile"
 import { ProfileUpdateInputSchema } from "../../schema/ProfileUpdateInputSchema"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-
-const SESSO_OPTIONS = [
-  { value: "M", label: "Uomo" },
-  { value: "F", label: "Donna" },
-  { value: "A", label: "Altro" },
-  { value: "N", label: "Non dichiarato" },
-]
+import { useTranslations } from "next-intl"
 
 const InfoProfileForm = () => {
   const { data: session, status } = useSession()
@@ -31,6 +25,15 @@ const InfoProfileForm = () => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const [editProfile, setEditProfile] = useState<Partial<ProfileOutput>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const t = useTranslations("ProfilePage")
+
+  const SESSO_OPTIONS = [
+    { value: "M", label: t('GenderSelect.gs-male') },
+    { value: "F", label: t('GenderSelect.gs-female') },
+    { value: "A", label: t('GenderSelect.gs-other') },
+    { value: "N", label: t('GenderSelect.gs-not-spec') },
+  ]
 
   React.useEffect(() => {
     if (status === "authenticated") {
@@ -118,7 +121,7 @@ const InfoProfileForm = () => {
   return (
     <>
       <div className="max-w-4xl mx-auto mb-4">
-        <h1 className="font-medium text-foreground">Info Profilo</h1>
+        <h1 className="font-medium text-foreground">{t('ip-title')}</h1>
       </div>
       <form
         id="form"
@@ -130,7 +133,7 @@ const InfoProfileForm = () => {
             htmlFor="nome"
             className="mb-2 text-sm font-medium text-muted-foreground"
           >
-            Nome
+            {t('ip-name-label')}
           </label>
           <Input
             id="nome"
@@ -150,7 +153,7 @@ const InfoProfileForm = () => {
             htmlFor="cognome"
             className="mb-2 text-sm font-medium text-muted-foreground"
           >
-            Cognome
+            {t('ip-surname-label')}
           </label>
           <Input
             id="cognome"
@@ -170,7 +173,7 @@ const InfoProfileForm = () => {
             htmlFor="data_nascita"
             className="mb-2 text-sm font-medium text-muted-foreground"
           >
-            Data di nascita
+            {t('ip-birthday-label')}
           </label>
           <Input
             id="data_nascita"
@@ -195,7 +198,7 @@ const InfoProfileForm = () => {
             htmlFor="sesso"
             className="mb-2 text-sm font-medium text-muted-foreground"
           >
-            Sesso
+            {t('ip-gender-label')}
           </label>
           <select
             id="sesso"
@@ -207,7 +210,7 @@ const InfoProfileForm = () => {
             value={isEditing ? editProfile.sesso ?? "" : profile?.sesso ?? ""}
             onChange={(e) => handleFieldChange("sesso", e.target.value)}
           >
-            <option value="">Seleziona...</option>
+            <option value="">{t('GenderSelect.gs-select')}</option>
             {SESSO_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
@@ -233,7 +236,7 @@ const InfoProfileForm = () => {
               }
             }}
           >
-            {isEditing ? "Salva" : "Modifica"}
+            {isEditing ? t('Buttons.b-save') : t('Buttons.b-edit')}
           </Button>
           {profile && (
             <Button
@@ -241,7 +244,7 @@ const InfoProfileForm = () => {
               onClick={() => setShowModal(true)}
               className="bg-destructive hover:bg-destructive/90 cursor-pointer"
             >
-              DELETE
+              {t('Buttons.b-delete')}
             </Button>
           )}
           {showModal && (

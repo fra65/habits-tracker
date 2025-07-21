@@ -4,12 +4,15 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { signOut } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 
 type ChangePasswordConfirmModalProps = {
   onClose: () => void;
 };
 
 export default function ChangePasswordModal({ onClose }: ChangePasswordConfirmModalProps) {
+  const t = useTranslations("ProfilePage");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,7 +27,7 @@ export default function ChangePasswordModal({ onClose }: ChangePasswordConfirmMo
       setError(
         err?.response?.data?.message ||
         err?.message ||
-        'Errore durante la procedura di logout.'
+        t('Modals.ChangePassword.cp-error', { defaultValue: 'Errore durante la procedura di logout.' })
       );
       setLoading(false); // Torna interattivo solo se errore
     }
@@ -33,23 +36,26 @@ export default function ChangePasswordModal({ onClose }: ChangePasswordConfirmMo
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">
-        <h3 className="text-lg font-bold mb-4">Cambio password</h3>
+        <h3 className="text-lg font-bold mb-4">{t('Modals.ChangePassword.cp-title')}</h3>
         <p className="mb-6">
-          Cliccando su <span className="font-semibold">Continua</span> verrà effettuato il logout, e
-          sarai reindirizzato alla pagina di recupero password.
-          <br />
-          <br />
-          <span className="text-red-600">Continuare?</span>
+          {t.rich('Modals.ChangePassword.cp-desc', {
+            continue: (children) => <span className="font-semibold">{children}</span>,
+            br: () => <>
+              <br />
+              <br />
+            </>
+          })}
+          <span className="text-red-600">{t('Modals.ChangePassword.cp-advise')}</span>
         </p>
 
         {error && <p className="text-red-600 mb-4">{error}</p>}
 
         <div className="flex justify-end gap-4">
-          <Button className='cursor-pointer' variant="outline" onClick={onClose} disabled={loading}>
-            Annulla
+          <Button className="cursor-pointer" variant="outline" onClick={onClose} disabled={loading}>
+            {t('Buttons.b-cancel')}
           </Button>
-          <Button className='cursor-pointer' onClick={handleContinue} disabled={loading}>
-            {loading ? 'Uscita...' : 'Continua'}
+          <Button className="cursor-pointer" onClick={handleContinue} disabled={loading}>
+            {loading ? t('Modals.ChangePassword.cp-loading', { defaultValue: 'Uscita...' }) : t('Buttons.b-confirm')}
           </Button>
         </div>
       </div>

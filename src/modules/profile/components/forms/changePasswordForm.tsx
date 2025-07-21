@@ -3,8 +3,12 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import ChangePasswordModal from '../modals/changePasswordModal';
+import { useTranslations } from 'next-intl';
 
 const ChangePasswordForm = () => {
+
+  const t = useTranslations("ProfilePage")
+
   const [showModal, setShowModal] = useState(false);
 
   const handleOpenModal = () => setShowModal(true);
@@ -15,17 +19,21 @@ const ChangePasswordForm = () => {
     <>
 
       <div className="max-w-4xl mx-auto mb-4">
-        <h1 className="font-medium text-foreground">Cambia Password</h1>
+        <h1 className="font-medium text-foreground">
+          {t("ChangePassword.cp-title")}
+        </h1>
       </div>
 
       <div className="flex justify-between max-w-4xl mx-auto items-center">
-        <h1 className='text-muted-foreground'>Clicca per cambiare la password</h1>
+        <h1 className='text-muted-foreground'>
+          {t("ChangePassword.cp-desc")}
+        </h1>
         <Button
           type="button"
           className="bg-primary cursor-pointer"
           onClick={handleOpenModal}
         >
-          Cambia Password
+          {t("Buttons.b-change-password")}
         </Button>
 
         {/* Modale visibile solo se showModal === true */}

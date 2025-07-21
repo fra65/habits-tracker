@@ -14,8 +14,12 @@ import ResetModal from "../modals/resetPreferencesModal"
 import ConfirmModal from "../modals/confirmPreferences"
 import { ThemeToggle } from "@/components/button/theme-toggle"
 import { useTheme } from "next-themes"
+import { useTranslations } from "next-intl"
 
 const ProfilePreferencesForm = () => {
+
+  const t = useTranslations("ProfilePage")
+
   const { data: session, status } = useSession()
   const [preferences, setPreferences] = useState<ProfilePreferencesOutput | null>(null)
   const [loading, setLoading] = useState(true)
@@ -144,7 +148,7 @@ const ProfilePreferencesForm = () => {
   return (
     <>
       <div className="max-w-4xl mx-auto mb-4">
-        <h1 className="font-medium text-foreground">Preferenze Utente</h1>
+        <h1 className="font-medium text-foreground">{t("Preferences.p-title")}</h1>
       </div>
       <form className="max-w-4xl mx-auto flex flex-col gap-4" onSubmit={e => e.preventDefault()}>
         {errors._global && (
@@ -155,7 +159,7 @@ const ProfilePreferencesForm = () => {
 
         <div className="flex flex-col w-1/6">
           <label htmlFor="theme" className="mb-2 text-sm font-medium text-muted-foreground">
-            Tema
+            {t("Preferences.p-theme-label")}
           </label>
           <ThemeToggle
             value={isEditing ? editPreferences.theme ?? "system" : preferences?.theme ?? "system"}
@@ -167,7 +171,7 @@ const ProfilePreferencesForm = () => {
 
         <div className="flex flex-col col-span-1 w-1/6">
           <label htmlFor="lang" className="mb-2 text-sm font-medium text-muted-foreground">
-            Lingua
+            {t("Preferences.p-lang-label")}
           </label>
           <select
             id="lang"
@@ -177,10 +181,10 @@ const ProfilePreferencesForm = () => {
             className="bg-input rounded-md border p-2 text-muted-foreground"
           >
             <option value="it">
-              Italiano
+              {t("Preferences.p-lang-it")}
             </option>
             <option value="en">
-              English
+              {t("Preferences.p-lang-en")}
             </option>
           </select>
           {errors.lang && <span className="text-sm text-red-500 mt-1">{errors.lang}</span>}
@@ -201,7 +205,7 @@ const ProfilePreferencesForm = () => {
               }
             }}
           >
-            {isEditing ? "Salva" : "Modifica"}
+            {isEditing ? t("Buttons.b-save") : t("Buttons.b-edit")}
           </Button>
 
           <Button
@@ -209,7 +213,7 @@ const ProfilePreferencesForm = () => {
             className={`cursor-pointer rounded-md bg-destructive px-4 py-2 text-white hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear ${isEditing ? "hidden" : ""}`}
             onClick={() => setShowResetModal(true)}
           >
-            Ripristina
+            {t("Buttons.b-reset")}
           </Button>
         </div>
 

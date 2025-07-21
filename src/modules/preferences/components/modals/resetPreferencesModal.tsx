@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import resetPreferences from '../../api/resetPreferences';
+import { useTranslations } from 'next-intl';
 
 type ResetConfirmModalProps = {
   onClose: () => void;
@@ -11,6 +12,8 @@ type ResetConfirmModalProps = {
 };
 
 export default function ResetModal({ onClose, onResetSuccess }: ResetConfirmModalProps) {
+  const t = useTranslations("ProfilePage");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,10 +25,13 @@ export default function ResetModal({ onClose, onResetSuccess }: ResetConfirmModa
       if (result) {
         onResetSuccess();
       } else {
-        setError('Il reset non è andato a buon fine.');
+        setError(t('Modals.ResetPreferences.rp-error', { defaultValue: 'Il reset non è andato a buon fine.' }));
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Errore durante il reset.');
+      setError(
+        err.response?.data?.message ||
+          t('Modals.ResetPreferences.rp-fail', { defaultValue: 'Errore durante il reset.' })
+      );
     } finally {
       setLoading(false);
     }
@@ -34,17 +40,21 @@ export default function ResetModal({ onClose, onResetSuccess }: ResetConfirmModa
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">
-        <h3 className="text-lg font-bold mb-4">Conferma Ripristino</h3>
-        <p className="mb-6">Cliccando su Conferma, le preferenze verranno riportate alle impostazioni di fabbrica. Questa azione è irreversibile!</p>
+        <h3 className="text-lg font-bold mb-4">{t('Modals.ResetPreferences.rp-title')}</h3>
+        <p className="mb-6">{t('Modals.ResetPreferences.rp-desc')}</p>
 
         {error && <p className="text-red-600 mb-4">{error}</p>}
 
         <div className="flex justify-end gap-4">
-          <Button className='cursor-pointer' variant="outline" onClick={onClose} disabled={loading}>
-            Annulla
+          <Button className="cursor-pointer" variant="outline" onClick={onClose} disabled={loading}>
+            {t('Buttons.b-cancel')}
           </Button>
-          <Button className='bg-destructive hover:bg-destructive/90 cursor-pointer' onClick={handleConfirmReset} disabled={loading}>
-            {loading ? 'Ripristino...' : 'Conferma'}
+          <Button
+            className="bg-destructive hover:bg-destructive/90 cursor-pointer"
+            onClick={handleConfirmReset}
+            disabled={loading}
+          >
+            {loading ? t('Modals.ResetPreferences.rp-loading', { defaultValue: 'Ripristino...' }) : t('Buttons.b-confirm')}
           </Button>
         </div>
       </div>

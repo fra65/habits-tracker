@@ -11,5 +11,71 @@
     "sb-admin-item": "Admin",
     "sb-users-item": "Users",
     "sb-settings-item": "Settings"
+  },
+  "SidebarUser": {
+    "sbu-profile": "Profile",
+    "sbu-logout": "Logout"
+  },
+  "ProfilePage": {
+    "ip-title": "Profile Info",
+    "ip-name-label": "Name",
+    "ip-surname-label": "Surname",
+    "ip-birthday-label": "Birthday",
+    "ip-gender-label": "Gender",
+
+    "GenderSelect": {
+      "gs-select": "Select",
+      "gs-male": "Man",
+      "gs-female": "Female",
+      "gs-other": "Other",
+      "gs-not-spec": "Not Specificated"
+    },
+
+    "ChangePassword": {
+      "cp-title": "Change Password",
+      "cp-desc": "Click here to reset your password"
+    },
+
+    "Preferences": {
+      "p-title": "User Preferences",
+      "p-theme-label": "Theme",
+      "p-lang-label": "Language",
+      "p-lang-it": "Italian",
+      "p-lang-en": "English (UK)"
+    },
+
+    "Buttons": {
+      "b-edit": "Edit",
+      "b-save": "Save",
+      "b-delete": "Delete",
+      "b-reset": "Reset",
+      "b-change-password": "Change Password",
+      "b-confirm": "Confirm",
+      "b-cancel": "Cancel"
+    },
+
+    "Modals": {
+      "DeleteProfile": {
+        "dp-title": "Cancellation Confirm",
+        "dp-desc": "Are you sure to delete your profile? This action is irreversible!"
+      },
+      "ChangePassword": {
+        "cp-title": "Change Password",
+        "cp-desc": "By clicking Continue, you will be logged out and redirected to the password recovery page.",
+        "cp-advise": "Confirm?"
+      },
+      "ResetPreferences": {
+        "rp-title": "Reset Confirm",
+        "rp-desc": "By clicking Confirm, the preferences will be reset to factory settings. This action is irreversible!"
+      },
+      "SavePreferences": {
+        "sp-title": "Edit Confirm",
+        "sp-desc": "Are you sure you want to change the preferences? This action will update the current settings.",
+        "sp-success": "Changes saved successfully!",
+        "sp-reload": "The page will reload to apply the changes..."
+      }
+    }
+
   }
+
 }

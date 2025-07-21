@@ -1,7 +1,6 @@
 "use client"
 
 import {
-  Bell,
   ChevronsUpDown,
   LogOut,
   User,
@@ -30,6 +29,7 @@ import {
 import { useState } from "react"
 import { signOut } from "next-auth/react"
 import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 
 export function NavUser({
@@ -41,6 +41,9 @@ export function NavUser({
     avatar: string
   }
 }) {
+
+  const t = useTranslations("SidebarUser")
+
   const { isMobile } = useSidebar()
 
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -95,7 +98,7 @@ export function NavUser({
                 <DropdownMenuItem className="cursor-pointer">
                   <div className="flex align-middle w-full">
                     <User className="mr-2 cursor-pointer" />
-                    Profile
+                    {t("sbu-profile")}
                   </div>
                 </DropdownMenuItem>
               </Link>
@@ -103,15 +106,11 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
 
-            <DropdownMenuItem className="cursor-pointer">
-                <Bell className="mr-2 cursor-pointer" />
-                Notifications
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout} className="cursor-pointer" disabled={isLoggingOut}>
               <LogOut className="mr-2 cursor-pointer" />
-              Log out
+              {t('sbu-logout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
