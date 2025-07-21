@@ -25,6 +25,7 @@ import { normalizeRole } from "@/utils/roleEnumHelper";
 // Importa la configurazione base (providers, session strategy, middleware edge compatibile)
 import authConfig from "./auth.config"; // Assicurati che il percorso sia corretto
 import { createUser, createUserOauth, getUserByAuthProvider, getUserByEmail } from "@/modules/user/services/user.service";
+import { createUserPreferences } from "@/modules/preferences/services/preferences.service";
 
 // Esporta la configurazione NextAuth con i provider e i callback personalizzati
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -82,11 +83,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if (!existingUser) {
 
           // Crea utente senza password
-          await createUserOauth({
+          const createdUser = await createUserOauth({
             username: user.name ?? user.email?.split("@")[0] ?? "user",
             email: user.email,
             provider: account.provider
           }) 
+
+          // creo le preferenze di default per questo utente
+          await createUserPreferences(createdUser.id);
 
         }
       }

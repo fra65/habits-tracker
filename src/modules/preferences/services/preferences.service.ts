@@ -50,3 +50,19 @@ export async function updateProfilePreferences(userId: number, data: ProfilePref
     return validate.data
 
 }
+
+
+export async function createUserPreferences(userId: number): Promise<ProfilePreferencesOutput | null | undefined> {
+
+    const preferences = await prisma?.user_preferences.create({
+        data: {
+            id: userId
+        }
+    })
+
+    if(!preferences) return null
+
+    const validatePreferences = ProfilePreferencesOutputSchema.safeParse(preferences)
+    
+    return validatePreferences.data;
+}

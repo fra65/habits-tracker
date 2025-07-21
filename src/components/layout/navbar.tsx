@@ -3,7 +3,7 @@
 import { Target } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { ThemeToggle } from "../button/theme-toggle";
+// import { ThemeToggle } from "../button/theme-toggle";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export default function Navbar() {
@@ -33,9 +33,9 @@ export default function Navbar() {
         
 
         <div className="flex items-center space-x-4">
-          <div>
+          {/* <div>
             <ThemeToggle />
-          </div>
+          </div> */}
 
           <Link href='/pages/dashboard'>
             <Button size="sm" className="bg-primary hover:bg-primary/90 cursor-pointer">
