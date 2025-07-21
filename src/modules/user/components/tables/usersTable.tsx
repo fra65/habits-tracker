@@ -44,7 +44,7 @@ export default function UsersTable() {
        (
         <>
           <Table>
-            <TableCaption>Lista di tutti gli utenti</TableCaption>
+            <TableCaption className="text-primary">Lista di tutti gli utenti</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="text-start">Username</TableHead>
@@ -59,18 +59,18 @@ export default function UsersTable() {
             <TableBody>
               {users.map((user: OutputUserWithProfile) => (
                 <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.username}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.provider}</TableCell>
-                  <TableCell className="font-medium">{user.user_profile?.nome}</TableCell>
-                  <TableCell className="font-medium">{user.user_profile?.cognome}</TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium text-muted-foreground">{user.username}</TableCell>
+                  <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                  <TableCell className="text-muted-foreground">{user.provider}</TableCell>
+                  <TableCell className="font-medium text-muted-foreground">{user.user_profile?.nome}</TableCell>
+                  <TableCell className="font-medium text-muted-foreground">{user.user_profile?.cognome}</TableCell>
+                  <TableCell className="font-medium text-muted-foreground">
                     {user.user_profile?.data_nascita
                       ? new Date(user.user_profile.data_nascita).toLocaleDateString("it-IT")
                       : ""
                     }
                   </TableCell>
-                  <TableCell className="font-medium">{user.user_profile?.sesso}</TableCell>
+                  <TableCell className="font-medium text-muted-foreground">{user.user_profile?.sesso}</TableCell>
                 </TableRow>
               ))}
 
