@@ -25,12 +25,12 @@ export default function ResetModal({ onClose, onResetSuccess }: ResetConfirmModa
       if (result) {
         onResetSuccess();
       } else {
-        setError(t('Modals.ResetPreferences.rp-error', { defaultValue: 'Il reset non è andato a buon fine.' }));
+        setError(t('Modals.ResetPreferences.rp-error'));
       }
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-          t('Modals.ResetPreferences.rp-fail', { defaultValue: 'Errore durante il reset.' })
+          t('Modals.ResetPreferences.rp-fail')
       );
     } finally {
       setLoading(false);
@@ -54,7 +54,7 @@ export default function ResetModal({ onClose, onResetSuccess }: ResetConfirmModa
             onClick={handleConfirmReset}
             disabled={loading}
           >
-            {loading ? t('Modals.ResetPreferences.rp-loading', { defaultValue: 'Ripristino...' }) : t('Buttons.b-confirm')}
+            {loading ? t('Modals.ResetPreferences.rp-loading') : t('Buttons.b-confirm')}
           </Button>
         </div>
       </div>

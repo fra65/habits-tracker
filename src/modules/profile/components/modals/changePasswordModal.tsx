@@ -27,7 +27,7 @@ export default function ChangePasswordModal({ onClose }: ChangePasswordConfirmMo
       setError(
         err?.response?.data?.message ||
         err?.message ||
-        t('Modals.ChangePassword.cp-error', { defaultValue: 'Errore durante la procedura di logout.' })
+        t('Modals.ChangePassword.cp-error')
       );
       setLoading(false); // Torna interattivo solo se errore
     }
@@ -55,7 +55,7 @@ export default function ChangePasswordModal({ onClose }: ChangePasswordConfirmMo
             {t('Buttons.b-cancel')}
           </Button>
           <Button className="cursor-pointer" onClick={handleContinue} disabled={loading}>
-            {loading ? t('Modals.ChangePassword.cp-loading', { defaultValue: 'Uscita...' }) : t('Buttons.b-confirm')}
+            {loading ? t('Modals.ChangePassword.cp-loading') : t('Buttons.b-confirm')}
           </Button>
         </div>
       </div>

@@ -22,7 +22,6 @@
     "ip-surname-label": "Cognome",
     "ip-birthday-label": "Data di Nascita",
     "ip-gender-label": "Sesso",
-
     "GenderSelect": {
       "gs-select": "Seleziona",
       "gs-male": "Uomo",
@@ -30,12 +29,10 @@
       "gs-other": "Altro",
       "gs-not-spec": "Non Specificato"
     },
-    
     "ChangePassword": {
       "cp-title": "Cambia Password",
       "cp-desc": "Clicca qui per cambiare la password"
     },
-
     "Preferences": {
       "p-title": "Preferenze Utente",
       "p-theme-label": "Tema",
@@ -43,7 +40,6 @@
       "p-lang-it": "Italiano",
       "p-lang-en": "Inglese (UK)"
     },
-
     "Buttons": {
       "b-edit": "Modifica",
       "b-save": "Salva",
@@ -53,28 +49,35 @@
       "b-confirm": "Conferma",
       "b-cancel": "Annulla"
     },
-
     "Modals": {
       "DeleteProfile": {
         "dp-title": "Conferma Eliminazione",
-        "dp-desc": "Sei sicuro di eliminare il tuo profilo? Quest'azione è irreversibile"
+        "dp-desc": "Sei sicuro di eliminare il tuo profilo? Quest'azione è irreversibile",
+        "dp-error": "La cancellazione non è andata a buon fine.",
+        "dp-fail": "Errore durante la cancellazione.",
+        "dp-loading": "Eliminazione in corso..."
       },
       "ChangePassword": {
         "cp-title": "Cambia Password",
         "cp-desc": "Cliccando su Continua verrà effettuato il logout, e sarai reindirizzato alla pagina di recupero password.",
-        "cp-advise": "Confermare?"
+        "cp-advise": "Confermare?",
+        "cp-error": "Errore durante il processo di logout.",
+        "cp-loading": "Disconnessione in corso..."
       },
       "ResetPreferences": {
         "rp-title": "Conferma Ripristino",
-        "rp-desc": "Cliccando su Conferma, le preferenze verranno riportate alle impostazioni di fabbrica. Questa azione è irreversibile!"
+        "rp-desc": "Cliccando su Conferma, le preferenze verranno riportate alle impostazioni di fabbrica. Questa azione è irreversibile!",
+        "rp-error": "Il ripristino non è andato a buon fine.",
+        "rp-fail": "Errore durante il ripristino.",
+        "rp-loading": "Ripristino in corso..."
       },
       "SavePreferences": {
         "sp-title": "Conferma Modifica",
         "sp-desc": "Sei sicuro di voler modificare le preferenze? Questa azione aggiornerà le impostazioni correnti.",
         "sp-success": "Modifiche salvate con successo!",
-        "sp-reload": "La pagina si ricaricherà per applicare le modifiche..."
+        "sp-reload": "La pagina si ricaricherà per applicare le modifiche...",
+        "sp-error": "La modifica non è andata a buon fine."
       }
     }
   }
-
 }

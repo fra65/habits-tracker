@@ -23,12 +23,12 @@ export default function ConfirmModal({ onClose, onConfirm }: ConfirmModalProps) 
     try {
       const result = await onConfirm(); // chiama la funzione save passata dal form
       if (!result) {
-        setError(t('Modals.SavePreferences.sp-error', { defaultValue: 'La modifica non è andata a buon fine.' }));
+        setError(t('Modals.SavePreferences.sp-error'));
       } else {
         setSuccess(true);
       }
     } catch (err: any) {
-      setError(err?.message || t('Modals.SavePreferences.sp-error', { defaultValue: 'Errore durante la modifica.' }));
+      setError(err?.message || t('Modals.SavePreferences.sp-error'));
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ export default function ConfirmModal({ onClose, onConfirm }: ConfirmModalProps) 
               </Button>
               <Button className="bg-primary" variant="default" onClick={handleConfirm} disabled={loading}>
                 {loading
-                  ? t('Buttons.b-save', { defaultValue: 'Salvataggio...' })
+                  ? t('Buttons.b-save')
                   : t('Buttons.b-confirm')}
               </Button>
             </div>

@@ -25,12 +25,12 @@ export default function DeleteModal({ onClose, onDeleteSuccess }: DeleteConfirmM
       if (result === true) {
         onDeleteSuccess();
       } else {
-        setError(t('Modals.DeleteProfile.dp-error', { defaultValue: 'La cancellazione non è andata a buon fine.' }));
+        setError(t('Modals.DeleteProfile.dp-error'));
       }
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-        t('Modals.DeleteProfile.dp-fail', { defaultValue: 'Errore durante la cancellazione.' })
+        t('Modals.DeleteProfile.dp-fail')
       );
     } finally {
       setLoading(false);
@@ -54,7 +54,7 @@ export default function DeleteModal({ onClose, onDeleteSuccess }: DeleteConfirmM
             onClick={handleConfirmDelete}
             disabled={loading}
           >
-            {loading ? t('Modals.DeleteProfile.dp-loading', { defaultValue: 'Eliminazione...' }) : t('Buttons.b-confirm')}
+            {loading ? t('Modals.DeleteProfile.dp-loading') : t('Buttons.b-confirm')}
           </Button>
         </div>
       </div>

@@ -22,20 +22,17 @@
     "ip-surname-label": "Surname",
     "ip-birthday-label": "Birthday",
     "ip-gender-label": "Gender",
-
     "GenderSelect": {
       "gs-select": "Select",
       "gs-male": "Man",
       "gs-female": "Female",
       "gs-other": "Other",
-      "gs-not-spec": "Not Specificated"
+      "gs-not-spec": "Not Specified"
     },
-
     "ChangePassword": {
       "cp-title": "Change Password",
       "cp-desc": "Click here to reset your password"
     },
-
     "Preferences": {
       "p-title": "User Preferences",
       "p-theme-label": "Theme",
@@ -43,7 +40,6 @@
       "p-lang-it": "Italian",
       "p-lang-en": "English (UK)"
     },
-
     "Buttons": {
       "b-edit": "Edit",
       "b-save": "Save",
@@ -53,29 +49,35 @@
       "b-confirm": "Confirm",
       "b-cancel": "Cancel"
     },
-
     "Modals": {
       "DeleteProfile": {
         "dp-title": "Cancellation Confirm",
-        "dp-desc": "Are you sure to delete your profile? This action is irreversible!"
+        "dp-desc": "Are you sure to delete your profile? This action is irreversible!",
+        "dp-error": "The deletion was not successful.",
+        "dp-fail": "Error during deletion.",
+        "dp-loading": "Deleting..."
       },
       "ChangePassword": {
         "cp-title": "Change Password",
         "cp-desc": "By clicking Continue, you will be logged out and redirected to the password recovery page.",
-        "cp-advise": "Confirm?"
+        "cp-advise": "Confirm?",
+        "cp-error": "Error during the logout process.",
+        "cp-loading": "Logging out..."
       },
       "ResetPreferences": {
         "rp-title": "Reset Confirm",
-        "rp-desc": "By clicking Confirm, the preferences will be reset to factory settings. This action is irreversible!"
+        "rp-desc": "By clicking Confirm, the preferences will be reset to factory settings. This action is irreversible!",
+        "rp-error": "The reset was not successful.",
+        "rp-fail": "Error during the reset.",
+        "rp-loading": "Resetting..."
       },
       "SavePreferences": {
         "sp-title": "Edit Confirm",
         "sp-desc": "Are you sure you want to change the preferences? This action will update the current settings.",
-        "sp-success": "Changes saved successfully!",
+        "sp-error": "The change was not successful.",
+        "sp-success": "Changes saved successfully.",
         "sp-reload": "The page will reload to apply the changes..."
       }
     }
-
   }
-
 }
