@@ -4,9 +4,37 @@ import { ProfilePreferencesInputSchema } from "@/modules/preferences/schema/Prof
 import { ProfilePreferencesOutputSchema } from "@/modules/preferences/schema/ProfilePreferencesOutput.schema";
 // import { ProfilePreferencesInputSchema } from "@/modules/preferences/schema/ProfilePreferencesInput.schema";
 // import { ProfilePreferencesOutputSchema } from "@/modules/preferences/schema/ProfilePreferencesOutput.schema";
-import { getUserPreferences, updateProfilePreferences } from "@/modules/preferences/services/preferences.service";
+import { createUserPreferences, getUserPreferences, updateProfilePreferences } from "@/modules/preferences/services/preferences.service";
 import { getUserProfileById } from "@/modules/profile/services/profile.service";
 import { NextRequest, NextResponse } from "next/server";
+
+
+// CREAZIONE PREFERENZE
+export async function POST(request: NextRequest) {
+
+  try {
+
+    // console.log("Data received:", request);
+
+    const data = await request.json()
+
+    console.log("Data received:", data.userId);
+
+
+    const preferences = await createUserPreferences(data.userId);
+
+    return NextResponse.json(preferences, { status: 201 });
+
+  } catch(error) {
+        console.error("Errore nel recupero delle preferenze:", error);
+    return NextResponse.json(
+      { error: "Errore interno del server" },
+      { status: 500 }
+    );
+  }
+
+}
+
 
 export async function GET() {
 
@@ -77,9 +105,9 @@ export async function PUT(request: NextRequest) {
     }
 
     // Aggiorna profilo con dati validati
-    const updatedProfile = await updateProfilePreferences(Number(session.user.id), parseResult.data);
+    const updatedPreferences = await updateProfilePreferences(Number(session.user.id), parseResult.data);
 
-    if (!updatedProfile) {
+    if (!updatedPreferences) {
       return NextResponse.json(
         { error: "Impossibile aggiornare il profilo" },
         { status: 500 }
@@ -87,7 +115,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Validazione opzionale della risposta (se hai uno schema per l'output)
-    const outputValidation = ProfilePreferencesOutputSchema.safeParse(updatedProfile);
+    const outputValidation = ProfilePreferencesOutputSchema.safeParse(updatedPreferences);
     if (!outputValidation.success) {
       console.error("Profilo aggiornato ma output non valido:", outputValidation.error);
       // Puoi decidere se mandare comunque la risposta o un errore

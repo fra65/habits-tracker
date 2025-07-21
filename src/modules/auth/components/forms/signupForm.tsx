@@ -12,6 +12,7 @@ import Link from "next/link";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import createPreferences from "@/modules/preferences/api/createPreferences";
 
 // Componente PasswordInput con stile aggiornato
 function PasswordInput({
@@ -166,12 +167,18 @@ export default function SignupForm() {
     }
 
     try {
-      await createUser(
+      const userCreated = await createUser(
         formData.username,
         formData.email,
         formData.password,
         "credentials"
       );
+
+      // console.log("User created ID:", userCreated.data.user.id);
+
+      // creo il record vuoto delle preferenze
+      await createPreferences(userCreated.data.user.id);
+
       setSubmitSuccess("Registrazione avvenuta con successo! Reindirizzamento...");
       setTimeout(() => {
         router.push("/login");
