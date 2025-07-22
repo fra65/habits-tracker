@@ -31,6 +31,7 @@ model user {
   passwordresettoken passwordresettoken[]
   user_preferences   user_preferences?
   user_profile       user_profile?
+  habits             habit[]
 
   @@unique([email, provider], map: "email_provider_UNIQUE")
   @@unique([provider, oauthId], map: "provider_oauthId_UNIQUE")
@@ -81,4 +82,63 @@ enum SidebarType {
   sidebar
   floating
   inset
+}
+
+model category {
+  id          Int   @id @default(autoincrement())
+  titolo      String
+  descrizione String?
+  icona       String?
+  colore      String?
+
+  habits      habit[]
+}
+
+
+model habit {
+  id           Int        @id @default(autoincrement())
+  userId       Int
+  categoriaId  Int
+
+  titolo       String
+  descrizione  String?
+  startDate    DateTime
+  endDate      DateTime?
+  color        String?
+  priority     String?
+  isActive     Boolean       @default(true)
+  visibility   String?
+  targetValue  Int?
+
+  user         user          @relation(fields: [userId], references: [id])
+  categoria    category      @relation(fields: [categoriaId], references: [id])
+  logs         HabitLog[]
+  repeatRules  HabitRepeat[]
+}
+
+model HabitRepeat {
+  id        Int   @id @default(autoincrement())
+  habitId   Int
+
+  type      String   // 'weekly' | 'interval'
+  dayOfWeek Int?     // 0=Sun, 6=Sat — solo se type = weekly
+  interval  Int?     // solo se type = interval
+  startDate DateTime // per calcolo giorni ciclici
+
+  habit     habit    @relation(fields: [habitId], references: [id])
+}
+
+model HabitLog {
+  id        Int   @id @default(autoincrement())
+  habitId   Int
+
+  logDate   DateTime
+  completed Boolean   @default(false)
+  value     Int?
+  note      String?
+  createdAt DateTime  @default(now())
+
+  habit     habit     @relation(fields: [habitId], references: [id])
+
+  @@unique([habitId, logDate]) // evita duplicati giornalieri
 }
