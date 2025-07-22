@@ -28,10 +28,11 @@ model user {
   role               Role                 @default(USER)
   oauthId            String?              @db.VarChar(100)
   provider           String               @db.VarChar(30)
+  category           category[]
+  habits             habit[]
   passwordresettoken passwordresettoken[]
   user_preferences   user_preferences?
   user_profile       user_profile?
-  habits             habit[]
 
   @@unique([email, provider], map: "email_provider_UNIQUE")
   @@unique([provider, oauthId], map: "provider_oauthId_UNIQUE")
@@ -61,6 +62,66 @@ model user_preferences {
   user                user        @relation(fields: [id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_user_preferences")
 }
 
+model category {
+  id          Int     @id @default(autoincrement())
+  titolo      String
+  descrizione String? @db.VarChar(255)
+  icona       String?
+  colore      String?
+  userId      Int?
+  user        user?   @relation(fields: [userId], references: [id])
+  habits      habit[]
+
+  @@index([userId], map: "category_userId_fkey")
+}
+
+model habit {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  categoriaId Int
+  titolo      String
+  descrizione String?
+  startDate   DateTime
+  endDate     DateTime?
+  color       String?
+  priority    String?
+  isActive    Boolean       @default(true)
+  visibility  String?
+  targetValue Int?
+  categoria   category      @relation(fields: [categoriaId], references: [id])
+  user        user          @relation(fields: [userId], references: [id])
+  habitlog    habitlog[]
+  habitrepeat habitrepeat[]
+
+  @@index([categoriaId], map: "habit_categoriaId_fkey")
+  @@index([userId], map: "habit_userId_fkey")
+}
+
+model habitlog {
+  id        Int      @id @default(autoincrement())
+  habitId   Int
+  logDate   DateTime
+  completed Boolean  @default(false)
+  value     Int?
+  note      String?
+  createdAt DateTime @default(now())
+  habit     habit    @relation(fields: [habitId], references: [id], map: "HabitLog_habitId_fkey")
+
+  @@unique([habitId, logDate], map: "HabitLog_habitId_logDate_key")
+}
+
+model habitrepeat {
+  id        Int      @id @default(autoincrement())
+  habitId   Int
+  type      String
+  dayOfWeek Int?
+  interval  Int?
+  startDate DateTime
+  habit     habit    @relation(fields: [habitId], references: [id], map: "HabitRepeat_habitId_fkey")
+
+  @@index([habitId], map: "HabitRepeat_habitId_fkey")
+}
+
 enum Role {
   USER
   ADMIN
@@ -82,63 +143,4 @@ enum SidebarType {
   sidebar
   floating
   inset
-}
-
-model category {
-  id          Int   @id @default(autoincrement())
-  titolo      String
-  descrizione String?
-  icona       String?
-  colore      String?
-
-  habits      habit[]
-}
-
-
-model habit {
-  id           Int        @id @default(autoincrement())
-  userId       Int
-  categoriaId  Int
-
-  titolo       String
-  descrizione  String?
-  startDate    DateTime
-  endDate      DateTime?
-  color        String?
-  priority     String?
-  isActive     Boolean       @default(true)
-  visibility   String?
-  targetValue  Int?
-
-  user         user          @relation(fields: [userId], references: [id])
-  categoria    category      @relation(fields: [categoriaId], references: [id])
-  logs         HabitLog[]
-  repeatRules  HabitRepeat[]
-}
-
-model HabitRepeat {
-  id        Int   @id @default(autoincrement())
-  habitId   Int
-
-  type      String   // 'weekly' | 'interval'
-  dayOfWeek Int?     // 0=Sun, 6=Sat — solo se type = weekly
-  interval  Int?     // solo se type = interval
-  startDate DateTime // per calcolo giorni ciclici
-
-  habit     habit    @relation(fields: [habitId], references: [id])
-}
-
-model HabitLog {
-  id        Int   @id @default(autoincrement())
-  habitId   Int
-
-  logDate   DateTime
-  completed Boolean   @default(false)
-  value     Int?
-  note      String?
-  createdAt DateTime  @default(now())
-
-  habit     habit     @relation(fields: [habitId], references: [id])
-
-  @@unique([habitId, logDate]) // evita duplicati giornalieri
 }
