@@ -2,8 +2,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import prisma from "@/prisma";
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { CategoryOutput, CategoryOutputSchema } from "../schema/CategoryOutput.schema";
+import z from "zod";
 
-export async function getAllCategories(userId: number) {
+export async function getAllCategories(userId: number): Promise<CategoryOutput[] | null> {
 
     try {
         const categories = await prisma?.category.findMany({
@@ -17,7 +20,12 @@ export async function getAllCategories(userId: number) {
 
         if(!categories) return null
 
-        return categories
+        const validateCategory = z.array(CategoryOutputSchema).safeParse(categories)
+
+        if(!validateCategory.success) return null
+
+        return validateCategory.data;
+
     } catch(err) {
         console.error("Errore nel recupero delle categorie: ", err)
         throw new Error("Errore generico nel recupero delle categorie")
@@ -25,7 +33,7 @@ export async function getAllCategories(userId: number) {
 
 }
 
-export async function getCategory(categoryId: number, userId: number) {
+export async function getCategory(categoryId: number, userId: number): Promise<CategoryOutput | null> {
 
     try {
         const category = await prisma?.category.findFirst({
@@ -38,10 +46,14 @@ export async function getCategory(categoryId: number, userId: number) {
             }
         });
 
-
         if(!category) return null
 
-        return category
+        const validateCategory = CategoryOutputSchema.safeParse(category)
+
+        if(!validateCategory.success) return null
+
+        return validateCategory.data;
+
     } catch(err) {
         console.error("Errore nel recupero della categoria: ", err)
         throw new Error("Errore generico nel recupero della categoria")
@@ -50,21 +62,25 @@ export async function getCategory(categoryId: number, userId: number) {
 }
 
 
+export async function createCategory(data: any): Promise<CategoryOutput | null> {
+  try {
 
-export async function createCategory(data: any) {
+    const category = await prisma.category.create({ data });
 
-    console.log("DATI RICEVUTI NEL BACKEND: ", data)
+    const validateCategory = CategoryOutputSchema.safeParse(category)
 
-    try {
-        const category = await prisma?.category.create({data});
+    if(!validateCategory.success) return null
 
+    return validateCategory.data;
 
-        if(!category) return null
+  } catch (err: unknown) {
 
-        return category
-    } catch(err) {
-        console.error("Errore nella creazione della categoria: ", err)
-        throw new Error("Errore generico nella creazione della categoria")
+    console.error("Errore catturato in createCategory:", err);
+    // Gestione errore Prisma unique constraint
+    if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {
+      // Rilancia direttamente l'errore Prisma per farlo intercettare dalla route
+      throw err;
     }
-
+    throw err;
+  }
 }

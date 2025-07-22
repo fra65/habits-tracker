@@ -66,12 +66,13 @@ model category {
   id          Int     @id @default(autoincrement())
   titolo      String
   descrizione String? @db.VarChar(255)
-  icona       String?
-  colore      String?
+  icona       String? @default("Target")
+  colore      String? @default("#c1121f")
   userId      Int?
   user        user?   @relation(fields: [userId], references: [id])
   habits      habit[]
 
+  @@unique([titolo, userId], map: "titolo_userId_UNIQUE")
   @@index([userId], map: "category_userId_fkey")
 }
 

@@ -79,5 +79,12 @@
         "sp-error": "La modifica non è andata a buon fine."
       }
     }
+  },
+  "CategoryListPage": {
+    "Buttons": {
+      "b-new": "Nuova categoria",
+      "b-edit": "Modifica categoria",
+      "b-delete": "Elimina categoria"
+    }
   }
 }

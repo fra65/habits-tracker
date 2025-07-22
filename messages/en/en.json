@@ -79,5 +79,12 @@
         "sp-reload": "The page will reload to apply the changes..."
       }
     }
+  },
+  "CategoryListPage": {
+    "Buttons": {
+      "b-new": "New category",
+      "b-edit": "Edit category",
+      "b-delete": "Delete category"
+    }
   }
 }

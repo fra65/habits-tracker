@@ -5,30 +5,68 @@ import { Input } from '@/components/ui/input';
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import createCategory from "../../api/createCategory";
+import { CategoryInputSchema } from "../../schema/CategoryInput.schema";
+import type { z } from "zod";
 
 export function CreateCategoryForm() {
   const [titolo, setTitolo] = useState("");
   const [descrizione, setDescrizione] = useState("");
   const [icona, setIcona] = useState("");
   const [colore, setColore] = useState("");
+  const [errors, setErrors] = useState<Partial<Record<keyof z.infer<typeof CategoryInputSchema>, string>>>({});
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
+  const [isError, setIsError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function onSubmit(event: React.FormEvent) {
+  async function onSubmit(event: React.FormEvent) {
     event.preventDefault();
+    setServerMessage(null);
+    setIsError(false);
 
-    if (!titolo.trim()) {
-      alert("Il campo titolo è obbligatorio.");
+    const data = { titolo, descrizione, icona, colore };
+
+    // Validazione client con Zod
+    const result = CategoryInputSchema.safeParse(data);
+    if (!result.success) {
+      // Mappa errori campo per campo
+      const fieldErrors: typeof errors = {};
+      result.error.errors.forEach(err => {
+        if (err.path.length > 0) {
+          fieldErrors[err.path[0] as keyof typeof fieldErrors] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      setServerMessage("Correggi gli errori evidenziati.");
+      setIsError(true);
       return;
     }
 
-    const data = {
-      titolo,
-      descrizione,
-      icona,
-      colore,
-    };
+    setErrors({});
+    setIsSubmitting(true);
 
+    try {
+      const response = await createCategory(result.data);
 
-    createCategory(data);
+      if (response.success) {
+        setServerMessage(response.message || "Categoria creata correttamente!");
+        setIsError(false);
+
+        // Resetta form
+        setTitolo("");
+        setDescrizione("");
+        setIcona("");
+        setColore("");
+      } else {
+        setServerMessage(response.message || "Errore durante la creazione della categoria.");
+        setIsError(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setServerMessage("Errore di rete o server. Riprova più tardi.");
+      setIsError(true);
+    }
+
+    setTimeout(() => setIsSubmitting(false), 1000);
   }
 
   return (
@@ -42,7 +80,9 @@ export function CreateCategoryForm() {
           onChange={(e) => setTitolo(e.target.value)}
           required
           placeholder="Inserisci il titolo"
+          disabled={isSubmitting}
         />
+        {errors.titolo && <p className="text-red-600 mt-1">{errors.titolo}</p>}
       </div>
 
       <div>
@@ -53,7 +93,9 @@ export function CreateCategoryForm() {
           value={descrizione}
           onChange={(e) => setDescrizione(e.target.value)}
           placeholder="Inserisci la descrizione"
+          disabled={isSubmitting}
         />
+        {errors.descrizione && <p className="text-red-600 mt-1">{errors.descrizione}</p>}
       </div>
 
       <div>
@@ -64,7 +106,9 @@ export function CreateCategoryForm() {
           value={icona}
           onChange={(e) => setIcona(e.target.value)}
           placeholder="Inserisci l'icona"
+          disabled={isSubmitting}
         />
+        {errors.icona && <p className="text-red-600 mt-1">{errors.icona}</p>}
       </div>
 
       <div>
@@ -74,10 +118,20 @@ export function CreateCategoryForm() {
           type="color"
           value={colore}
           onChange={(e) => setColore(e.target.value)}
+          disabled={isSubmitting}
         />
+        {errors.colore && <p className="text-red-600 mt-1">{errors.colore}</p>}
       </div>
 
-      <Button type="submit">Crea Categoria</Button>
+      {serverMessage && (
+        <p className={`mt-2 ${isError ? "text-red-600" : "text-green-600"}`}>
+          {serverMessage}
+        </p>
+      )}
+
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Creazione in corso..." : "Crea Categoria"}
+      </Button>
     </form>
   );
 }
