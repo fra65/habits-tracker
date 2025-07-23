@@ -84,3 +84,64 @@ export async function createCategory(data: any): Promise<CategoryOutput | null> 
     throw err;
   }
 }
+
+
+
+// UPDATE
+
+export async function updateCategory(data: any, categoryId: number, userId: number): Promise<CategoryOutput | null> {
+  try {
+
+    const category = await prisma.category.update({
+        where: {
+            id: categoryId,
+            userId
+        },
+        data 
+    });
+
+    const validateCategory = CategoryOutputSchema.safeParse(category)
+
+    if(!validateCategory.success) return null
+
+    return validateCategory.data;
+
+  } catch (err: unknown) {
+
+    console.error("Errore catturato in createCategory:", err);
+    // Gestione errore Prisma unique constraint
+    if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {
+      // Rilancia direttamente l'errore Prisma per farlo intercettare dalla route
+      throw err;
+    }
+    throw err;
+  }
+}
+
+
+
+
+export async function deleteCategory(categoryId: number, userId: number): Promise<CategoryOutput | null> {
+
+    try {
+        const category = await prisma?.category.delete({
+            where: {
+                id: categoryId,
+                userId
+            }
+        });
+
+        if(!category) return null
+
+        const validateCategory = CategoryOutputSchema.safeParse(category)
+
+        if(!validateCategory.success) return null
+
+        return validateCategory.data;
+
+    } catch(err) {
+        console.error("Errore nell'eliminazione della categoria: ", err)
+        throw new Error("Errore generico nell'eliminazione della categoria")
+    }
+
+}

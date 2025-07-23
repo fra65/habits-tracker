@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { CategoryOutput } from "../../schema/CategoryOutput.schema" // Assicurati che questo sia corretto
+import deleteCategory from "../../api/deleteCategory"
+import updateCategory from "../../api/updateCategory"
 // import updateCategory from "../../api/updateCategory" // Da creare
 // import deleteCategory from "../../api/deleteCategory" // Da creare
 
@@ -82,7 +84,7 @@ export function CategoryDetailsModal({
   async function handleUpdate(data: CategoryUpdateInput) {
     try {
       console.log("Dati inviati per l'aggiornamento:", data)
-    //   await updateCategory(data) // Chiama la tua API di aggiornamento
+      await updateCategory(data, category?.id) // Chiama la tua API di aggiornamento
       onOpenChange(false) // Chiudi il modale
       onCategoryUpdated() // Triggera il refresh della lista
     } catch (error) {
@@ -97,7 +99,7 @@ export function CategoryDetailsModal({
     setIsDeleting(true)
     try {
       console.log("Eliminazione categoria con ID:", category.id)
-    //   await deleteCategory(category.id) // Chiama la tua API di eliminazione
+      await deleteCategory(category.id) // Chiama la tua API di eliminazione
       onOpenChange(false) // Chiudi il modale
       onCategoryDeleted() // Triggera il refresh della lista
     } catch (error) {
