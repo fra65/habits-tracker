@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import React, { useState, useEffect } from "react"
@@ -13,39 +14,28 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { CategoryOutput } from "../../schema/CategoryOutput.schema" // Assicurati che questo sia corretto
+import { CategoryOutput } from "../../schema/CategoryOutput.schema"
 import deleteCategory from "../../api/deleteCategory"
 import updateCategory from "../../api/updateCategory"
-// import updateCategory from "../../api/updateCategory" // Da creare
-// import deleteCategory from "../../api/deleteCategory" // Da creare
-
-// Schema per la modifica (uguale all'input ma potresti avere validazioni diverse)
-const CategoryUpdateSchema = z.object({
-  id: z.number(), // L'ID è necessario per l'aggiornamento/eliminazione
-  titolo: z.string().min(1, "Titolo obbligatorio"),
-  descrizione: z.string().optional(),
-  icona: z.string().optional(),
-  colore: z.string().optional(),
-})
-
-type CategoryUpdateInput = z.infer<typeof CategoryUpdateSchema>
+import { CategoryInputSchema } from "../../schema/CategoryInput.schema"
+import { CategoryUpdateInput, CategoryUpdateInputSchema } from "../../schema/CategoryUpdateInput.schema"
 
 export function CategoryDetailsModal({
   open,
   onOpenChange,
-  category, // Categoria da visualizzare/modificare
-  onCategoryUpdated, // Callback per refresh lista dopo modifica
-  onCategoryDeleted, // Callback per refresh lista dopo eliminazione
+  category,
+  onCategoryUpdated,
+  onCategoryDeleted,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
-  category: CategoryOutput | null // Può essere null se non c'è una categoria selezionata
+  category: CategoryOutput | null
   onCategoryUpdated: () => void
   onCategoryDeleted: () => void
 }) {
   const [isEditing, setIsEditing] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false) // Stato per la conferma eliminazione
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
 
   const {
     register,
@@ -53,9 +43,9 @@ export function CategoryDetailsModal({
     formState: { errors, isSubmitting },
     reset,
   } = useForm<CategoryUpdateInput>({
-    resolver: zodResolver(CategoryUpdateSchema),
+    resolver: zodResolver(CategoryUpdateInputSchema),
     defaultValues: {
-      id: category?.id, // Imposta i valori iniziali dal prop category
+      id: category?.id,
       titolo: category?.titolo,
       descrizione: category?.descrizione,
       icona: category?.icona,
@@ -63,7 +53,6 @@ export function CategoryDetailsModal({
     },
   })
 
-  // Aggiorna il form quando la categoria prop cambia o il modale si apre/chiude
   useEffect(() => {
     if (open && category) {
       reset({
@@ -73,44 +62,63 @@ export function CategoryDetailsModal({
         icona: category.icona,
         colore: category.colore,
       })
-      setIsEditing(false) // Resetta la modalità di modifica all'apertura
-    } else if (!open) {
-      reset() // Resetta il form quando il modale si chiude
       setIsEditing(false)
-      setIsDeleting(false) // Resetta lo stato di eliminazione
+      setFormError(null)
+    } else if (!open) {
+      reset()
+      setIsEditing(false)
+      setIsDeleting(false)
+      setFormError(null)
     }
   }, [open, category, reset])
 
   async function handleUpdate(data: CategoryUpdateInput) {
     try {
-      console.log("Dati inviati per l'aggiornamento:", data)
-      await updateCategory(data, category?.id) // Chiama la tua API di aggiornamento
-      onOpenChange(false) // Chiudi il modale
-      onCategoryUpdated() // Triggera il refresh della lista
-    } catch (error) {
+
+      const validateData = CategoryInputSchema.safeParse(data)
+
+      if(!validateData.success) {
+        setFormError("Dati non corretti")
+        return
+      }
+
+      const response = await updateCategory(validateData.data, category?.id)
+
+      if (!response.success) {
+        setFormError(response.message || "Errore durante l'aggiornamento. Riprova più tardi.")
+        return // Non chiudere il modal
+      }
+      setFormError(null) // Reset errore solo se update ok
+      onOpenChange(false)
+      onCategoryUpdated()
+    } catch (error: any) {
       console.error("Errore nell'aggiornamento della categoria:", error)
-      // TODO: Gestisci l'errore UI (es. toast)
+      setFormError(
+        error?.message || "Errore durante l'aggiornamento. Riprova più tardi."
+      )
     }
   }
 
   async function handleDelete() {
-    if (!category?.id || isDeleting) return // Previene doppie chiamate o se ID non c'è
+    if (!category?.id || isDeleting) return
 
+    setFormError(null)
     setIsDeleting(true)
     try {
       console.log("Eliminazione categoria con ID:", category.id)
-      await deleteCategory(category.id) // Chiama la tua API di eliminazione
-      onOpenChange(false) // Chiudi il modale
-      onCategoryDeleted() // Triggera il refresh della lista
-    } catch (error) {
+      await deleteCategory(category.id)
+      onOpenChange(false)
+      onCategoryDeleted()
+    } catch (error: any) {
       console.error("Errore nell'eliminazione della categoria:", error)
-      // TODO: Gestisci l'errore UI
+      setFormError(
+        error?.message || "Errore durante l'eliminazione. Riprova più tardi."
+      )
     } finally {
-      setIsDeleting(false) // Resetta lo stato di eliminazione
+      setIsDeleting(false)
     }
   }
 
-  // Se non c'è una categoria, non mostrare il modale (o gestisci diversamente)
   if (!category) return null
 
   return (
@@ -120,72 +128,115 @@ export function CategoryDetailsModal({
           <DialogTitle>Dettagli Categoria</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleUpdate)} className="space-y-4">
-          {/* Campo ID nascosto ma necessario per l'update */}
           <Input type="hidden" {...register("id")} />
 
           <div>
             <Label htmlFor="titolo">Titolo *</Label>
-            <Input id="titolo" {...register("titolo")} disabled={!isEditing || isSubmitting} />
+            <Input
+              id="titolo"
+              {...register("titolo")}
+              disabled={!isEditing || isSubmitting}
+            />
             {errors.titolo && (
               <p className="text-sm text-red-600">{errors.titolo.message}</p>
             )}
           </div>
           <div>
             <Label htmlFor="descrizione">Descrizione</Label>
-            <Input id="descrizione" {...register("descrizione")} disabled={!isEditing || isSubmitting} />
+            <Input
+              id="descrizione"
+              {...register("descrizione")}
+              disabled={!isEditing || isSubmitting}
+            />
           </div>
           <div>
             <Label htmlFor="icona">Icona</Label>
-            <Input id="icona" {...register("icona")} disabled={!isEditing || isSubmitting} />
+            <Input
+              id="icona"
+              {...register("icona")}
+              disabled={!isEditing || isSubmitting}
+            />
           </div>
           <div>
             <Label htmlFor="colore">Colore</Label>
-            <Input id="colore" type="color" {...register("colore")} disabled={!isEditing || isSubmitting} />
+            <Input
+              id="colore"
+              type="color"
+              {...register("colore")}
+              disabled={!isEditing || isSubmitting}
+            />
           </div>
 
           <DialogFooter className="mt-6 flex flex-col sm:flex-row sm:justify-between sm:space-x-2 space-y-2 sm:space-y-0">
-            {isEditing ? (
-              <>
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Salvando..." : "Salva Modifiche"}
-                </Button>
-                <Button variant="outline" onClick={() => setIsEditing(false)} disabled={isSubmitting}>
-                  Annulla Modifica
-                </Button>
-              </>
-            ) : (
-              <Button type="button" onClick={() => setIsEditing(true)}>
-                Modifica
-              </Button>
-            )}
+            <div className="flex-1">
+              {formError && (
+                <p className="mb-2 text-sm text-red-600">{formError}</p>
+              )}
+            
+            </div>
 
-            {/* Bottone Elimina */}
-            {!isEditing && (
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => {
-                  if (window.confirm("Sei sicuro di voler eliminare questa categoria?")) {
-                    handleDelete()
-                  }
-                }}
-                disabled={isSubmitting || isDeleting}
-              >
-                {isDeleting ? "Eliminando..." : "Elimina"}
-              </Button>
-            )}
+            {
+              (category.titolo !== "Salute") && (category.titolo !== "Lavoro") && (category.titolo !== "Sport")
 
-            {/* Bottone Chiudi (sempre visibile) */}
-            <Button
-              variant="ghost"
-              onClick={() => {
-                onOpenChange(false)
-                setIsEditing(false) // Assicurati di resettare lo stato di modifica alla chiusura
-                setIsDeleting(false)
-              }}
-            >
-              Chiudi
-            </Button>
+              &&
+
+                <div className="flex flex-wrap gap-2 sm:gap-4 sm:flex-nowrap">
+                  {isEditing ? (
+                    <>
+                      <Button type="submit" disabled={isSubmitting || isDeleting}>
+                        {isSubmitting ? "Salvando..." : "Salva Modifiche"}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => setIsEditing(false)}
+                        disabled={isSubmitting || isDeleting}
+                      >
+                        Annulla Modifica
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      type="button"
+                      onClick={() => setIsEditing(true)}
+                      disabled={isDeleting || isSubmitting}
+                    >
+                      Modifica
+                    </Button>
+                  )}
+
+                  {!isEditing && (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            "Sei sicuro di voler eliminare questa categoria?"
+                          )
+                        ) {
+                          handleDelete()
+                        }
+                      }}
+                      disabled={isSubmitting || isDeleting}
+                    >
+                      {isDeleting ? "Eliminando..." : "Elimina"}
+                    </Button>
+                  )}
+
+                  {/* <Button
+                    variant="ghost"
+                    onClick={() => {
+                      onOpenChange(false)
+                      setIsEditing(false)
+                      setIsDeleting(false)
+                      setFormError(null)
+                    }}
+                  >
+                    Chiudi
+                  </Button> */}
+                </div>
+
+            }
           </DialogFooter>
         </form>
       </DialogContent>

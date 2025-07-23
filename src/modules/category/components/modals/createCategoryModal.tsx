@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react"
 import {
   Dialog,
@@ -11,17 +12,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
 import createCategory from "../../api/createCategory"
-
-const CategoryInputSchema = z.object({
-  titolo: z.string().min(1, "Titolo obbligatorio"),
-  descrizione: z.string().optional(),
-  icona: z.string().optional(),
-  colore: z.string().optional(),
-})
-
-type CategoryInput = z.infer<typeof CategoryInputSchema>
+import { CategoryInput, CategoryInputSchema } from "../../schema/CategoryInput.schema"
 
 export function CategoryModal({
   open,
@@ -41,16 +33,32 @@ export function CategoryModal({
     resolver: zodResolver(CategoryInputSchema),
   })
 
+  const [formError, setFormError] = React.useState<string | null>(null);
+
   async function onSubmit(data: CategoryInput) {
+    setFormError(null);
     try {
-      console.log("Dati inviati al server:", data)
-      await createCategory(data)
-      reset()
-      onOpenChange(false)
-      onCategoryCreated()
-    } catch (error) {
-      console.error("Errore nella creazione della categoria:", error)
-      // Puoi aggiungere gestione errori UI qui
+
+      const validateData = CategoryInputSchema.safeParse(data)
+
+      if(!validateData.success) {
+        setFormError("Dati non corretti")
+        return
+      }
+
+      const response = await createCategory(validateData.data);
+      if (!response.success) {
+        // Mostra sempre il messaggio esatto restituito dal backend
+        setFormError(response.message ?? "Errore durante la creazione. Riprova più tardi.");
+        return; // Non chiudere il modal
+      }
+      reset();
+      setFormError(null);
+      onOpenChange(false);
+      onCategoryCreated();
+    } catch (error: any) {
+      // Mostra il messaggio di errore del backend se disponibile
+      setFormError(error?.response?.data?.message ?? "Errore durante la creazione. Riprova più tardi.");
     }
   }
 
@@ -61,6 +69,9 @@ export function CategoryModal({
           <DialogTitle>Nuova Categoria</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {formError && (
+            <p className="mb-2 text-sm text-red-600">{formError}</p>
+          )}
           <div>
             <Label htmlFor="titolo">Titolo *</Label>
             <Input id="titolo" {...register("titolo")} />

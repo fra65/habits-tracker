@@ -16,9 +16,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const dataWithUserId = { ...body, userId: Number(session.user.id) };
 
-    const category = await createCategory(dataWithUserId);
-
-    return NextResponse.json({ success: true, data: category, message: "Categoria creata correttamente!" }, { status: 201 });
+    const response = await createCategory(dataWithUserId);
+    if (!response.success) {
+      // Se il messaggio è quello user-friendly, status 409
+      if (response.message && response.message.includes('Esiste già una categoria')) {
+        return NextResponse.json({ success: false, message: response.message }, { status: 409 });
+      }
+      // Altri errori
+      return NextResponse.json({ success: false, message: response.message }, { status: 400 });
+    }
+    return NextResponse.json(response, { status: 201 });
   } catch (error: unknown) {
     console.error("Errore nella route POST:", error);
 
@@ -33,7 +40,7 @@ export async function POST(req: NextRequest) {
     // Se è un altro tipo di errore, rispondi genericamente
     return NextResponse.json({
       success: false,
-      message: 'Errore interno del server'
+      message: 'Esiste già una categoria con questo titolo. Scegli un titolo diverso.'
     }, { status: 500 });
   }
 }

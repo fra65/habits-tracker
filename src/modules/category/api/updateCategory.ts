@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import CreateCategoryResponse from "../types/createCategoryResponse";
+import { CategoryInput } from "../schema/CategoryInput.schema";
 
-export default async function updateCategory(data: any, categoryId: number | undefined): Promise<CreateCategoryResponse> {
+export default async function updateCategory(data: CategoryInput, categoryId: number | undefined): Promise<CreateCategoryResponse> {
   try {
 
     if( isNaN(Number(categoryId)) ) {

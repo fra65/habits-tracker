@@ -4,6 +4,7 @@
 import prisma from "@/prisma";
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { CategoryOutput, CategoryOutputSchema } from "../schema/CategoryOutput.schema";
+import CreateCategoryResponse from "../types/createCategoryResponse";
 import z from "zod";
 
 export async function getAllCategories(userId: number): Promise<CategoryOutput[] | null> {
@@ -62,26 +63,20 @@ export async function getCategory(categoryId: number, userId: number): Promise<C
 }
 
 
-export async function createCategory(data: any): Promise<CategoryOutput | null> {
+export async function createCategory(data: any): Promise<CreateCategoryResponse> {
   try {
-
     const category = await prisma.category.create({ data });
-
-    const validateCategory = CategoryOutputSchema.safeParse(category)
-
-    if(!validateCategory.success) return null
-
-    return validateCategory.data;
-
-  } catch (err: unknown) {
-
-    console.error("Errore catturato in createCategory:", err);
-    // Gestione errore Prisma unique constraint
-    if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {
-      // Rilancia direttamente l'errore Prisma per farlo intercettare dalla route
-      throw err;
+    const validateCategory = CategoryOutputSchema.safeParse(category);
+    if (!validateCategory.success) {
+      return { success: false, message: "Errore validazione categoria" };
     }
-    throw err;
+    return { success: true, data: validateCategory.data };
+  } catch (err: unknown) {
+    console.error("Errore catturato in createCategory:", err);
+    if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {
+      return { success: false, message: 'Esiste già una categoria con questo titolo. Scegli un titolo diverso.' };
+    }
+    return { success: false, message: 'Esiste già una categoria con questo titolo. Scegli un titolo diverso.' };
   }
 }
 
