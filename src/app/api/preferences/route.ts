@@ -42,11 +42,11 @@ export async function GET() {
     }
 
     //console.log(session.user.id)
-    const isUserComplete = await getUserProfileById(session.user.id);
+    // const isUserComplete = await getUserProfileById(session.user.id);
 
-    if(!isUserComplete) {
-      return NextResponse.json({ error: "Utente non trovato" }, { status: 404 });
-    }
+    // if(!isUserComplete) {
+    //   return NextResponse.json({ error: "Utente non trovato" }, { status: 404 });
+    // }
 
     const preferences = await getUserPreferences(Number(session.user.id))
 

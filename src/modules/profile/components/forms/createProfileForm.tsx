@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from 'next-intl';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,6 +12,7 @@ import createProfile from "../../api/createProfile"
 import { useRouter } from "next/navigation"
 
 export default function CreateProfileForm() {
+  const t = useTranslations('CreateProfileForm');
   // Stato per messaggi di feedback
   const [message, setMessage] = useState<string | null>(null)
   const [messageType, setMessageType] = useState<"error" | "success" | null>(null)
@@ -49,7 +51,7 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
       console.error(`  Tipo: ${err.code}`);
     });
 
-    setMessage("Errore nei dati inseriti. Controlla i campi e riprova.");
+    setMessage(t('msg-invalid-data'));
     setMessageType("error");
     return;
   }
@@ -60,17 +62,17 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     //console.log("Risultato createProfile:", createdUser);
 
     if (!createdUser) {
-      setMessage("Impossibile creare il profilo. Riprova più tardi.");
+      setMessage(t('msg-create-fail'));
       setMessageType("error");
     } else {
-      setMessage("Profilo creato con successo! Reindirizzamento in corso...");
+      setMessage(t('msg-create-success'));
       setMessageType("success");
       router.push('/pages/profile')
       form.reset();
     }
   } catch (error) {
     console.error("Errore nella creazione del profilo:", error);
-    setMessage("Si è verificato un errore durante la creazione del profilo.");
+    setMessage(t('msg-create-error'));
     setMessageType("error");
   }
 }
@@ -80,38 +82,38 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     <div className="w-full max-w-2xl mx-auto p-4">
       <Card>
         <CardHeader>
-          <CardTitle>Crea il tuo profilo</CardTitle>
-          <CardDescription>Inserisci le tue informazioni personali per completare la registrazione.</CardDescription>
+          <CardTitle>{t('title')}</CardTitle>
+          <CardDescription>{t('description')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="nome">Nome</Label>
-                <Input id="nome" placeholder="Inserisci il tuo nome" required />
+                <Label htmlFor="nome">{t('label-nome')}</Label>
+                <Input id="nome" placeholder={t('placeholder-nome')} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="cognome">Cognome</Label>
-                <Input id="cognome" placeholder="Inserisci il tuo cognome" required />
+                <Label htmlFor="cognome">{t('label-cognome')}</Label>
+                <Input id="cognome" placeholder={t('placeholder-cognome')} required />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="data_nascita">Data di nascita</Label>
+                <Label htmlFor="data_nascita">{t('label-data-nascita')}</Label>
                 <Input id="data_nascita" type="date" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="sesso">Sesso</Label>
+                <Label htmlFor="sesso">{t('label-sesso')}</Label>
                 <Select name="sesso" defaultValue="">
                   <SelectTrigger>
-                    <SelectValue placeholder="Seleziona il sesso" />
+                    <SelectValue placeholder={t('placeholder-sesso')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="M">Maschio</SelectItem>
-                    <SelectItem value="F">Femmina</SelectItem>
-                    <SelectItem value="A">Altro</SelectItem>
-                    <SelectItem value="N">Preferisco non specificare</SelectItem>
+                    <SelectItem value="M">{t('option-maschio')}</SelectItem>
+                    <SelectItem value="F">{t('option-femmina')}</SelectItem>
+                    <SelectItem value="A">{t('option-altro')}</SelectItem>
+                    <SelectItem value="N">{t('option-non-specificato')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -129,7 +131,7 @@ async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
 
             <div className="flex justify-end pt-4">
               <Button type="submit" className="w-full md:w-auto">
-                Crea profilo
+                {t('btn-create-profile')}
               </Button>
             </div>
           </form>

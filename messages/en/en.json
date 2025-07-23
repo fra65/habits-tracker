@@ -128,7 +128,25 @@
     "ccm-cdm-color-label": "Color",
     "ccm-cdm-icon-expand": "Expand",
     "ccm-cdm-icon-collapse": "Collapse"
+  },
+  "CreateProfileForm": {
+    "title": "Create your profile",
+    "description": "Enter your personal information to complete registration.",
+    "label-nome": "Name",
+    "label-cognome": "Surname",
+    "label-data-nascita": "Birthday",
+    "label-sesso": "Gender",
+    "placeholder-nome": "Enter your name",
+    "placeholder-cognome": "Enter your surname",
+    "placeholder-sesso": "Select gender",
+    "option-maschio": "Male",
+    "option-femmina": "Female",
+    "option-altro": "Other",
+    "option-non-specificato": "Prefer not to specify",
+    "btn-create-profile": "Create profile",
+    "msg-invalid-data": "Invalid data. Please check the fields and try again.",
+    "msg-create-fail": "Unable to create profile. Please try again later.",
+    "msg-create-success": "Profile created successfully! Redirecting...",
+    "msg-create-error": "An error occurred while creating the profile."
   }
-
-
 }

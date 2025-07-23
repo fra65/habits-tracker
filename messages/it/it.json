@@ -128,6 +128,25 @@
     "ccm-cdm-color-label": "Colore",
     "ccm-cdm-icon-expand": "Espandi",
     "ccm-cdm-icon-collapse": "Comprimi"
+  },
+  "CreateProfileForm": {
+    "title": "Crea il tuo profilo",
+    "description": "Inserisci le tue informazioni personali per completare la registrazione.",
+    "label-nome": "Nome",
+    "label-cognome": "Cognome",
+    "label-data-nascita": "Data di nascita",
+    "label-sesso": "Sesso",
+    "placeholder-nome": "Inserisci il tuo nome",
+    "placeholder-cognome": "Inserisci il tuo cognome",
+    "placeholder-sesso": "Seleziona il sesso",
+    "option-maschio": "Maschio",
+    "option-femmina": "Femmina",
+    "option-altro": "Altro",
+    "option-non-specificato": "Preferisco non specificare",
+    "btn-create-profile": "Crea profilo",
+    "msg-invalid-data": "Errore nei dati inseriti. Controlla i campi e riprova.",
+    "msg-create-fail": "Impossibile creare il profilo. Riprova più tardi.",
+    "msg-create-success": "Profilo creato con successo! Reindirizzamento in corso...",
+    "msg-create-error": "Si è verificato un errore durante la creazione del profilo."
   }
-
 }
