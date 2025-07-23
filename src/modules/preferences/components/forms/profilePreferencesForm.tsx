@@ -193,7 +193,7 @@ const ProfilePreferencesForm = () => {
         <div className="col-span-4 flex justify-end gap-2">
           <Button
             type="button"
-            className="cursor-pointer rounded-md bg-primary px-4 py-2 text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear"
+            className="cursor-pointer rounded-md bg-primary px-4 py-2 text-background hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear"
             onClick={() => {
               if (isEditing) {
                 // Apri il modale di conferma quando si tenta di salvare
@@ -210,7 +210,7 @@ const ProfilePreferencesForm = () => {
 
           <Button
             type="button"
-            className={`cursor-pointer rounded-md bg-destructive px-4 py-2 text-white hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear ${isEditing ? "hidden" : ""}`}
+            className={`cursor-pointer rounded-md bg-destructive px-4 py-2 text-foreground hover:bg-destructive/90 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-300 ease-linear ${isEditing ? "hidden" : ""}`}
             onClick={() => setShowResetModal(true)}
           >
             {t("Buttons.b-reset")}

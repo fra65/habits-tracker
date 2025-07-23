@@ -6,6 +6,7 @@
   "Sidebar": {
     "sb-today-item": "Today",
     "sb-habits-item": "Habits",
+    "sb-categories-item": "Categories",
     "sb-history-item": "History",
     "sb-statystics-item": "Statystics",
     "sb-admin-item": "Admin",
@@ -47,7 +48,10 @@
       "b-reset": "Reset",
       "b-change-password": "Change Password",
       "b-confirm": "Confirm",
-      "b-cancel": "Cancel"
+      "b-cancel": "Cancel",
+      "b-profile-not-created-title": "Profile doesn't exist",
+      "b-profile-not-created-subtitle": "Your profile still doesn't exist",
+      "b-create-profile": "Create Now"
     },
     "Modals": {
       "DeleteProfile": {
@@ -81,10 +85,50 @@
     }
   },
   "CategoryListPage": {
+    "clp-title": "Your categories",
+    "clp-subtitle": "Here you can add, edit or remove your categories",
+
     "Buttons": {
       "b-new": "New category",
       "b-edit": "Edit category",
       "b-delete": "Delete category"
+    },
+    "PredefinedCategories": {
+      "Salute": "Healty",
+      "Lavoro": "Work",
+      "Sport": "Sport",
+      "Tutto ciò che riguarda la tua salute fisica, come bere di più  o mangiare meglio": "Everything related to your physical health, like drinking more or eating better",
+      "Tutto ciò che riguarda il lavoro, come completare n tasks": "Everything related to work, like completing n tasks",
+      "Tutto ciò che riguarda lo sport": "Everything related to sport"
     }
+  },
+  "CategoryModals": {
+    "cdm-title": "Category Details",
+    "cdm-edit": "Edit",
+    "cdm-save": "Save Changes",
+    "cdm-cancel-edit": "Cancel Edit",
+    "cdm-delete": "Delete",
+    "cdm-confirm-delete-title": "Delete Confirmation",
+    "cdm-confirm-delete-desc": "Are you sure you want to delete this category?",
+    "cdm-confirm": "Confirm",
+    "cdm-cancel": "Cancel",
+    "cdm-saving": "Saving...",
+    "cdm-deleting": "Deleting...",
+    "cdm-error-invalid": "Invalid data",
+    "cdm-error-update": "Error during update. Please try again later.",
+    "cdm-error-delete": "Error during deletion. Please try again later.",
+    "ccm-title": "New Category",
+    "ccm-save": "Save",
+    "ccm-saving": "Saving...",
+    "ccm-error-invalid": "Invalid data",
+    "ccm-error-create": "Error during creation. Please try again later.",
+    "ccm-cdm-title-label": "Title",
+    "ccm-cdm-description-label": "Description",
+    "ccm-cdm-icon-label": "Icon",
+    "ccm-cdm-color-label": "Color",
+    "ccm-cdm-icon-expand": "Expand",
+    "ccm-cdm-icon-collapse": "Collapse"
   }
+
+
 }

@@ -107,11 +107,12 @@ const InfoProfileForm = () => {
 
   if(!profile) {
     return(
-      <div className="flex flex-col gap-2">
-        <h1>Profilo non ancora creato</h1>
+      <div className="flex flex-col gap-2 max-w-4xl mx-auto mb-4">
+        <h1 className="text-foreground font-medium">{t('Buttons.b-profile-not-created-title')}</h1>
+        <p className="text-muted-foreground">{t('Buttons.b-profile-not-created-subtitle')}</p>
         <Link href='/pages/create-profile'>
           <Button className="bg-primary">
-            Crea Ora
+            {t('Buttons.b-create-profile')}
           </Button>
         </Link>
       </div>
@@ -226,7 +227,7 @@ const InfoProfileForm = () => {
         <div className="md:col-span-2 flex justify-end gap-2">
           <Button
             type="button"
-            className="cursor-pointer rounded-md bg-primary px-4 py-2 text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 transition-all duration-300 ease-linear"
+            className="cursor-pointer rounded-md bg-primary px-4 py-2 text-background hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1 transition-all duration-300 ease-linear"
             onClick={() => {
               if (isEditing) {
                 handleSave()
@@ -242,7 +243,7 @@ const InfoProfileForm = () => {
             <Button
               type="button"
               onClick={() => setShowModal(true)}
-              className="bg-destructive hover:bg-destructive/90 cursor-pointer"
+              className="bg-destructive hover:bg-destructive/90 cursor-pointer text-foreground"
             >
               {t('Buttons.b-delete')}
             </Button>

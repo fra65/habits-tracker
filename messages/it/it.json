@@ -7,6 +7,7 @@
     "sb-today-item": "Oggi",
     "sb-habits-item": "Abitudini",
     "sb-history-item": "Storico",
+    "sb-categories-item": "Categorie",
     "sb-statystics-item": "Statistiche",
     "sb-admin-item": "Admin",
     "sb-users-item": "Utenti",
@@ -47,7 +48,10 @@
       "b-reset": "Ripristina",
       "b-change-password": "Cambia Password",
       "b-confirm": "Conferma",
-      "b-cancel": "Annulla"
+      "b-cancel": "Annulla",
+      "b-profile-not-created-title": "Profilo Inesistente",
+      "b-profile-not-created-subtitle": "Profilo non ancora creato",
+      "b-create-profile": "Crea Ora"
     },
     "Modals": {
       "DeleteProfile": {
@@ -81,10 +85,49 @@
     }
   },
   "CategoryListPage": {
+    "clp-title": "Le tue categorie",
+    "clp-subtitle": "Qui puoi aggiungere, modificare o rimuovere le tue categorie",
+
     "Buttons": {
       "b-new": "Nuova categoria",
       "b-edit": "Modifica categoria",
       "b-delete": "Elimina categoria"
+    },
+    "PredefinedCategories": {
+      "Salute": "Salute",
+      "Lavoro": "Lavoro",
+      "Sport": "Sport",
+      "Tutto ciò che riguarda la tua salute fisica, come bere di più  o mangiare meglio": "Tutto ciò che riguarda la tua salute fisica, come bere di più  o mangiare meglio",
+      "Tutto ciò che riguarda il lavoro, come completare n tasks": "Tutto ciò che riguarda il lavoro, come completare n tasks",
+      "Tutto ciò che riguarda lo sport": "Tutto ciò che riguarda lo sport"
     }
+  },
+  "CategoryModals": {
+    "cdm-title": "Dettagli Categoria",
+    "cdm-edit": "Modifica",
+    "cdm-save": "Salva Modifiche",
+    "cdm-cancel-edit": "Annulla Modifica",
+    "cdm-delete": "Elimina",
+    "cdm-confirm-delete-title": "Conferma Eliminazione",
+    "cdm-confirm-delete-desc": "Sei sicuro di voler eliminare questa categoria?",
+    "cdm-confirm": "Conferma",
+    "cdm-cancel": "Annulla",
+    "cdm-saving": "Salvando...",
+    "cdm-deleting": "Eliminando...",
+    "cdm-error-invalid": "Dati non corretti",
+    "cdm-error-update": "Errore durante l'aggiornamento. Riprova più tardi.",
+    "cdm-error-delete": "Errore durante l'eliminazione. Riprova più tardi.",
+    "ccm-title": "Nuova Categoria",
+    "ccm-save": "Salva",
+    "ccm-saving": "Salvando...",
+    "ccm-error-invalid": "Dati non corretti",
+    "ccm-error-create": "Errore durante la creazione. Riprova più tardi.",
+    "ccm-cdm-title-label": "Titolo",
+    "ccm-cdm-description-label": "Descrizione",
+    "ccm-cdm-icon-label": "Icona",
+    "ccm-cdm-color-label": "Colore",
+    "ccm-cdm-icon-expand": "Espandi",
+    "ccm-cdm-icon-collapse": "Comprimi"
   }
+
 }

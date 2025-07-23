@@ -56,7 +56,18 @@ const CategoryList = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="max-w-md mx-auto p-4 flex flex-col gap-8 my-auto">
+
+      <div className="max-w-4xl mx-auto px-0.5 flex flex-col">
+
+        <h1 className="w-full text-center font-bold text-xl text-foreground">
+          {t('clp-title')}
+        </h1>
+
+        <p className="text-center text-muted-foreground">{t('clp-subtitle')}</p>
+
+      </div>
+
       <ul className="space-y-3">
         {categories?.map((category) => (
           <CategoryListItem
@@ -71,7 +82,7 @@ const CategoryList = () => {
         ))}
       </ul>
 
-      <div className="mt-4">
+      <div className="mt-4 mx-auto">
         <Button onClick={() => setCreateModalOpen(true)}>{t("Buttons.b-new")}</Button>
       </div>
 

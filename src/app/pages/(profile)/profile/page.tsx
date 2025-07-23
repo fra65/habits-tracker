@@ -18,7 +18,7 @@ const ProfilePage = async () => {
   }
 
   return (
-    <main className="bg-background p-6 min-h-screen">
+    <main className="bg-background p-6 min-h-screen py-auto">
       <InfoProfileForm />
       <Separator className="max-w-4xl mx-auto my-10" />
       <ChangePasswordForm />

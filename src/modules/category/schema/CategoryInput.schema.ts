@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const forbiddenTitles = ["Salute", "Lavoro", "Sport"];
+const forbiddenTitles = ["Salute", "Healty", "Lavoro", "Work", "Sport"];
 
 export const CategoryInputSchema = z.object({
   titolo: z
