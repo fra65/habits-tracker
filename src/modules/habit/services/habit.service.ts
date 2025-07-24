@@ -1,9 +1,9 @@
-import CreateHabitResponse from "../schema/CreateHabitResponse";
 import prisma from "@/prisma";
 import { HabitOutput, HabitOutputSchema } from "../schema/HabitOutput.schema";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { HabitInput } from "../schema/HabitsInput.schema";
 import { HabitCategoryOutput, HabitCategoryOutputSchema } from "../schema/HabitCategoryOutputSchema";
+import CreateHabitResponse from "../types/CreateHabitResponse";
 // import z from "zod";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -123,6 +123,36 @@ export async function getAllHabitsWithCategory(userId: number): Promise<HabitCat
     } catch(err) {
         console.error("Errore backend nel recupero delle abitudini + categorie: ", err)
         throw new Error("Errore backend generico nel recupero delle abitudini + categorie")
+    }
+
+}
+
+
+export async function deleteHabit(habitId: number, userId: number): Promise<boolean | null> {
+
+    try {
+        const habit = await prisma?.habit.delete({
+            where: {
+                id: habitId,
+                userId
+            }
+        });
+
+        // console.log("Habit backend pre valid: ", habit)
+
+        if(!habit) return null
+
+        // const validateHabit = HabitOutputSchema.safeParse(habit)
+
+        // console.log("Habit backend post valid: ", validateHabit)
+
+        // if(!validateHabit.success) return null
+
+        return true;
+
+    } catch(err) {
+        console.error("Errore nell'eliminazione della abitudine + categoria: ", err)
+        throw new Error("Errore generico nell'eliminazione della abitudine + categoria")
     }
 
 }

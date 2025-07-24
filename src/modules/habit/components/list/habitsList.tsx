@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import React, { useEffect, useState } from "react"
@@ -9,6 +10,8 @@ import { useTranslations } from "next-intl"
 import getHabitsWithCategory from "../../api/getHabitsWithCategory"
 import { HabitCategoryOutput } from "../../schema/HabitCategoryOutputSchema"
 import { HabitDetailsModal } from "../modals/HabitDetailsModal"
+import { CreateHabitModal } from "../modals/createHabitModal"
+// import { HabitDetailsModal } from "../modals/HabitDetailsModal"
 // import { HabitDetailsModal } from "../modals/habitDetailsModal"
 
 const HabitsList = () => {
@@ -31,9 +34,9 @@ const HabitsList = () => {
     fetchHabitsWithCategory()
   }, [])
 
-  function handleHabitCreated() {
-    fetchHabitsWithCategory()
-  }
+  // function handleHabitCreated() {
+  //   fetchHabitsWithCategory()
+  // }
 
   function handleHabitUpdated() {
     fetchHabitsWithCategory()
@@ -83,14 +86,13 @@ const HabitsList = () => {
       </div>
 
       {/* Modale crea nuovo habit */}
-      {/* <CreateHabitModal
+      <CreateHabitModal
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
         onHabitCreated={() => {
-          handleHabitCreated()
           setCreateModalOpen(false)
         }}
-      /> */}
+      />
 
       {/* Modale dettagli/modifica habit */}
       <HabitDetailsModal
