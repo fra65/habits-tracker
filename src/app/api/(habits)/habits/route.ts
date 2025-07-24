@@ -9,15 +9,15 @@ import { NextRequest, NextResponse } from "next/server";
 // POST route
 export async function POST(req: NextRequest) {
   try {
-    // const session = await auth();
-    // if (!session) {
-    //   return NextResponse.json({ success: false, message: "Non autenticato" }, { status: 401 });
-    // }
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ success: false, message: "Non autenticato" }, { status: 401 });
+    }
 
-    // const userId = Number(session.user.id)
+    const userId = Number(session.user.id)
 
     const body = await req.json();
-    const dataWithUserId = { ...body, userId: 29 };
+    const dataWithUserId = { ...body, userId: userId };
 
     const validateData = HabitInputSchema.safeParse(dataWithUserId)
 
