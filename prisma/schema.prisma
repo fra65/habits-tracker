@@ -82,10 +82,10 @@ model habit {
   categoriaId Int
   titolo      String
   descrizione String?
-  startDate   DateTime
+  startDate   DateTime      @default(now())
   endDate     DateTime?
-  color       String?
-  priority    String?
+  color       String?       @default("#c1121f")
+  priority    PRIORIY?       @default(MEDIA)
   isActive    Boolean       @default(true)
   visibility  String?
   targetValue Int?
@@ -121,6 +121,12 @@ model habitrepeat {
   habit     habit    @relation(fields: [habitId], references: [id], map: "HabitRepeat_habitId_fkey")
 
   @@index([habitId], map: "HabitRepeat_habitId_fkey")
+}
+
+enum PRIORIY {
+  ALTA
+  MEDIA
+  BASSA
 }
 
 enum Role {
