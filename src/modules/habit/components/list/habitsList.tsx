@@ -34,9 +34,9 @@ const HabitsList = () => {
     fetchHabitsWithCategory()
   }, [])
 
-  // function handleHabitCreated() {
-  //   fetchHabitsWithCategory()
-  // }
+  const handleHabitCreated = async () => {
+    await fetchHabitsWithCategory(); // refresh della lista (attendi fine)
+  }
 
   function handleHabitUpdated() {
     fetchHabitsWithCategory()
@@ -89,9 +89,7 @@ const HabitsList = () => {
       <CreateHabitModal
         open={createModalOpen}
         onOpenChange={setCreateModalOpen}
-        onHabitCreated={() => {
-          setCreateModalOpen(false)
-        }}
+        onHabitCreated={handleHabitCreated}
       />
 
       {/* Modale dettagli/modifica habit */}
