@@ -3,7 +3,7 @@ import { z } from "zod";
 export const PRIORITY_ENUM = ["BASSA", "MEDIA", "ALTA"] as const;
 
 // Schema base comune (senza userId)
-const HabitInputBaseSchema = z.object({
+const HabitUpdateInputBaseSchema = z.object({
   categoriaId: z.number({
     required_error: "La categoria è obbligatoria",
     invalid_type_error: "La categoria deve essere un numero",
@@ -46,13 +46,13 @@ const HabitInputBaseSchema = z.object({
 });
 
 // Schema client (senza userId)
-export const HabitInputClientSchema = HabitInputBaseSchema;
+export const HabitUpdateInputClientSchema = HabitUpdateInputBaseSchema;
 
 // Schema server (con userId)
-export const HabitInputSchema = HabitInputBaseSchema.extend({
+export const HabitUpdateInputSchema = HabitUpdateInputBaseSchema.extend({
   userId: z.number(),
 });
 
 // Tipi inferiti:
-export type HabitInputClient = z.infer<typeof HabitInputClientSchema>;
-export type HabitInput = z.infer<typeof HabitInputSchema>;
+export type HabitUpdateInputClient = z.infer<typeof HabitUpdateInputClientSchema>;
+export type HabitUpdateInput = z.infer<typeof HabitUpdateInputSchema>;

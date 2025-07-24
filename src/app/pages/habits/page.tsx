@@ -1,8 +1,7 @@
 import React from "react"
-import DashboardSection from "@/components/sections/dashboardSection"
+import HabitsList from "@/modules/habit/components/list/habitsList"
 
 export default function Page() {
-  // const { sidebarWidth } = useSidebar()
 
   return (
 
@@ -10,7 +9,7 @@ export default function Page() {
 
     <main className="bg-background p-6 min-h-screen max-h-screen py-auto">
 
-      <DashboardSection />
+      <HabitsList />
 
     </main>
 

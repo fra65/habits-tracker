@@ -1,6 +1,7 @@
 import axios from "axios";
+import { CategoryOutput } from "../schema/CategoryOutput.schema";
 
-export default async function getCategories() {
+export default async function getCategories(): Promise<CategoryOutput[] | null> {
 
     try {
 

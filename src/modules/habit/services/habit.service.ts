@@ -3,6 +3,7 @@ import prisma from "@/prisma";
 import { HabitOutput, HabitOutputSchema } from "../schema/HabitOutput.schema";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { HabitInput } from "../schema/HabitsInput.schema";
+import { HabitCategoryOutput, HabitCategoryOutputSchema } from "../schema/HabitCategoryOutputSchema";
 // import z from "zod";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -91,3 +92,37 @@ export async function getHabit(habitId: number, userId: number): Promise<HabitOu
 
 }
 
+
+
+export async function getAllHabitsWithCategory(userId: number): Promise<HabitCategoryOutput[] | null> {
+
+    try {
+
+        const habits = await prisma?.habit.findMany({
+        where: {
+            userId
+        },
+        include: {
+            categoria: true, // include tutti i campi della categoria associata
+        },
+        })
+
+
+        if(!habits) return null
+
+        const validateHabits = HabitCategoryOutputSchema.array().safeParse(habits);
+        
+
+        if(!validateHabits.success) {
+            console.error("Errore di validazione nel backend per habits category")
+            return null
+        }
+
+        return validateHabits.data;
+
+    } catch(err) {
+        console.error("Errore backend nel recupero delle abitudini + categorie: ", err)
+        throw new Error("Errore backend generico nel recupero delle abitudini + categorie")
+    }
+
+}

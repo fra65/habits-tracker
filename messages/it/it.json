@@ -149,4 +149,68 @@
     "msg-create-success": "Profilo creato con successo! Reindirizzamento in corso...",
     "msg-create-error": "Si è verificato un errore durante la creazione del profilo."
   }
+,
+"HabitsListPage": {
+  "hlp-title": "Le tue abitudini",
+  "hlp-subtitle": "Monitora e gestisci le tue abitudini quotidiane.",
+  "hli-category": "Categoria",
+  "hli-description": "Descrizione",
+  "hlp-priority": "Priorità",
+  "hli-active": "Attiva",
+  "hli-inactive": "Non attiva",
+  "hli-edit": "Modifica",
+  "hli-delete": "Elimina",
+  "hli-details": "Dettagli",
+  "hli-color": "Colore",
+  "hli-start-date": "Data inizio",
+  "hli-end-date": "Data fine",
+  "hli-user": "Utente",
+  "hli-no-habits": "Nessuna abitudine trovata.",
+  "hli-add-habit": "Aggiungi abitudine",
+
+  "Buttons": {
+    "b-new": "Nuova abitudine",
+    "b-edit": "Modifica abitudine",
+    "b-delete": "Elimina abitudine"
+  },
+
+  "PredefinedCategories": {
+    "Salute": "Healty",
+    "Lavoro": "Work",
+    "Sport": "Sport",
+    "Tutto ciò che riguarda la tua salute fisica, come bere di più  o mangiare meglio": "Everything related to your physical health, like drinking more or eating better",
+    "Tutto ciò che riguarda il lavoro, come completare n tasks": "Everything related to work, like completing n tasks",
+    "Tutto ciò che riguarda lo sport": "Everything related to sport"
+  },
+
+  "Priorities": {
+    "ALTA": "Alta",
+    "MEDIA": "Media",
+    "BASSA": "Bassa"
+  }
+},
+"HabitModals": {
+  "hm-title": "Dettagli abitudine",
+  "hm-edit": "Modifica",
+  "hm-save": "Salva modifiche",
+  "hm-cancel-edit": "Annulla modifica",
+  "hm-delete": "Elimina",
+  "hm-confirm-delete-title": "Conferma eliminazione",
+  "hm-confirm-delete-desc": "Sei sicuro di voler eliminare questa abitudine?",
+  "hm-confirm": "Conferma",
+  "hm-cancel": "Annulla",
+  "hm-saving": "Salvando...",
+  "hm-deleting": "Eliminando...",
+  "hm-error-invalid": "Dati non validi",
+  "hm-error-update": "Errore durante l'aggiornamento. Riprova più tardi.",
+  "hm-error-delete": "Errore durante l'eliminazione. Riprova più tardi.",
+  "hm-title-label": "Titolo",
+  "hm-description-label": "Descrizione",
+  "hm-category-label": "Categoria",
+  "hm-color-label": "Colore",
+  "hm-priority-label": "Priorità",
+  "hm-active-label": "Attiva",
+  "hm-start-date-label": "Data inizio",
+  "hm-end-date-label": "Data fine"
+}
 }

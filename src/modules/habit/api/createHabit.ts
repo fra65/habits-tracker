@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-import { HabitInput } from "../schema/HabitsInput.schema";
+import { HabitInputClient } from "../schema/HabitsInput.schema";
 import CreateHabitResponse from "../schema/CreateHabitResponse";
 
-export default async function createHabit(data: HabitInput): Promise<CreateHabitResponse> {
+export default async function createHabit(data: HabitInputClient): Promise<CreateHabitResponse> {
   try {
 
     const response = await axios.post('/api/habits', data);

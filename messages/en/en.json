@@ -149,4 +149,68 @@
     "msg-create-success": "Profile created successfully! Redirecting...",
     "msg-create-error": "An error occurred while creating the profile."
   }
+,
+"HabitsListPage": {
+  "hlp-title": "Your habits",
+  "hlp-subtitle": "Track and manage your daily habits.",
+  "hli-category": "Category",
+  "hli-description": "Description",
+  "hlp-priority": "Priority",
+  "hli-active": "Active",
+  "hli-inactive": "Inactive",
+  "hli-edit": "Edit",
+  "hli-delete": "Delete",
+  "hli-details": "Details",
+  "hli-color": "Color",
+  "hli-start-date": "Start date",
+  "hli-end-date": "End date",
+  "hli-user": "User",
+  "hli-no-habits": "No habits found.",
+  "hli-add-habit": "Add habit",
+
+  "Buttons": {
+    "b-new": "New habit",
+    "b-edit": "Edit habit",
+    "b-delete": "Delete habit"
+  },
+
+  "PredefinedCategories": {
+    "Salute": "Healty",
+    "Lavoro": "Work",
+    "Sport": "Sport",
+    "Tutto ciò che riguarda la tua salute fisica, come bere di più  o mangiare meglio": "Everything related to your physical health, like drinking more or eating better",
+    "Tutto ciò che riguarda il lavoro, come completare n tasks": "Everything related to work, like completing n tasks",
+    "Tutto ciò che riguarda lo sport": "Everything related to sport"
+  },
+
+  "Priorities": {
+    "ALTA": "High",
+    "MEDIA": "Middle",
+    "BASSA": "Low"
+  }
+},
+"HabitModals": {
+  "hm-title": "Habit details",
+  "hm-edit": "Edit",
+  "hm-save": "Save changes",
+  "hm-cancel-edit": "Cancel edit",
+  "hm-delete": "Delete",
+  "hm-confirm-delete-title": "Delete confirmation",
+  "hm-confirm-delete-desc": "Are you sure you want to delete this habit?",
+  "hm-confirm": "Confirm",
+  "hm-cancel": "Cancel",
+  "hm-saving": "Saving...",
+  "hm-deleting": "Deleting...",
+  "hm-error-invalid": "Invalid data",
+  "hm-error-update": "Error during update. Please try again later.",
+  "hm-error-delete": "Error during deletion. Please try again later.",
+  "hm-title-label": "Title",
+  "hm-description-label": "Description",
+  "hm-category-label": "Category",
+  "hm-color-label": "Color",
+  "hm-priority-label": "Priority",
+  "hm-active-label": "Active",
+  "hm-start-date-label": "Start date",
+  "hm-end-date-label": "End date"
+}
 }
