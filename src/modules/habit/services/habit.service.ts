@@ -156,3 +156,33 @@ export async function deleteHabit(habitId: number, userId: number): Promise<bool
     }
 
 }
+
+
+export async function updateHabits(data: any, habitId: number, userId: number): Promise<HabitOutput | null> {
+  try {
+
+    const habit = await prisma.habit.update({
+        where: {
+            id: habitId,
+            userId
+        },
+        data 
+    });
+
+    const validateHabit = HabitOutputSchema.safeParse(habit)
+
+    if(!validateHabit.success) return null
+
+    return validateHabit.data;
+
+  } catch (err: unknown) {
+
+    console.error("Errore catturato in updateHabits:", err);
+    // Gestione errore Prisma unique constraint
+    if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {
+      // Rilancia direttamente l'errore Prisma per farlo intercettare dalla route
+      throw err;
+    }
+    throw err;
+  }
+}

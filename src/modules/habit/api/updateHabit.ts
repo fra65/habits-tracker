@@ -9,10 +9,10 @@ export default async function updateHabit(data: HabitUpdateInputClient, habitId:
     try {
 
         if( isNaN(Number(habitId)) ) {
-        return { success: false, message: "ID categoria non valido" };
+        return { success: false, message: "ID abitudine non valido" };
         }
 
-        const response = await axios.put(`/api/categories/${habitId}`, data);
+        const response = await axios.put(`/api/habits/${habitId}`, data);
 
         if (!response || !response.data) {
         return { success: false, message: "Nessuna risposta dal server" };
@@ -23,11 +23,11 @@ export default async function updateHabit(data: HabitUpdateInputClient, habitId:
 
     } catch (err: any) {
 
-        console.error("Errore client nell'update della habit + categoria:", err);
+        console.error("Errore client nell'update della habit:", err);
         // Gestione messaggio user-friendly per errore unique constraint
-        let message = err.response?.data?.message || "Errore nell'update lato client della categoria";
-        if (err.response?.status === 409 && message.includes('Esiste già una categoria')) {
-        message = 'Esiste già una categoria con questo titolo. Scegli un titolo diverso.';
+        let message = err.response?.data?.message || "Errore nell'update lato client della abitudine";
+        if (err.response?.status === 409 && message.includes('Esiste già una abitudine')) {
+        message = 'Esiste già una abitudine con questo titolo. Scegli un titolo diverso.';
         }
         return { success: false, message };
 

@@ -5,7 +5,7 @@ import CreateHabitResponse from "../types/CreateHabitResponse";
 export default async function deleteHabit(habitId: number): Promise<CreateHabitResponse | null> {
     
   try {
-    const response = await axios.delete(`/api/habits-categories/${habitId}`);
+    const response = await axios.delete(`/api/habits/${habitId}`);
 
     if (!response || !response.data) {
       return { success: false, message: "Nessuna risposta dal server" };

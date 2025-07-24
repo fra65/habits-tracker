@@ -71,6 +71,11 @@ export function HabitDetailsModal({
     },
   })
 
+    const formatDateToInput = (dateString: string | null | undefined) => {
+        if (!dateString) return "";
+        return dateString.split("T")[0]; // prende solo YYYY-MM-DD dalla stringa ISO
+    }
+
   useEffect(() => {
     async function fetchCategories() {
       setLoading(true)
@@ -84,8 +89,8 @@ export function HabitDetailsModal({
         categoriaId: habit.categoriaId,
         titolo: habit.titolo,
         descrizione: habit.descrizione,
-        startDate: habit.startDate,
-        endDate: habit.endDate,
+        startDate: formatDateToInput(habit.startDate),
+        endDate: formatDateToInput(habit.endDate),
         color: habit.color,
         priority: habit.priority,
         isActive: habit.isActive,
