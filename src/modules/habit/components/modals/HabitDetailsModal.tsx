@@ -184,8 +184,8 @@ export function HabitDetailsModal({
               placeholder={t("placeholder-title")}
               className="text-muted-foreground"
             />
-            {errors.titolo && (
-              <p className="text-sm text-red-600">{formError}</p>
+            {typeof errors.titolo?.message === "string" && (
+              <p className="text-sm text-red-600">{errors.titolo.message}</p>
             )}
           </div>
 
@@ -200,8 +200,8 @@ export function HabitDetailsModal({
               placeholder={t("placeholder-description")}
               className="text-muted-foreground"
             />
-            {errors.descrizione && (
-              <p className="text-sm text-red-600">{formError}</p>
+            {typeof errors.descrizione?.message === "string" && (
+              <p className="text-sm text-red-600">{errors.descrizione.message}</p>
             )}
           </div>
 
@@ -216,8 +216,8 @@ export function HabitDetailsModal({
               disabled={!isEditing || isSubmitting}
               className="text-muted-foreground"
             />
-            {errors.startDate && (
-              <p className="text-sm text-red-600">{formError}</p>
+            {typeof errors.startDate?.message === "string" && (
+              <p className="text-sm text-red-600">{errors.startDate.message}</p>
             )}
           </div>
 
@@ -232,8 +232,8 @@ export function HabitDetailsModal({
               disabled={!isEditing || isSubmitting}
               className="text-muted-foreground"
             />
-            {errors.endDate && (
-              <p className="text-sm text-red-600">{formError}</p>
+            {typeof errors.endDate?.message === "string" && (
+              <p className="text-sm text-red-600">{errors.endDate.message}</p>
             )}
           </div>
 
@@ -274,9 +274,9 @@ export function HabitDetailsModal({
 
                 </Select>
               )}
-              {errors.categoriaId && (
-                <p className="text-sm text-red-600">{formError}</p>
-              )}
+            {typeof errors.categoriaId?.message === "string" && (
+              <p className="text-sm text-red-600">{errors.categoriaId.message}</p>
+            )}
             </div>
 
             <div className="space-y-2">
@@ -322,8 +322,8 @@ export function HabitDetailsModal({
                   </SelectItem>
                 </SelectContent>
               </Select>
-              {errors.priority && (
-                <p className="text-sm text-red-600">{formError}</p>
+              {typeof errors.priority?.message === "string" && (
+                <p className="text-sm text-red-600">{errors.priority.message}</p>
               )}
             </div>
 
@@ -373,7 +373,7 @@ export function HabitDetailsModal({
                     variant="ghost"
                     onClick={() => setIsEditing(false)}
                     disabled={isSubmitting || isDeleting}
-                    className="cursor-pointer"
+                    className="cursor-pointer text-foreground"
                   >
                     {t("button-cancel")}
                   </Button>
@@ -405,15 +405,15 @@ export function HabitDetailsModal({
                     <Dialog open={true} onOpenChange={() => setShowDeleteConfirm(false)}>
                       <DialogContent className="max-w-sm">
                         <DialogHeader>
-                          <DialogTitle>{t("delete-confirm-title")}</DialogTitle>
+                          <DialogTitle className="text-foreground">{t("delete-confirm-title")}</DialogTitle>
                         </DialogHeader>
-                        <p className="mb-4">{t("delete-confirm-desc")}</p>
+                        <p className="mb-4 text-muted-foreground">{t("delete-confirm-desc")}</p>
                         <DialogFooter className="flex justify-end gap-4">
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             onClick={() => setShowDeleteConfirm(false)}
                             disabled={isDeleting}
-                            className="cursor-pointer"
+                            className="cursor-pointer text-foreground"
                           >
                             {t("button-cancel")}
                           </Button>

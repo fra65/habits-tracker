@@ -52,11 +52,11 @@ const HabitsListItem = ({
     >
       <div>
         <IconFromName iconName={categoria.icona} />
-        {displayCategoryTitle}
+        {/* {displayCategoryTitle} */}
       </div>
       <div className="flex flex-col">
         <h3 className="text-lg font-semibold">{titolo}</h3>
-        <p className="text-sm opacity-90">{descrizione}</p>
+        {/* <p className="text-sm opacity-90">{descrizione}</p> */}
         <small className="text-xs opacity-70">
           {t("hlp-priority")}: {displayPriority}
         </small>

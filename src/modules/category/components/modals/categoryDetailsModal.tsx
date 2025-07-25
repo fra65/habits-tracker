@@ -293,14 +293,15 @@ export function CategoryDetailsModal({
                       <Dialog open={true} onOpenChange={() => setShowDeleteConfirm(false)}>
                         <DialogContent className="max-w-sm">
                           <DialogHeader>
-                            <DialogTitle>{t("cdm-confirm-delete-title")}</DialogTitle>
+                            <DialogTitle className="text-foreground">{t("cdm-confirm-delete-title")}</DialogTitle>
                           </DialogHeader>
-                          <p className="mb-4">{t("cdm-confirm-delete-desc")}</p>
+                          <p className="mb-4 text-muted-foreground">{t("cdm-confirm-delete-desc")}</p>
                           <DialogFooter className="flex justify-end gap-4">
                             <Button
-                              variant="outline"
+                              variant="ghost"
                               onClick={() => setShowDeleteConfirm(false)}
                               disabled={isDeleting}
+                              className="text-foreground cursor-pointer"
                             >
                               {t("cdm-cancel")}
                             </Button>
@@ -308,6 +309,7 @@ export function CategoryDetailsModal({
                               variant="destructive"
                               onClick={handleDelete}
                               disabled={isDeleting}
+                              className="cursor-pointer"
                             >
                               {isDeleting ? t("cdm-deleting") : t("cdm-confirm")}
                             </Button>

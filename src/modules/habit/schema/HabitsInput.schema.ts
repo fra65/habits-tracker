@@ -10,7 +10,7 @@ const HabitInputBaseSchema = z.object({
   }),
   titolo: z.string()
     .min(2, "Il titolo deve avere almeno 2 caratteri")
-    .max(100, "Il titolo può avere massimo 100 caratteri"),
+    .max(30, "Il titolo può avere massimo 30 caratteri"),
   descrizione: z.string().optional(),
 
   startDate: z.preprocess((arg) => {

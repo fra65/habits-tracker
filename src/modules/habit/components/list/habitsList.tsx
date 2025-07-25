@@ -60,7 +60,7 @@ const HabitsList = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto p-4 flex flex-col gap-8 my-auto">
+    <div className="max-w-4xl mx-auto p-4 flex flex-col gap-8 my-auto">
       <div className="max-w-4xl mx-auto px-0.5 flex flex-col">
         <h1 className="w-full text-center font-bold text-xl text-foreground">
           {t('hlp-title')}
@@ -68,17 +68,23 @@ const HabitsList = () => {
         <p className="text-center text-muted-foreground">{t('hlp-subtitle')}</p>
       </div>
 
-      <ul className="space-y-3">
-        {habits?.map((habit) => (
-          <HabitsListItem
-                key={habit.id}
-                titolo={habit.titolo}
-                descrizione={habit.descrizione}
-                color={habit.color}
-                id={habit.id}
-                categoria={habit.categoria}
-                onClick={() => openDetailsModal(habit)} categoriaId={0} startDate={""} priority={"BASSA"} isActive={false} userId={0}          />
-        ))}
+      <ul className="space-y-3 w-full">
+
+        <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+
+          {habits?.map((habit) => (
+            <HabitsListItem
+                  key={habit.id}
+                  titolo={habit.titolo}
+                  descrizione={habit.descrizione}
+                  color={habit.color}
+                  id={habit.id}
+                  categoria={habit.categoria}
+                  onClick={() => openDetailsModal(habit)} categoriaId={0} startDate={""} priority={"BASSA"} isActive={habit.isActive} userId={0}          />
+          ))}
+
+        </div>
+
       </ul>
 
       <div className="mt-4 mx-auto">

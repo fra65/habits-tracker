@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
@@ -74,14 +75,22 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
     targetValue: null,
   })
 
+  // Stato per messaggi generali (non specifici per campo)
   const [message, setMessage] = useState<string | null>(null)
   const [messageType, setMessageType] = useState<"error" | "success" | null>(null)
+
+  // Stato per singoli errori di campo
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string | null>>({})
+
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (!open) {
+      // Reset stato quando modale si chiude
       setMessage(null)
       setMessageType(null)
+      setFieldErrors({})
+      setSubmitting(false)
       return
     }
 
@@ -117,6 +126,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
     })
     setMessage(null)
     setMessageType(null)
+    setFieldErrors({})
     setSubmitting(false)
   }, [open, t])
 
@@ -127,14 +137,17 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
     }))
     setMessage(null)
     setMessageType(null)
+    setFieldErrors((prev) => ({ ...prev, [field]: null }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setMessage(null)
     setMessageType(null)
+    setFieldErrors({})
     setSubmitting(true)
 
+    // Preprocess per validazione (endDate null se stringa vuota)
     const dataToValidate = {
       ...formData,
       endDate: formData.endDate === "" ? null : formData.endDate,
@@ -143,28 +156,18 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
     const validateData = HabitInputClientSchema.safeParse(dataToValidate)
 
     if (!validateData.success) {
-      const formattedErrors = validateData.error.format()
+      // Mappa gli errori per campo
+      const errors = validateData.error.formErrors.fieldErrors
+      const newErrors: Record<string, string> = {}
 
-      const errorMessages = Object.entries(formattedErrors)
-        .map(([key, value]) => {
-          if (Array.isArray(value) && value.length > 0) {
-            return `${key}: ${value.join(", ")}`
-          }
-          if (
-            typeof value === "object" &&
-            value &&
-            "_errors" in value &&
-            Array.isArray(value._errors) &&
-            value._errors.length > 0
-          ) {
-            return `${key}: ${value._errors.join(", ")}`
-          }
-          return null
-        })
-        .filter(Boolean)
-        .join("; ")
+      Object.entries(errors).forEach(([field, msgs]) => {
+        if (msgs && msgs.length > 0) {
+          newErrors[field] = msgs.join(", ")
+        }
+      })
 
-      setMessage(t("error-validation", { errorMessages }))
+      setFieldErrors(newErrors)
+      setMessage(t("error-validation", { errorMessages: "Correggere i campi evidenziati" }))
       setMessageType("error")
       setSubmitting(false)
       return
@@ -215,7 +218,14 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
               placeholder={t("placeholder-title")}
               required
               disabled={submitting}
+              aria-invalid={fieldErrors.titolo ? "true" : "false"}
+              aria-describedby={fieldErrors.titolo ? "titolo-error" : undefined}
             />
+            {fieldErrors.titolo && (
+              <p id="titolo-error" className="mt-1 text-sm text-red-600">
+                {fieldErrors.titolo}
+              </p>
+            )}
           </div>
 
           {/* Descrizione */}
@@ -230,7 +240,14 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
               placeholder={t("placeholder-description")}
               rows={3}
               disabled={submitting}
+              aria-invalid={fieldErrors.descrizione ? "true" : "false"}
+              aria-describedby={fieldErrors.descrizione ? "descrizione-error" : undefined}
             />
+            {fieldErrors.descrizione && (
+              <p id="descrizione-error" className="mt-1 text-sm text-red-600">
+                {fieldErrors.descrizione}
+              </p>
+            )}
           </div>
 
           {/* Date */}
@@ -247,7 +264,14 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                 required
                 disabled={submitting}
                 className="text-muted-foreground"
+                aria-invalid={fieldErrors.startDate ? "true" : "false"}
+                aria-describedby={fieldErrors.startDate ? "startDate-error" : undefined}
               />
+              {fieldErrors.startDate && (
+                <p id="startDate-error" className="mt-1 text-sm text-red-600">
+                  {fieldErrors.startDate}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="endDate" className="text-foreground">
@@ -260,7 +284,14 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                 onChange={(e) => handleInputChange("endDate", e.target.value)}
                 disabled={submitting}
                 className="text-muted-foreground"
+                aria-invalid={fieldErrors.endDate ? "true" : "false"}
+                aria-describedby={fieldErrors.endDate ? "endDate-error" : undefined}
               />
+              {fieldErrors.endDate && (
+                <p id="endDate-error" className="mt-1 text-sm text-red-600">
+                  {fieldErrors.endDate}
+                </p>
+              )}
             </div>
           </div>
 
@@ -277,25 +308,34 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                   <span className="text-sm text-muted-foreground">{t("category-loading")}</span>
                 </div>
               ) : (
-                <Select
-                  value={formData.categoriaId?.toString() || ""}
-                  onValueChange={(value) => handleInputChange("categoriaId", Number.parseInt(value))}
-                  disabled={submitting}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t("category-loading-placeholder")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id.toString()}>
-                        <div className="flex items-center gap-2">
-                          {category.icona && <IconFromName iconName={category.icona} />}
-                          <span>{category.titolo}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <>
+                  <Select
+                    value={formData.categoriaId?.toString() || ""}
+                    onValueChange={(value) => handleInputChange("categoriaId", Number.parseInt(value))}
+                    disabled={submitting}
+                    aria-invalid={fieldErrors.categoriaId ? "true" : "false"}
+                    aria-describedby={fieldErrors.categoriaId ? "categoria-error" : undefined}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("category-loading-placeholder")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id.toString()}>
+                          <div className="flex items-center gap-2">
+                            {category.icona && <IconFromName iconName={category.icona} />}
+                            <span>{category.titolo}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fieldErrors.categoriaId && (
+                    <p id="categoria-error" className="mt-1 text-sm text-red-600">
+                      {fieldErrors.categoriaId}
+                    </p>
+                  )}
+                </>
               )}
             </div>
 
@@ -312,9 +352,16 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                   onChange={(e) => handleInputChange("color", e.target.value)}
                   className="w-16 h-10 p-1 border rounded cursor-pointer"
                   disabled={submitting}
+                  aria-invalid={fieldErrors.color ? "true" : "false"}
+                  aria-describedby={fieldErrors.color ? "color-error" : undefined}
                 />
                 <span className="text-sm text-muted-foreground">{formData.color}</span>
               </div>
+              {fieldErrors.color && (
+                <p id="color-error" className="mt-1 text-sm text-red-600">
+                  {fieldErrors.color}
+                </p>
+              )}
             </div>
           </div>
 
@@ -328,6 +375,8 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                 value={formData.priority}
                 onValueChange={(value) => handleInputChange("priority", value)}
                 disabled={submitting}
+                aria-invalid={fieldErrors.priority ? "true" : "false"}
+                aria-describedby={fieldErrors.priority ? "priority-error" : undefined}
               >
                 <SelectTrigger>
                   <SelectValue placeholder={t("priority-placeholder")} />
@@ -338,6 +387,11 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                   <SelectItem value="ALTA">{t("priority-high")}</SelectItem>
                 </SelectContent>
               </Select>
+              {fieldErrors.priority && (
+                <p id="priority-error" className="mt-1 text-sm text-red-600">
+                  {fieldErrors.priority}
+                </p>
+              )}
             </div>
 
             {/* Target Value */}
@@ -358,7 +412,14 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
                 placeholder={t("target-placeholder")}
                 className="[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 disabled={submitting}
+                aria-invalid={fieldErrors.targetValue ? "true" : "false"}
+                aria-describedby={fieldErrors.targetValue ? "targetValue-error" : undefined}
               />
+              {fieldErrors.targetValue && (
+                <p id="targetValue-error" className="mt-1 text-sm text-red-600">
+                  {fieldErrors.targetValue}
+                </p>
+              )}
             </div>
           </div>
 
@@ -377,7 +438,9 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
             <Switch
               id="visibility"
               checked={formData.visibility === "public"}
-              onCheckedChange={(checked) => handleInputChange("visibility", checked ? "public" : "private")}
+              onCheckedChange={(checked) =>
+                handleInputChange("visibility", checked ? "public" : "private")
+              }
               disabled={submitting}
             />
           </div>
@@ -395,8 +458,8 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
             </Label>
           </div>
 
-          {/* Messaggi di errore/successo */}
-          {message && (
+          {/* Messaggi di errore/successo generali */}
+          {/* {message && (
             <div
               className={`mb-4 rounded-md p-3 font-semibold ${
                 messageType === "error"
@@ -407,7 +470,7 @@ export const CreateHabitModal: React.FC<CreateHabitModalProps> = ({
             >
               {message}
             </div>
-          )}
+          )} */}
 
           {/* Bottone Submit */}
           <DialogFooter>
