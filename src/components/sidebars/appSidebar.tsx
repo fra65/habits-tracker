@@ -3,9 +3,10 @@
 import * as React from "react"
 import {
   Calendar,
-  History,
+  Folder,
+  // History,
   Lock,
-  PieChartIcon,
+  // PieChartIcon,
   Settings2,
   Target,
 } from "lucide-react"
@@ -22,9 +23,10 @@ import { SidebarSkeleton } from "../skeletons/sidebarSkeleton"
 import { NavMain } from "./navMain"
 import { NavUser } from "./navUser"
 import { TeamSwitcher } from "./teamSwitcher"
-import { NavSettings } from "./navSettings"
+// import { NavSettings } from "./navSettings"
 import { NavAdmin } from "./navAdmin"
 import { useTranslations } from "next-intl"
+import { useIsMobile } from "../../../hooks/use-mobile"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
@@ -35,9 +37,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     navMain: [
       { title: t('sb-today-item'), url: "#", icon: Calendar, isActive: true },
       { title: t('sb-habits-item'), url: "/pages/habits", icon: Target },
-      { title: t('sb-categories-item'), url: "/pages/categories", icon: Target },
-      { title: t('sb-history-item'), url: "#", icon: History },
-      { title: t('sb-statystics-item'), url: "#", icon: PieChartIcon },
+      { title: t('sb-categories-item'), url: "/pages/categories", icon: Folder },
+      // { title: t('sb-history-item'), url: "#", icon: History },
+      // { title: t('sb-statystics-item'), url: "#", icon: PieChartIcon },
     ],
     navSettings: [{ title: t('sb-settings-item'), url: "#", icon: Settings2 }],
 
@@ -57,6 +59,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }
 
   const { data: session, status } = useSession()
+
+  const isMobile = useIsMobile()
 
   const user = React.useMemo(() => {
     if (!session?.user) return null
@@ -83,9 +87,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     >
       <SidebarHeader className="flex flex-row items-center justify-between pr-0">
         <TeamSwitcher teams={data.teams} />
-        <SidebarTrigger />
+        { !isMobile && <SidebarTrigger /> }
         {/* Rimosso SidebarTrigger da header */}
       </SidebarHeader>
+
+
 
       <SidebarContent className="flex flex-col justify-between h-full overflow-hidden">
         <div>
@@ -93,9 +99,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {session?.user.role === "ADMIN" && <NavAdmin items={data.navAdmin} />}
         </div>
 
-        <div>
+        {/* <div>
           <NavSettings items={data.navSettings} />
-        </div>
+        </div> */}
       </SidebarContent>
 
       <SidebarFooter className="w-full mx-auto">
@@ -103,6 +109,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
 
       <SidebarRail />
+
+      {isMobile && (
+        <div
+          className="fixed top-4 left-[90vh] z-50 bg-white dark:bg-gray-900 rounded-full shadow-lg p-2"
+          style={{ width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <SidebarTrigger />
+        </div>
+      )}
+
     </Sidebar>
   )
 }
