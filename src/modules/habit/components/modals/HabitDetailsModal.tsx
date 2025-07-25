@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client'
+"use client"
 
 import React, { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
+
 import {
   Dialog,
   DialogContent,
@@ -18,7 +20,13 @@ import { HabitInputClientSchema } from "../../schema/HabitsInput.schema"
 import updateHabit from "../../api/updateHabit"
 import deleteHabit from "../../api/deleteHabit"
 import { Switch } from "@/components/ui/switch"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { HabitCategoryOutput } from "../../schema/HabitCategoryOutputSchema"
 import getCategories from "@/modules/category/api/getCategories"
@@ -41,6 +49,8 @@ export function HabitDetailsModal({
   onHabitUpdated,
   onHabitDeleted,
 }: HabitDetailsModalProps) {
+  const t = useTranslations("HabitDetailsModal")
+
   const [isEditing, setIsEditing] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
@@ -71,10 +81,10 @@ export function HabitDetailsModal({
     },
   })
 
-    const formatDateToInput = (dateString: string | null | undefined) => {
-        if (!dateString) return "";
-        return dateString.split("T")[0]; // prende solo YYYY-MM-DD dalla stringa ISO
-    }
+  const formatDateToInput = (dateString: string | null | undefined) => {
+    if (!dateString) return ""
+    return dateString.split("T")[0] // YYYY-MM-DD
+  }
 
   useEffect(() => {
     async function fetchCategories() {
@@ -108,7 +118,6 @@ export function HabitDetailsModal({
       setShowDeleteConfirm(false)
     }
 
-
     fetchCategories()
   }, [open, habit, reset])
 
@@ -116,20 +125,20 @@ export function HabitDetailsModal({
     try {
       const parsed = HabitUpdateInputClientSchema.safeParse(data)
       if (!parsed.success) {
-        setFormError("Dati non validi.")
+        setFormError(t("error-invalid-data"))
         return
       }
       const response = await updateHabit(parsed.data, habit?.id)
       if (!response.success) {
-        setFormError(response.message || "Errore nell'aggiornamento")
+        setFormError(response.message || t("error-update"))
         return
       }
       setFormError(null)
       onOpenChange(false)
       onHabitUpdated()
     } catch (error: any) {
-      console.error("Errore nell'aggiornamento:", error)
-      setFormError(error?.message || "Errore generico")
+      console.error("Update error:", error)
+      setFormError(error?.message || t("error-generic"))
     }
   }
 
@@ -143,8 +152,8 @@ export function HabitDetailsModal({
       onOpenChange(false)
       onHabitDeleted()
     } catch (error: any) {
-      console.error("Errore durante l'eliminazione:", error)
-      setFormError(error?.message || "Errore durante l'eliminazione")
+      console.error("Delete error:", error)
+      setFormError(error?.message || t("error-delete"))
     } finally {
       setIsDeleting(false)
     }
@@ -156,165 +165,265 @@ export function HabitDetailsModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[90%] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Dettagli Obiettivo</DialogTitle>
+          <DialogTitle className="text-foreground">{t("title")}</DialogTitle>
+          {formError && (
+            <p className="mb-2 text-sm text-red-600">{formError}</p>
+          )}
         </DialogHeader>
         <form onSubmit={handleSubmit(handleUpdate)} className="space-y-4">
           <Input type="hidden" {...register("id")} />
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="titolo">Titolo</Label>
-            <Input id="titolo" {...register("titolo")} disabled={!isEditing || isSubmitting} />
-            {errors.titolo && <p className="text-sm text-red-600">ERROREEEEEEEEEEEEE</p>}
+            <Label htmlFor="titolo" className="text-foreground">
+              {t("label-title")}
+            </Label>
+            <Input
+              id="titolo"
+              {...register("titolo")}
+              disabled={!isEditing || isSubmitting}
+              placeholder={t("placeholder-title")}
+              className="text-muted-foreground"
+            />
+            {errors.titolo && (
+              <p className="text-sm text-red-600">{formError}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="descrizione">Descrizione</Label>
-            <Input id="descrizione" {...register("descrizione")} disabled={!isEditing || isSubmitting} />
+            <Label htmlFor="descrizione" className="text-foreground">
+              {t("label-description")}
+            </Label>
+            <Input
+              id="descrizione"
+              {...register("descrizione")}
+              disabled={!isEditing || isSubmitting}
+              placeholder={t("placeholder-description")}
+              className="text-muted-foreground"
+            />
+            {errors.descrizione && (
+              <p className="text-sm text-red-600">{formError}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="startDate">Data Inizio</Label>
-            <Input type="date" id="startDate" {...register("startDate")} disabled={!isEditing || isSubmitting} />
+            <Label htmlFor="startDate" className="text-foreground">
+              {t("label-start-date")}
+            </Label>
+            <Input
+              type="date"
+              id="startDate"
+              {...register("startDate")}
+              disabled={!isEditing || isSubmitting}
+              className="text-muted-foreground"
+            />
+            {errors.startDate && (
+              <p className="text-sm text-red-600">{formError}</p>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
-            <Label htmlFor="endDate">Data Fine</Label>
-            <Input type="date" id="endDate" {...register("endDate")} disabled={!isEditing || isSubmitting} />
+            <Label htmlFor="endDate" className="text-foreground">
+              {t("label-end-date")}
+            </Label>
+            <Input
+              type="date"
+              id="endDate"
+              {...register("endDate")}
+              disabled={!isEditing || isSubmitting}
+              className="text-muted-foreground"
+            />
+            {errors.endDate && (
+              <p className="text-sm text-red-600">{formError}</p>
+            )}
           </div>
 
-            {/* Categoria e colore */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Categoria */}
-              <div className="space-y-2">
-                <Label htmlFor="categoriaId">Categoria *</Label>
-                {loading ? (
-                  <div className="flex items-center space-x-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm text-muted-foreground">
-                      Caricamento categorie...
-                    </span>
-                  </div>
-                ) : (
-                  <Select
-                    value={watch("categoriaId")?.toString() || ""}
-                    onValueChange={(value) => setValue("categoriaId", Number(value), { shouldValidate: true })}
-                    disabled={!isEditing || isSubmitting}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Seleziona una categoria" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id.toString()}>
-                          <div className="flex items-center gap-2">
-                            {/* Mostra icona se disponibile */}
-                            {category.icona && <IconFromName iconName={category.icona} />}
-                            <span>{category.titolo}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                )}
-              </div>
-
-              {/* Colore */}
-              <div className="space-y-2">
-                <Label htmlFor="color">Colore abitudine</Label>
-                <div className="flex items-center space-x-3">
-                    <Input type="color" id="color" {...register("color")} disabled={!isEditing || isSubmitting} className="w-1/3 p-0" />
+          {/* Categoria e colore */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="categoriaId" className="text-foreground">
+                {t("label-category")}
+              </Label>
+              {loading ? (
+                <div className="flex items-center space-x-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span className="text-sm text-muted-foreground">
+                    {t("category-loading")}
+                  </span>
                 </div>
-              </div>
+              ) : (
+                <Select
+                  value={watch("categoriaId")?.toString() || ""}
+                  onValueChange={(value) =>
+                    setValue("categoriaId", Number(value), { shouldValidate: true })
+                  }
+                  disabled={!isEditing || isSubmitting}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={t("category-placeholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id.toString()}>
+                        <div className="flex items-center gap-2">
+                          {category.icona && <IconFromName iconName={category.icona} />}
+                          <span className="text-muted-foreground">{category.titolo}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+
+                </Select>
+              )}
+              {errors.categoriaId && (
+                <p className="text-sm text-red-600">{formError}</p>
+              )}
             </div>
 
-          {/* <div className="flex flex-col gap-2">
-            <Label htmlFor="color">Colore</Label>
-            <Input type="color" id="color" {...register("color")} disabled={!isEditing || isSubmitting} className="w-1/3 p-0" />
-          </div> */}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-
-          <div className="flex flex-col gap-2">
-            <Label>Priorità</Label>
-            <Select
-              value={watch("priority") || ""}
-              onValueChange={(value) => setValue("priority", value as any, { shouldValidate: true })}
-              disabled={!isEditing || isSubmitting}
-            >
-              <SelectTrigger><SelectValue placeholder="Seleziona priorità" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="BASSA">Bassa</SelectItem>
-                <SelectItem value="MEDIA">Media</SelectItem>
-                <SelectItem value="ALTA">Alta</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="space-y-2">
+              <Label htmlFor="color" className="text-foreground">
+                {t("color-label")}
+              </Label>
+              <div className="flex items-center space-x-3">
+                <Input
+                  type="color"
+                  id="color"
+                  {...register("color")}
+                  disabled={!isEditing || isSubmitting}
+                  className="w-1/3 p-0 cursor-pointer"
+                  aria-label={t("color-label")}
+                />
+                <span className="text-sm text-muted-foreground">{watch("color")}</span>
+              </div>
+            </div>
           </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <Label className="text-foreground">{t("priority-label")}</Label>
+              <Select
+                value={watch("priority") || ""}
+                onValueChange={(value) =>
+                  setValue("priority", value as any, { shouldValidate: true })
+                }
+                disabled={!isEditing || isSubmitting}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={t("priority-placeholder")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="BASSA">
+                    <span className="text-muted-foreground">{t("priority-low")}</span>
+                  </SelectItem>
+                  <SelectItem value="MEDIA">
+                    <span className="text-muted-foreground">{t("priority-medium")}</span>
+                  </SelectItem>
+                  <SelectItem value="ALTA">
+                    <span className="text-muted-foreground">{t("priority-high")}</span>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.priority && (
+                <p className="text-sm text-red-600">{formError}</p>
+              )}
+            </div>
 
             <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-                <Label htmlFor="visibility">Visibilità</Label>
+              <div className="space-y-0.5">
+                <Label htmlFor="visibility" className="text-foreground">
+                  {t("visibility-label")}
+                </Label>
                 <div className="text-sm text-muted-foreground">
-                {/* {value === "public" ? "Pubblico" : "Privato"} */}
+                  {watch("visibility") === "public" ? t("visibility-public") : t("visibility-private")}
                 </div>
-            </div>
-            <Switch
+              </div>
+              <Switch
                 id="visibility"
                 checked={watch("visibility") === "public"}
                 onCheckedChange={(checked) => setValue("visibility", checked ? "public" : "private")}
                 disabled={!isEditing || isSubmitting}
-                
-            />
+                className="cursor-pointer"
+                aria-label={t("visibility-label")}
+              />
             </div>
-
-        </div>
-
-          {/* <div className="flex flex-col gap-2">
-            <Label>Visibilità</Label>
-            <Switch
-              checked={watch("visibility") === "public"}
-              onCheckedChange={(checked) => setValue("visibility", checked ? "public" : "private")}
-              disabled={!isEditing || isSubmitting}
-            />
-          </div> */}
+          </div>
 
           <div className="flex items-center space-x-2">
-            <Checkbox id="isActive" checked={watch("isActive")} onCheckedChange={(checked) => setValue("isActive", checked)} disabled={!isEditing || isSubmitting} />
-            <Label htmlFor="isActive">Obiettivo attivo</Label>
+            <Checkbox
+              id="isActive"
+              checked={watch("isActive")}
+              onCheckedChange={(checked) => setValue("isActive", checked)}
+              disabled={!isEditing || isSubmitting}
+              className="cursor-pointer"
+              aria-label={t("active-label")}
+            />
+            <Label htmlFor="isActive" className="text-foreground">
+              {t("active-label")}
+            </Label>
           </div>
 
           <DialogFooter className="mt-6 flex flex-col sm:flex-row sm:justify-between sm:space-x-2 space-y-2 sm:space-y-0">
-            <div className="flex-1">
-              {formError && <p className="mb-2 text-sm text-red-600">{formError}</p>}
-            </div>
-
+            <div className="flex-1"></div>
             <div className="flex flex-wrap gap-2 sm:gap-4 sm:flex-nowrap">
               {isEditing ? (
                 <>
-                  <Button type="submit" disabled={isSubmitting || isDeleting}>Salva</Button>
-                  <Button variant="ghost" onClick={() => setIsEditing(false)} disabled={isSubmitting || isDeleting}>Annulla</Button>
+                  <Button type="submit" disabled={isSubmitting || isDeleting} className="cursor-pointer">
+                    {t("button-save")}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setIsEditing(false)}
+                    disabled={isSubmitting || isDeleting}
+                    className="cursor-pointer"
+                  >
+                    {t("button-cancel")}
+                  </Button>
                 </>
               ) : (
-                <Button type="button" onClick={() => setIsEditing(true)} disabled={isSubmitting || isDeleting}>Modifica</Button>
+                <Button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  disabled={isSubmitting || isDeleting}
+                  className="cursor-pointer"
+                >
+                  {t("button-edit")}
+                </Button>
               )}
 
               {!isEditing && (
                 <>
-                  <Button type="button" variant="destructive" onClick={() => setShowDeleteConfirm(true)} disabled={isSubmitting || isDeleting}>
-                    {isDeleting ? "Eliminazione..." : "Elimina"}
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    disabled={isSubmitting || isDeleting}
+                    className="cursor-pointer"
+                  >
+                    {isDeleting ? t("button-deleting") : t("button-delete")}
                   </Button>
 
                   {showDeleteConfirm && (
                     <Dialog open={true} onOpenChange={() => setShowDeleteConfirm(false)}>
                       <DialogContent className="max-w-sm">
                         <DialogHeader>
-                          <DialogTitle>Conferma eliminazione</DialogTitle>
+                          <DialogTitle>{t("delete-confirm-title")}</DialogTitle>
                         </DialogHeader>
-                        <p className="mb-4">Sei sicuro di voler eliminare questo obiettivo?</p>
+                        <p className="mb-4">{t("delete-confirm-desc")}</p>
                         <DialogFooter className="flex justify-end gap-4">
-                          <Button variant="outline" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>Annulla</Button>
-                          <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-                            {isDeleting ? "Eliminazione..." : "Conferma"}
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowDeleteConfirm(false)}
+                            disabled={isDeleting}
+                            className="cursor-pointer"
+                          >
+                            {t("button-cancel")}
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="cursor-pointer"
+                          >
+                            {isDeleting ? t("button-deleting") : t("button-confirm")}
                           </Button>
                         </DialogFooter>
                       </DialogContent>
