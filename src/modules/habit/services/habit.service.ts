@@ -186,3 +186,40 @@ export async function updateHabits(data: any, habitId: number, userId: number): 
     throw err;
   }
 }
+
+
+
+
+export async function getAllActiveHabitsWithCategory(userId: number): Promise<HabitCategoryOutput[] | null> {
+
+    try {
+
+        const habits = await prisma?.habit.findMany({
+        where: {
+            userId,
+            isActive: true
+        },
+        include: {
+            categoria: true, // include tutti i campi della categoria associata
+        },
+        })
+
+
+        if(!habits) return null
+
+        const validateHabits = HabitCategoryOutputSchema.array().safeParse(habits);
+        
+
+        if(!validateHabits.success) {
+            console.error("Errore di validazione nel backend per habits category")
+            return null
+        }
+
+        return validateHabits.data;
+
+    } catch(err) {
+        console.error("Errore backend nel recupero delle abitudini + categorie: ", err)
+        throw new Error("Errore backend generico nel recupero delle abitudini + categorie")
+    }
+
+}

@@ -38,8 +38,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       { title: t('sb-today-item'), url: "#", icon: Calendar, isActive: true },
       { title: t('sb-habits-item'), url: "/pages/habits", icon: Target },
       { title: t('sb-categories-item'), url: "/pages/categories", icon: Folder },
-      // { title: t('sb-history-item'), url: "#", icon: History },
-      // { title: t('sb-statystics-item'), url: "#", icon: PieChartIcon },
     ],
     navSettings: [{ title: t('sb-settings-item'), url: "#", icon: Settings2 }],
 
