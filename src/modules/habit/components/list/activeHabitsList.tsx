@@ -9,7 +9,11 @@ import { HabitCategoryOutput } from "../../schema/HabitCategoryOutputSchema"
 import { HabitDetailsModal } from "../modals/HabitDetailsModal"
 import ActiveHabitsListItem from "../list-item/activeHabitsListItem"
 
-const ActiveHabitsList = () => {
+interface ActiveHabitsListProps {
+  refreshCalendar: () => Promise<void>
+}
+
+const ActiveHabitsList = ({ refreshCalendar }: ActiveHabitsListProps) => {
   const [habits, setHabits] = useState<HabitCategoryOutput[] | null>(null)
   const [loading, setLoading] = useState(true)
   const [detailsModalOpen, setDetailsModalOpen] = useState(false)
@@ -19,15 +23,22 @@ const ActiveHabitsList = () => {
 
   async function fetchHabitsWithCategory() {
     setLoading(true)
-    const data = await getActiveHabitsWithCategory()
-    setHabits(data)
-    setLoading(false)
+    try {
+      const data = await getActiveHabitsWithCategory()
+      setHabits(data)
+    } catch (error) {
+      console.error("Errore caricamento abitudini attive:", error)
+      setHabits([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     fetchHabitsWithCategory()
   }, [])
 
+  // Richiama il ricaricamento dei dati nella lista dopo un update sull’habit
   function handleHabitUpdated() {
     fetchHabitsWithCategory()
   }
@@ -58,24 +69,29 @@ const ActiveHabitsList = () => {
         <p className="text-center text-muted-foreground">{t('hlp-subtitle')}</p>
       </div>
 
-      {/* Container unico che avvolge tutta la lista */}
+      {/* Lista degli habits */}
       <div className="space-y-3 w-full p-4 border rounded-md shadow-sm box-border">
-        {habits?.map((habit) => (
-          <ActiveHabitsListItem
-            key={habit.id}
-            titolo={habit.titolo}
-            descrizione={habit.descrizione}
-            color={habit.color}
-            id={habit.id}
-            categoria={habit.categoria}
-            onClick={() => openDetailsModal(habit)}
-            categoriaId={0}
-            startDate={""}
-            priority={"BASSA"}
-            isActive={habit.isActive}
-            userId={0}
-          />
-        ))}
+        {habits && habits.length > 0 ? (
+          habits.map((habit) => (
+            <ActiveHabitsListItem
+              key={habit.id}
+              id={habit.id}
+              titolo={habit.titolo}
+              descrizione={habit.descrizione}
+              color={habit.color}
+              categoria={habit.categoria}
+              isActive={habit.isActive}
+              priority={habit.priority}
+              categoriaId={habit.categoriaId}
+              startDate={habit.startDate}
+              userId={habit.userId}
+              onClick={() => openDetailsModal(habit)}
+              refreshCalendar={refreshCalendar} // Passa la funzione refresh
+            />
+          ))
+        ) : (
+          <p className="text-center text-muted-foreground">{t('hlp-no-habits')}</p>
+        )}
       </div>
 
       {/* Modale dettagli/modifica habit */}

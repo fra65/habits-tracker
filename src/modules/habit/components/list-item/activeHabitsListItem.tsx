@@ -3,14 +3,13 @@ import { useTranslations } from "next-intl";
 import { IconFromName } from "@/components/icons/iconFromName";
 import { HabitCategoryOutput } from "../../schema/HabitCategoryOutputSchema";
 import CreateLogModal from "@/modules/calendar/components/modals/createLogModal";
+import DeleteLogModal from "@/modules/calendar/components/modals/deleteLogModal";
 import deleteLog from "@/modules/calendar/api/deleteLog";
-import DeleteResponse from "@/modules/calendar/types/DeleteResponse";
 
 interface ActiveHabitsListItemProps extends HabitCategoryOutput {
   onClick: () => void;
+  refreshCalendar: () => Promise<void>; // funzione per refresh calendario
 }
-
-// const predefinedTitles = ["Salute", "Lavoro", "Sport"]; // Puoi adattare se serve
 
 const ActiveHabitsListItem = ({
   id,
@@ -20,6 +19,7 @@ const ActiveHabitsListItem = ({
   isActive,
   categoria,
   onClick,
+  refreshCalendar,
 }: ActiveHabitsListItemProps) => {
   const t = useTranslations("HabitsListPage");
 
@@ -27,55 +27,25 @@ const ActiveHabitsListItem = ({
 
   const activeClass = isActive ? "opacity-100" : "opacity-50";
 
-  // Stato per apertura modale
   const [modalOpen, setModalOpen] = useState(false);
-  const [loadingRemove, setLoadingRemove] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [messageType, setMessageType] = useState<"success" | "error" | null>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  // Gestione apertura modale al click del bottone spunta
+  // Apertura/chiusura modale creazione log
   const handleOpenModal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setModalOpen(true);
   };
-
   const handleCloseModal = () => {
     setModalOpen(false);
   };
 
-  // Simulazione API di rimozione dal log (puoi sostituire con la tua funzione reale)
-  async function removeFromLog(response: DeleteResponse) {
-    setLoadingRemove(true);
-    setMessage(null);
-    setMessageType(null);
-    try {
-      // Simula delay API
-      await new Promise((r) => setTimeout(r, 1000));
-      // Logica dummy: se id è pari, fallisce
-      if (!response.isDelete) {
-        setMessage(response.message);
-        setMessageType("error");
-      } else {
-        setMessage(response.message);
-        setMessageType("success");
-      }
-    } catch {
-      setMessage(t("error-generic"));
-      setMessageType("error");
-    } finally {
-      setLoadingRemove(false);
-    }
-  }
-
-  const handleRemove = async (e: React.MouseEvent) => {
+  // Apertura/chiusura modale cancellazione
+  const openDeleteModal = (e: React.MouseEvent) => {
     e.stopPropagation();
-
-    const now = new Date();
-    const logDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-    const response = await deleteLog(id, logDate)
-    
-    removeFromLog(response);
+    setDeleteModalOpen(true);
+  };
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
   };
 
   return (
@@ -97,11 +67,9 @@ const ActiveHabitsListItem = ({
         <div className="flex items-center space-x-4">
           <div>
             <IconFromName iconName={categoria.icona} />
-            {/* {displayCategoryTitle} */}
           </div>
           <div className="flex flex-col">
             <h3 className="text-lg font-semibold">{titolo}</h3>
-            {/* <p className="text-sm opacity-90">{descrizione}</p> */}
             <small className="text-xs opacity-70">
               {t("hlp-priority")}: {displayPriority}
             </small>
@@ -118,35 +86,38 @@ const ActiveHabitsListItem = ({
               ✔️
             </button>
             <button
-              onClick={handleRemove}
-              disabled={loadingRemove}
-              className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-1 rounded text-sm"
+              onClick={openDeleteModal}
+              className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-sm"
               aria-label="Remove from log"
             >
-              {loadingRemove ? t("loading") : "❌"}
+              ❌
             </button>
           </div>
-
-          {message && (
-            <p
-              className={`text-xs whitespace-normal max-w-xs ${
-                messageType === "success" ? "text-green-300" : "text-red-300"
-              }`}
-              role={messageType === "error" ? "alert" : undefined}
-            >
-              {message}
-            </p>
-          )}
         </div>
       </li>
 
-      {/* Passa isOpen, habitId, habitTitle e onClose al modale */}
-      <CreateLogModal
-        isOpen={modalOpen}
-        habitId={id}
-        habitTitle={titolo}
-        onClose={handleCloseModal}
-      />
+      {/* Modale creazione log */}
+      {modalOpen && (
+        <CreateLogModal
+          isOpen={modalOpen}
+          habitId={id}
+          habitTitle={titolo}
+          onClose={handleCloseModal}
+        />
+      )}
+
+      {/* Modale conferma cancellazione */}
+      {deleteModalOpen && (
+        <DeleteLogModal
+          habitId={id}
+          onClose={closeDeleteModal}
+          onDeleteSuccess={async () => {
+            await refreshCalendar(); // aggiornamento dietro le quinte
+            closeDeleteModal();
+          }}
+          deleteLogApi={deleteLog} // passiamo la funzione API al modale
+        />
+      )}
     </>
   );
 };
