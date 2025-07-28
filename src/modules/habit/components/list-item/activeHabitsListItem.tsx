@@ -103,7 +103,9 @@ const ActiveHabitsListItem = ({
           habitId={id}
           habitTitle={titolo}
           onClose={handleCloseModal}
+          refreshCalendar={refreshCalendar} // <-- aggiunto
         />
+
       )}
 
       {/* Modale conferma cancellazione */}

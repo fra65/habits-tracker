@@ -27,9 +27,16 @@ interface HabitLogFormProps {
   habitTitle: string
   isOpen: boolean
   onClose: () => void
+  refreshCalendar: () => Promise<void> // aggiunta prop
 }
 
-export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }: HabitLogFormProps) {
+export default function CreateLogModal({
+  habitId,
+  habitTitle,
+  isOpen,
+  onClose,
+  refreshCalendar,
+}: HabitLogFormProps) {
   const t = useTranslations("HabitLogModal")
 
   const [completed, setCompleted] = useState(true)
@@ -42,7 +49,7 @@ export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }:
     e.preventDefault()
     setIsLoading(true)
     setMessage(null)
-    
+
     const now = new Date()
     const logDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
@@ -59,19 +66,26 @@ export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }:
 
       if (!response) {
         console.error("Errore nella chiamata dell'api")
+        setMessage({ type: "error", text: t("hlm-error") })
+        setIsLoading(false)
+        return
       }
-      
+
       setMessage({ type: "success", text: t("hlm-success") })
+
+      // Esegui refresh calendario **prima** di chiudere modal
+      await refreshCalendar()
+
       // Reset form
       setCompleted(true)
       setValue("")
       setNote("")
-      // Close modal after delay
+
+      // Chiudi modale dopo un piccolo delay per mostrare messaggio di successo
       setTimeout(() => {
         onClose()
         setMessage(null)
-      }, 2000)
-
+      }, 1500)
     } catch (error) {
       setMessage({ type: "error", text: t("hlm-error") })
     } finally {

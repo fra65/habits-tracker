@@ -7,6 +7,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import getLogsViews from '../api/getLogsViews'
+import getPreferences from '@/modules/preferences/api/getPreferences'
 
 type CalendarComponentProps = {
   refreshTrigger: number // numero che cambia per triggerare refresh
@@ -15,6 +16,21 @@ type CalendarComponentProps = {
 export default function CalendarComponent({ refreshTrigger }: CalendarComponentProps) {
   const calendarRef = React.useRef<FullCalendar | null>(null);
   const [events, setEvents] = useState<any[]>([]);
+  const [lang, setLang] = useState<string>("")
+
+  async function fetchPreferences() {
+    try {
+
+      const preferences = await getPreferences()
+
+      if(!preferences) return null
+
+      setLang(preferences.lang)
+
+    } catch(error) {
+      console.error("Errore caricamento preferenze", error);
+    }
+  }
 
   async function fetchEvents() {
     try {
@@ -44,6 +60,7 @@ export default function CalendarComponent({ refreshTrigger }: CalendarComponentP
 
   useEffect(() => {
     fetchEvents();
+    fetchPreferences();
   }, [refreshTrigger]);  // Rifresha ogni volta che cambia refreshTrigger
 
   return (
@@ -57,7 +74,7 @@ export default function CalendarComponent({ refreshTrigger }: CalendarComponentP
         selectable={true}
         height="100%"
         firstDay={1}
-        locale="it"
+        locale={lang}
       />
     </div>
   )
