@@ -47,10 +47,17 @@ export default function CalendarComponent() {
         height="100%"
         firstDay={1}
         locale={"it"}
-        events={[
-          { title: 'Evento A', date: '2025-07-01' },
-          { title: 'Evento B', date: '2025-07-15' },
-        ]}
+        events={
+
+          async () => {
+
+            // getLogs()
+          }
+          // [
+          //   { title: 'Evento A', date: '2025-07-01' },
+          //   { title: 'Evento B', date: '2025-07-15' },
+          // ]
+      }
       />
     </div>
   );

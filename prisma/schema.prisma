@@ -33,6 +33,8 @@ model user {
   passwordresettoken passwordresettoken[]
   user_preferences   user_preferences?
   user_profile       user_profile?
+  habitlog            habitlog[]
+
 
   @@unique([email, provider], map: "email_provider_UNIQUE")
   @@unique([provider, oauthId], map: "provider_oauthId_UNIQUE")
@@ -101,12 +103,14 @@ model habit {
 model habitlog {
   id        Int      @id @default(autoincrement())
   habitId   Int
-  logDate   DateTime
-  completed Boolean  @default(false)
+  userId   Int
+  logDate   DateTime @default(now())
+  completed Boolean  @default(true)
   value     Int?
   note      String?
   createdAt DateTime @default(now())
   habit     habit    @relation(fields: [habitId], references: [id], map: "HabitLog_habitId_fkey")
+  user     user    @relation(fields: [userId], references: [id], map: "HabitLog_userId_fkey")
 
   @@unique([habitId, logDate], map: "HabitLog_habitId_logDate_key")
 }
