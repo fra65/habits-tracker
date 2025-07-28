@@ -14,7 +14,7 @@ export default auth((req) => {
   if (req.auth) {
     // Se l'utente è autenticato e sta cercando di accedere a una pagina di autenticazione, redirect alla dashboard
     if (authPaths.includes(pathname)) {
-      return Response.redirect(new URL("/pages/dashboard", req.nextUrl.origin));
+      return Response.redirect(new URL("/pages/today", req.nextUrl.origin));
     }
   } else {
     // Se l'utente non è autenticato e sta cercando di accedere a una pagina protetta, redirect al login

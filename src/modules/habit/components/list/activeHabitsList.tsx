@@ -2,7 +2,6 @@
 'use client'
 
 import React, { useEffect, useState } from "react"
-import HabitsListItem from "../list-item/habitsListItem"
 import HabitsListSkeleton from "../skeleton/CategoryListSkeleton"
 import { useTranslations } from "next-intl"
 import getActiveHabitsWithCategory from "../../api/getActiveHabitsWithCategory"
@@ -44,15 +43,15 @@ const ActiveHabitsList = () => {
 
   if (loading) {
     return (
-      <div className="p-4">
+      <div className="p-4 w-full box-border">
         <HabitsListSkeleton />
       </div>
     )
   }
 
   return (
-    <div className="w-xl mx-auto p-4 flex flex-col gap-8 my-auto">
-      <div className="max-w-4xl mx-auto px-0.5 flex flex-col">
+    <div className="w-full p-4 flex flex-col gap-8 box-border">
+      <div className="w-full px-0.5 flex flex-col items-center">
         <h1 className="w-full text-center font-bold text-xl text-foreground">
           {t('hlp-title')}
         </h1>
@@ -60,7 +59,7 @@ const ActiveHabitsList = () => {
       </div>
 
       {/* Container unico che avvolge tutta la lista */}
-      <div className="space-y-3 w-full p-4 border rounded-md shadow-sm">
+      <div className="space-y-3 w-full p-4 border rounded-md shadow-sm box-border">
         {habits?.map((habit) => (
           <ActiveHabitsListItem
             key={habit.id}

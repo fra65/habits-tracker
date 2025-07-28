@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { createHabitLog } from "@/modules/calendar/service/habitLog.service";
+import { createHabitLog, getAllHabitsAndLogsView } from "@/modules/calendar/service/habitLog.service";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -52,5 +52,32 @@ export async function POST(req: NextRequest) {
       success: false,
       message: "Esiste già un log con questo titolo. Scegli un titolo diverso."
     }, { status: 500 });
+  }
+}
+
+
+
+export async function GET() {
+  try {
+    const session = await auth();
+    if (!session) {
+      return NextResponse.json({ success: false, message: "Non autenticato" }, { status: 401 });
+    }
+
+    const userId = Number(session.user.id);
+
+    const response = await getAllHabitsAndLogsView(userId);
+
+    // Se response è null, rispondi con errore 404 o appropriato
+    if (!response) {
+      return NextResponse.json({ success: false, message: "Nessun dato trovato" }, { status: 404 });
+    }
+
+    // Se sei sicuro che non ci siano Date non serializzate usa direttamente:
+    return NextResponse.json(response, { status: 200 });
+
+  } catch (error) {
+    console.error("Errore nella route GET:", error);
+    return NextResponse.json({ success: false, message: "Errore interno" }, { status: 500 });
   }
 }
