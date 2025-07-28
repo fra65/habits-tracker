@@ -6,7 +6,7 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 export async function createHabitLog(data: any): Promise<any> {
 
-    console.log("Data nel backend prima di query prisma: ", data.logDate)
+    // console.log("Data nel backend prima di query prisma: ", data.logDate)
 
   try {
     const habitLog = await prisma.habitlog.create({ data });

@@ -35,7 +35,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
     teams: [{ name: "Habits Flow", logo: Target, plan: "Enterprise" }],
     navMain: [
-      { title: t('sb-today-item'), url: "#", icon: Calendar, isActive: true },
+      { title: t('sb-today-item'), url: "/pages/today", icon: Calendar, isActive: true },
       { title: t('sb-habits-item'), url: "/pages/habits", icon: Target },
       { title: t('sb-categories-item'), url: "/pages/categories", icon: Folder },
     ],

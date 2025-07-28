@@ -113,7 +113,7 @@ const ActiveHabitsListItem = ({
             <button
               onClick={handleOpenModal}
               className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded text-sm"
-              aria-label={t("Buttons.open-create-log-modal")}
+              aria-label="Create Log modal"
             >
               ✔️
             </button>
@@ -121,7 +121,7 @@ const ActiveHabitsListItem = ({
               onClick={handleRemove}
               disabled={loadingRemove}
               className="bg-red-600 hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed px-3 py-1 rounded text-sm"
-              aria-label={t("Buttons.remove-from-log")}
+              aria-label="Remove from log"
             >
               {loadingRemove ? t("loading") : "❌"}
             </button>

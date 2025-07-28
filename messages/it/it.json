@@ -277,6 +277,20 @@
     "error-generic": "Errore generico. Riprova più tardi.",
     "delete-confirm-title": "Conferma eliminazione",
     "delete-confirm-desc": "Sei sicuro di voler eliminare questo obiettivo?"
+  },
+  "HabitLogModal": {
+    "hlm-title": "Inserisci Habit Log",
+    "hlm-description": "Aggiungi un nuovo record per: {habitTitle}",
+    "hlm-completed": "Completato",
+    "hlm-value-label": "Valore (opzionale)",
+    "hlm-value-placeholder": "Inserisci un valore numerico",
+    "hlm-note-label": "Note (opzionale)",
+    "hlm-note-placeholder": "Aggiungi delle note...",
+    "hlm-cancel": "Annulla",
+    "hlm-insert": "Inserisci",
+    "hlm-loading": "Inserimento...",
+    "hlm-success": "Habit log inserito con successo!",
+    "hlm-error": "Errore durante l'inserimento. Riprova."
   }
 
 

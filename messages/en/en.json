@@ -277,6 +277,20 @@
     "error-generic": "Generic error. Please try again later.",
     "delete-confirm-title": "Delete confirmation",
     "delete-confirm-desc": "Are you sure you want to delete this habit?"
+  },
+  "HabitLogModal": {
+    "hlm-title": "Insert Habit Log",
+    "hlm-description": "Add a new record for: {habitTitle}",
+    "hlm-completed": "Completed",
+    "hlm-value-label": "Value (optional)",
+    "hlm-value-placeholder": "Enter a number value",
+    "hlm-note-label": "Note (optional)",
+    "hlm-note-placeholder": "Add a note...",
+    "hlm-cancel": "Cancel",
+    "hlm-insert": "Insert",
+    "hlm-loading": "Inserting...",
+    "hlm-success": "Habit log successfully inserted!",
+    "hlm-error": "Error during insertion. Try again."
   }
 
 }

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     const dataWithUserId = { ...body, userId: userId };
 
-    console.log("DATA NELLA ROUTE: ", dataWithUserId.logDate)
+    // console.log("DATA NELLA ROUTE: ", dataWithUserId.logDate)
 
     // const validateData = HabitInputSchema.safeParse(dataWithUserId)
 

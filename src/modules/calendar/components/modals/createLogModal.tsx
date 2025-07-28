@@ -2,8 +2,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
+import { useTranslations } from "next-intl"
+
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -19,7 +20,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { CheckCircle, XCircle, Loader2 } from "lucide-react"
-import axios from "axios"
 import CreateLog from "../../api/CreateLog"
 
 interface HabitLogFormProps {
@@ -30,6 +30,8 @@ interface HabitLogFormProps {
 }
 
 export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }: HabitLogFormProps) {
+  const t = useTranslations("HabitLogModal")
+
   const [completed, setCompleted] = useState(true)
   const [value, setValue] = useState("")
   const [note, setNote] = useState("")
@@ -41,47 +43,43 @@ export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }:
     setIsLoading(true)
     setMessage(null)
     
-    const now = new Date();
-    const logDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const now = new Date()
+    const logDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
     const data = JSON.stringify({
       habitId,
       completed,
       value: value ? Number.parseInt(value) : null,
       note: note || null,
-      logDate: new Date(logDate.toISOString()), // Passa ISO string completa qui
-    });
-
-    console.log("Data nel frontend: ", data)
+      logDate: new Date(logDate.toISOString()),
+    })
 
     try {
-        // Simula una chiamata API
-        const response = await CreateLog(data)
+      const response = await CreateLog(data)
 
-        if (!response) {
-            console.error("Errore nella chiamata dell'api")
-        }
-        
-        setMessage({ type: "success", text: "Habit log inserito con successo!" })
-        // Reset form
-        setCompleted(true)
-        setValue("")
-        setNote("")
-        // Chiudi il modale dopo un breve delay
-        setTimeout(() => {
-            onClose()
-            setMessage(null)
-        }, 2000)
+      if (!response) {
+        console.error("Errore nella chiamata dell'api")
+      }
+      
+      setMessage({ type: "success", text: t("hlm-success") })
+      // Reset form
+      setCompleted(true)
+      setValue("")
+      setNote("")
+      // Close modal after delay
+      setTimeout(() => {
+        onClose()
+        setMessage(null)
+      }, 2000)
 
     } catch (error) {
-      setMessage({ type: "error", text: "Errore durante l'inserimento. Riprova." })
+      setMessage({ type: "error", text: t("hlm-error") })
     } finally {
       setIsLoading(false)
     }
   }
 
   const handleCancel = () => {
-    // Reset form
     setCompleted(true)
     setValue("")
     setNote("")
@@ -93,8 +91,10 @@ export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }:
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Inserisci Habit Log</DialogTitle>
-          <DialogDescription>Aggiungi un nuovo record per: {habitTitle}</DialogDescription>
+          <DialogTitle className="text-foreground">{t("hlm-title")}</DialogTitle>
+          <DialogDescription className="text-muted-foreground">
+            {t("hlm-description", { habitTitle })}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -108,34 +108,38 @@ export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }:
               />
               <Label
                 htmlFor="completed"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-medium text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Completato
+                {t("hlm-completed")}
               </Label>
             </div>
 
             {/* Value Input */}
             <div className="space-y-2">
-              <Label htmlFor="value">Valore (opzionale)</Label>
+              <Label htmlFor="value" className="text-muted-foreground">
+                {t("hlm-value-label")}
+              </Label>
               <Input
                 id="value"
                 type="number"
-                placeholder="Inserisci un valore numerico"
+                placeholder={t("hlm-value-placeholder")}
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                className="[&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
+                className="text-muted-foreground [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
             </div>
 
             {/* Note Textarea */}
             <div className="space-y-2">
-              <Label htmlFor="note">Note (opzionale)</Label>
+              <Label htmlFor="note" className="text-muted-foreground">
+                {t("hlm-note-label")}
+              </Label>
               <Textarea
                 id="note"
-                placeholder="Aggiungi delle note..."
+                placeholder={t("hlm-note-placeholder")}
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="min-h-[80px]"
+                className="min-h-[80px] text-muted-foreground"
               />
             </div>
           </div>
@@ -155,17 +159,17 @@ export default function CreateLogModal({ habitId, habitTitle, isOpen, onClose }:
           )}
 
           <DialogFooter className="gap-2">
-            <Button type="button" variant="outline" onClick={handleCancel} disabled={isLoading}>
-              Annulla
+            <Button type="button" variant="ghost" className="text-foreground cursor-pointer" onClick={handleCancel} disabled={isLoading}>
+              {t("hlm-cancel")}
             </Button>
-            <Button type="submit" disabled={isLoading}>
+            <Button className="cursor-pointer" type="submit" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Inserimento...
+                  {t("hlm-loading")}
                 </>
               ) : (
-                "Insert"
+                t("hlm-insert")
               )}
             </Button>
           </DialogFooter>
