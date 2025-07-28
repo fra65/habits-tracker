@@ -291,6 +291,15 @@
     "hlm-loading": "Inserimento...",
     "hlm-success": "Habit log inserito con successo!",
     "hlm-error": "Errore durante l'inserimento. Riprova."
+  },
+  "DeleteLogModal": {
+    "title": "Conferma cancellazione log",
+    "description": "Sei sicuro di voler eliminare questo log? Questa operazione è irreversibile.",
+    "confirm": "Conferma",
+    "cancel": "Annulla",
+    "loading": "Eliminazione in corso...",
+    "close": "Chiudi",
+    "error-default": "Impossibile cancellare il log."
   }
 
 
