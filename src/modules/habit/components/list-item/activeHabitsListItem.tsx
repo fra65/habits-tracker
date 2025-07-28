@@ -18,7 +18,6 @@ const ActiveHabitsListItem = ({
   priority,
   isActive,
   categoria,
-  onClick,
   refreshCalendar,
 }: ActiveHabitsListItemProps) => {
   const t = useTranslations("HabitsListPage");
@@ -54,15 +53,9 @@ const ActiveHabitsListItem = ({
         id={`${id}`}
         style={{ backgroundColor: color }}
         className={`flex items-center justify-between rounded-md p-4 shadow-sm text-white cursor-pointer ${activeClass}`}
-        onClick={onClick}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            onClick();
-          }
-        }}
+        // Rimosso onClick e onKeyDown per non far succedere nulla al click generico
+        role="listitem" // - opzionale per accessibilità (invece di role=button)
+        tabIndex={-1}  // Non focusabile per tab
       >
         <div className="flex items-center space-x-4">
           <div>
@@ -105,7 +98,6 @@ const ActiveHabitsListItem = ({
           onClose={handleCloseModal}
           refreshCalendar={refreshCalendar} // <-- aggiunto
         />
-
       )}
 
       {/* Modale conferma cancellazione */}
