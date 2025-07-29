@@ -52,6 +52,7 @@ export default function CreateLogModal({
 
     const now = new Date()
     const logDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    logDate.setDate(logDate.getDate() + 1); // aggiunge un giorno
 
     const data = JSON.stringify({
       habitId,

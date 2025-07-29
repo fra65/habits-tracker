@@ -21,6 +21,8 @@ const HabitsList = () => {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false)
   const [selectedHabit, setSelectedHabit] = useState<HabitCategoryOutput | null>(null)
 
+  const [showInactive, setShowInactive] = useState<boolean>(false)
+
   const t = useTranslations("HabitsListPage")
 
   async function fetchHabitsWithCategory() {
@@ -70,25 +72,50 @@ const HabitsList = () => {
 
       <ul className="space-y-3 w-full">
 
-        <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4">
+        <div className="grid md:grid-cols-2 sm:grid-cols-1 gap-4 min-h-[10vh]">
 
-          {habits?.map((habit) => (
-            <HabitsListItem
-                  key={habit.id}
-                  titolo={habit.titolo}
-                  descrizione={habit.descrizione}
-                  color={habit.color}
-                  id={habit.id}
-                  categoria={habit.categoria}
-                  onClick={() => openDetailsModal(habit)} categoriaId={0} startDate={""} priority={"BASSA"} isActive={habit.isActive} userId={0}          />
-          ))}
+          {habits
+            ?.filter(habit => showInactive ? true : habit.isActive) // se showInactive è true mostro tutto, altrimenti solo attive
+            .map(habit => (
+              <HabitsListItem
+                key={habit.id}
+                titolo={habit.titolo}
+                descrizione={habit.descrizione}
+                color={habit.color}
+                id={habit.id}
+                categoria={habit.categoria}
+                onClick={() => openDetailsModal(habit)}
+                categoriaId={0}
+                startDate={""}
+                priority={"BASSA"}
+                isActive={habit.isActive}
+                userId={0}
+              />
+            ))
+          }
 
         </div>
 
       </ul>
 
-      <div className="mt-4 mx-auto">
-        <Button onClick={() => setCreateModalOpen(true)}>{t("Buttons.b-new")}</Button>
+      <div className="mt-4 mx-auto flex justify-center gap-6">
+        <Button
+          className="cursor-pointer"
+         onClick={() => setCreateModalOpen(true)}>
+          {t("Buttons.b-new")}
+        </Button>
+
+        <Button 
+          className="cursor-pointer"
+          onClick={() => setShowInactive(!showInactive)}>
+          {
+
+            !showInactive 
+              ? t("Buttons.b-show-inactive")
+              : t("Buttons.b-hide-inactive")
+
+          }
+        </Button>
       </div>
 
       {/* Modale crea nuovo habit */}

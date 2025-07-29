@@ -164,13 +164,16 @@
     "hli-start-date": "Data inizio",
     "hli-end-date": "Data fine",
     "hli-user": "Utente",
-    "hli-no-habits": "Nessuna abitudine trovata.",
+    "hli-no-habits": "Nessuna abitudine attiva trovata.",
+    "hlp-no-habits": "Nessuna abitudine attiva trovata.",
     "hli-add-habit": "Aggiungi abitudine",
 
     "Buttons": {
       "b-new": "Nuova abitudine",
       "b-edit": "Modifica abitudine",
-      "b-delete": "Elimina abitudine"
+      "b-delete": "Elimina abitudine",
+      "b-show-inactive": "Mostra inattive",
+      "b-hide-inactive": "Nascondi inattive"
     },
 
     "PredefinedCategories": {

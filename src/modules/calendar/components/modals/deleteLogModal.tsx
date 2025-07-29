@@ -30,6 +30,8 @@ export default function DeleteLogModal({
     try {
       const now = new Date()
       const logDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+      logDate.setDate(logDate.getDate() + 1); // aggiunge un giorno
+
 
       const response = await deleteLogApi(habitId, logDate)
 

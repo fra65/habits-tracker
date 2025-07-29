@@ -164,13 +164,16 @@
     "hli-start-date": "Start date",
     "hli-end-date": "End date",
     "hli-user": "User",
-    "hli-no-habits": "No habits found.",
+    "hli-no-habits": "No active habits found.",
+    "hlp-no-habits": "No active habits found.",
     "hli-add-habit": "Add habit",
 
     "Buttons": {
       "b-new": "New habit",
       "b-edit": "Edit habit",
-      "b-delete": "Delete habit"
+      "b-delete": "Delete habit",
+      "b-show-inactive": "Show Inactive",
+      "b-hide-inactive": "Hide Inactive"
     },
 
     "PredefinedCategories": {
