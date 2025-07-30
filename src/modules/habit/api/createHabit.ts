@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { HabitInputClient } from "../schema/HabitsInput.schema";
-import CreateHabitResponse from "../schema/CreateHabitResponse";
+import CreateHabitResponse from "../types/CreateHabitResponse";
 
 export default async function createHabit(data: HabitInputClient): Promise<CreateHabitResponse> {
   try {
