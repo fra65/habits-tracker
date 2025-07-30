@@ -61,7 +61,7 @@ export default function LoginForm() {
     if (signInResult?.error) {
       setLoginError("Username o password non validi");
     } else if (signInResult?.ok) {
-      window.location.href = "/pages/dashboard";
+      window.location.href = "/pages/today";
     }
   };
 
