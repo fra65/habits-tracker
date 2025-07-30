@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { auth } from "@/lib/auth";
 import { deleteHabitLog } from "@/modules/calendar/service/habitLog.service";
 import { NextResponse } from "next/server";
@@ -5,7 +6,7 @@ import { NextResponse } from "next/server";
 // Nota il cambio da "request" e "context" come parametri
 export async function DELETE(
   request: Request,
-  context: { params: { habitId_logDate: string } }
+  context: any
 ) {
   try {
     const session = await auth();
