@@ -106,7 +106,7 @@ export function ResetPasswordForm({ className }: ResetPasswordFormProps) {
                 <GalleryVerticalEnd className="size-6" />
               </div>
             </a>
-            <h1 className="text-xl font-bold">Reimposta la tua password</h1>
+            <h1 className="text-xl font-bold">Reimposta la tua password!</h1>
             <p className="text-sm text-muted-foreground text-center">Inserisci la tua nuova password</p>
           </div>
 
