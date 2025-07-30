@@ -20,7 +20,7 @@ export async function GET(
     const correctId = Number(categoryId)
 
     if (isNaN(correctId)) {
-      return NextResponse.json({ error: "ID non valido" }, { status: 400 });
+      return NextResponse.json({ error: "Id non valido" }, { status: 400 });
     }
 
     const category = await getCategory(correctId, id);
