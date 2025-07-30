@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "prisma generate && next build",
+    "build": "npm run generate && next build",
+    "generate": "npx prisma generate",
+    "postinstall": "npm run generate",
     "start": "next start",
     "lint": "next lint",
     "shadcn:add": "npx shadcn@latest add",
