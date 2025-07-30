@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { auth } from "@/lib/auth";
 import { getUser } from "@/modules/user/services/user.service";
 import { NextResponse } from "next/server";
 
 export async function GET(
     request: Request,
-    context: { params: { id: string } }
+    context: any
 ) {
 
   try {

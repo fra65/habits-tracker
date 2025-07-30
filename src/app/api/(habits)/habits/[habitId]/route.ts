@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { habitId: string } }
+  context: any
 ) {
   try {
     const session = await auth();
@@ -14,16 +14,17 @@ export async function GET(
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
     }
 
-    const paramsResolved = await params;
+    const { habitId } = context.params;
+
+    const correctId = Number(habitId)
 
     const id = Number(session.user.id);
-    const habitId = Number(paramsResolved.habitId);
 
-    if (isNaN(habitId)) {
+    if (isNaN(correctId)) {
       return NextResponse.json({ error: "ID non valido" }, { status: 400 });
     }
 
-    const habit = await getHabit(habitId, id);
+    const habit = await getHabit(correctId, id);
 
     if (!habit) {
       return NextResponse.json({ error: "Abitudine inesistente" }, { status: 404 });
@@ -42,7 +43,7 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  context: { params: { habitId: string } }
+  context: any
 ) {
   try {
     const session = await auth();
@@ -83,7 +84,7 @@ export async function DELETE(
 
 export async function PUT(
   request: Request,
-  context: { params: { habitId: string } }
+  context: any
 ) {
   
 
