@@ -42,7 +42,7 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { habitId: string } }
+  context: { params: { habitId: string } }
 ) {
   try {
     const session = await auth();
@@ -51,16 +51,17 @@ export async function DELETE(
       return NextResponse.json({ error: "Non autenticato" }, { status: 401 });
     }
 
-    const validateParams = await params
+    const { habitId } = context.params
+    const validateId = Number(habitId)
 
     const id = Number(session.user.id);
-    const habitId = Number(validateParams.habitId);
 
-    if (isNaN(habitId)) {
+
+    if (isNaN(validateId)) {
       return NextResponse.json({ error: "ID non valido" }, { status: 400 });
     }
 
-    const habit = await deleteHabit(habitId, id);
+    const habit = await deleteHabit(validateId, id);
 
     // console.log(habit)
 
@@ -82,7 +83,7 @@ export async function DELETE(
 
 export async function PUT(
   request: Request,
-  { params }: { params: { habitId: string } }
+  context: { params: { habitId: string } }
 ) {
   
 
@@ -93,16 +94,16 @@ export async function PUT(
     }
     const body = await request.json();
 
-    const validateParams = await params
+    const { habitId } = context.params
+    const correctId = Number(habitId)
 
     const id = Number(session.user.id);
-    const habitId = Number(validateParams.habitId);
 
     const dataWithUserId = { ...body, userId: id };
-    if (isNaN(habitId)) {
+    if (isNaN(correctId)) {
       return NextResponse.json({ success: false, message: "ID non valido" }, { status: 400 });
     }
-    const habit = await updateHabits(dataWithUserId, habitId, id);
+    const habit = await updateHabits(dataWithUserId, correctId, id);
     if (!habit) {
       return NextResponse.json({ success: false, message: "Abitudine inesistente" }, { status: 404 });
     }

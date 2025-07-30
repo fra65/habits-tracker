@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: { id: string } }
 ) {
 
   try {
@@ -19,7 +19,7 @@ export async function GET(
       return NextResponse.json({ error: "Non autorizzato" }, { status: 401 });
     }
 
-    const { id } = params; // <-- qui prendi l'id dalla URL
+    const { id } = context.params; // <-- qui prendi l'id dalla URL
 
     //console.log(session.user.id)
     const user = await getUser(id);

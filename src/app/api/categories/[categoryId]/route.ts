@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { categoryId: string } }
+  context: { params: { categoryId: string } }
 ) {
   try {
     const session = await auth();
@@ -15,13 +15,15 @@ export async function GET(
     }
 
     const id = Number(session.user.id);
-    const categoryId = Number(params.categoryId);
+    const { categoryId } = context.params;
 
-    if (isNaN(categoryId)) {
+    const correctId = Number(categoryId)
+
+    if (isNaN(correctId)) {
       return NextResponse.json({ error: "ID non valido" }, { status: 400 });
     }
 
-    const category = await getCategory(categoryId, id);
+    const category = await getCategory(correctId, id);
 
     if (!category) {
       return NextResponse.json({ error: "Categoria inesistente" }, { status: 404 });
