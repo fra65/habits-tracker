@@ -10,7 +10,20 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Config generale per tutto il codice
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Override per i file generati di Prisma
+  {
+    files: ["src/generated/**"], // o "./src/generated/**" se preferisci
+    rules: {
+      // Disabilita tutte le regole (puoi aggiungere quelle che danno fastidio)
+      "all": "off", // Disabilita tutto, ma attenzione: non tutte le versioni ESLint supportano "all"
+      // In alternativa, spegni le regole specifiche che danno errore:
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      // Se ci sono altre regole fastidiose, aggiungile qui
+    },
+  },
 ];
 
 export default eslintConfig;
