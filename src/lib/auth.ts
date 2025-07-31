@@ -36,8 +36,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google, // Provider OAuth Google
     Credentials({
       credentials: {
-        username: {}, // Definisce i campi accettati per il login con credenziali
-        password: {},
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       // Funzione che gestisce il login con credenziali personalizzate
       // Viene eseguita solo lato server (runtime Node.js), non nel middleware edge

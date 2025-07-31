@@ -17,9 +17,10 @@ export const authConfig = {
         Google,
         Credentials({
             credentials: {
-                username: {},
-                password: {},
+            username: { label: "Username", type: "text" },
+            password: { label: "Password", type: "password" },
             },
+
             // La logica di `authorize` va spostata nel file `auth.ts` principale,
             // poiché tipicamente involve l'accesso a un database o la validazione
             // che potrebbe usare librerie non Edge-compatible (es. bcrypt per hashPassword,
@@ -37,7 +38,7 @@ export const authConfig = {
     ],
     // Le pagine non sono strettamente necessarie per il middleware,
     // ma possono essere incluse per completezza se non causano problemi.
-    pages: {},
+    // pages: {},
     session: {
         strategy: 'jwt' // Cruciale per la compatibilità con Edge [2][3].
     },

@@ -10,11 +10,7 @@ interface PreferencesContextProps {
   loading: boolean
 }
 
-const PreferencesContext = createContext<PreferencesContextProps>({
-  preferences: null,
-  setPreferences: () => {},
-  loading: true,
-})
+const PreferencesContext = createContext<PreferencesContextProps | null>(null)
 
 export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   const [preferences, setPreferences] = useState<ProfilePreferencesOutput | null>(null)
@@ -42,7 +38,7 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-// Questa riga serve per usare facilmente il context
+// Hook custom per usare il context in modo sicuro
 export const usePreferences = () => {
   const context = useContext(PreferencesContext)
   if (!context) {
