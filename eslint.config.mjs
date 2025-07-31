@@ -24,7 +24,8 @@ const eslintConfig = [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unnecessary-type-constraint": "off",
       "@typescript-eslint/no-wrapper-object-types": "off",
-      "@typescript-eslint/no-unused-expressions": "off"
+      "@typescript-eslint/no-unused-expressions": "off",
+      "@typescript-eslint/no-this-alias": "off",
       // Se ci sono altre regole fastidiose, aggiungile qui
     },
   },
