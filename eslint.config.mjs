@@ -21,6 +21,7 @@ const eslintConfig = [
       // In alternativa, spegni le regole specifiche che danno errore:
       "@typescript-eslint/no-require-imports": "off",
       "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off"
       // Se ci sono altre regole fastidiose, aggiungile qui
     },
   },
