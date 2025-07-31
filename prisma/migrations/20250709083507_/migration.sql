@@ -6,7 +6,7 @@ CREATE TABLE `user_profile` (
     `data_nascita` DATETIME(0) NOT NULL,
     `sesso` CHAR(1) NULL,
     `is_complete` TINYINT NOT NULL DEFAULT 0,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -17,7 +17,7 @@ CREATE TABLE `user` (
     `email` VARCHAR(60) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
     `username` VARCHAR(20) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `role` ENUM('USER', 'ADMIN', 'MODERATOR') NOT NULL DEFAULT 'USER',
 
     UNIQUE INDEX `email_UNIQUE`(`email`),
@@ -29,10 +29,10 @@ CREATE TABLE `user` (
 CREATE TABLE `passwordresettoken` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `token` VARCHAR(191) NOT NULL,
-    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `resetAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `resetAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `userId` INTEGER NOT NULL,
-    `expiresAt` DATETIME(3) NOT NULL,
+    `expiresAt` DATETIME NOT NULL,
 
     UNIQUE INDEX `PasswordResetToken_token_key`(`token`),
     INDEX `fk_user`(`userId`),
