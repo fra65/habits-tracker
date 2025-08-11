@@ -1,68 +1,55 @@
-# Habits Tracker
-## **Author:** Francesco Villani
+# Titolo del Progetto
 
---- 
+## Descrizione
 
-// Description
+Questa webapp è stata sviluppata come progetto dimostrativo e di esercitazione personale.  
+Implementa un backend con **Next.js** e **Prisma** collegato a un database **MySQL** locale e un frontend minimale per mostrare funzionalità base e un’architettura fullstack moderna.  
 
----
+L’obiettivo principale è mostrare:
+- La struttura del codice
+- L’organizzazione del progetto
+- Lo stack tecnologico utilizzato
 
-### API
+## Disclaimer importante
 
-- **Global prefix:** /api
+> **Attenzione**  
+> Questo progetto è stato realizzato con finalità esclusivamente didattiche e di allenamento.  
+> Il codice è condiviso solo per consultazione e studio della struttura e dello stile, **non è garantito che sia completamente funzionante o ottimizzato**, né pronto per un utilizzo in produzione.  
+> Potrebbero esserci bug o implementazioni incomplete dovuti alla natura rapida e sperimentale del progetto.
 
-#### Special API Routes
+## Stack Tecnologico
 
-- **/api/auth:** Default configuration route API for AuthJS
-- **/api/email/send:** API to send email
-- **/api/test-connection:** API to check db connection
-- **/api/admin/:** Under this URI all function for admin (all users, all profiles, ecc...) while in normal api route is access for users, who can access just to them profile (but this is not included in URL params)
+- **Next.js:** Framework fullstack per React - Utilizzando per backend e frontend  
+- **Prisma:** ORM (Object-Relational Mapping) per manipolare in modo sicuro, semplice e moderno i dati del database  
+- **MySQL:** Database relazionale
+- **Librerie:**
+    - **Shadcn UI + Tailwind CSS + TweakCN** per componenti UI, codice CSS utility-first e classi CSS dinamiche
+    - **AuthJS** per autenticazione veloce, sicura e moderna
+    - **React Email** per costruzione di email con componenti React 
 
+## Autore
 
----
+Francesco Villani
 
-// Scaffolding
+## Data ultima modifica
 
-- ./src
+11/08/2025
 
-    - ./src/app
-    - ./src/app/api --> public API
-    - ./src/app/dirname --> pages
-    - ./src/app/page.tsx --> entry point
+## Contatti
 
-    - ./src/components --> global components
-    - ./src/emails --> email templates
-    - ./src/generated --> prisma compiled elements
-    - ./src/lib --> public external libraries (e.g. auth.ts to export AuthJS config)
+- 📧 **Email:** me.francesco.villani@gmail.com  
+- 🌐 **Portfolio:** [link al tuo sito portfolio]  
+- 💼 **LinkedIn:** https://www.linkedin.com/in/francesco-villani-b7972b243  
+- 🐙 **GitHub:** https://github.com/fra65
 
-    - ./src/modules --> modules which interact both with frontend and backend/db (e.g. profile to table 'user_profile')
-        - ./src/modules/profile/api --> API client side which links modules components (e.g. forms) with public API (e.g. POST /api/profiles)
-        - ./src/modules/profile/components --> local components about profile (forms, info container)
-        - ./src/modules/profile/hooks --> local hooks about profile (useProfile)
-        - ./src/modules/profile/schema --> validation schema with zod about profile (ProfileInput, ProfileOutput, ProfileUpdateInput, ProfileUpdateOutput)
-        - ./src/modules/profile/services --> profile.service.ts --> this is the real backend file, which is called in public API methods and which interacts whith DB by using Prisma
-        - ./src/modules/profile/utils --> local utils functions about profile (ageCalc)
+## Badge
 
-    (THIS IS THE SAME STRUCT FOR ALL MODULES)
+![Made with Next.js](https://img.shields.io/badge/Next.js-black?logo=next.js)  
+![Prisma](https://img.shields.io/badge/Prisma-ORM-blue)  
+![MySQL](https://img.shields.io/badge/MySQL-DB-blue)  
+![License: MIT](https://img.shields.io/badge/License-MIT-green)
 
-    - ./src/types --> global types (next-auth.d.ts using AuthJS)
-    - ./src/utils --> global utilities (roleEnumHelper, prismaErrorHelper)
+## Licenza
 
-    - ./src/middleware.ts --> nextJS middleware file --> this file protect route server-side (before page it's loaded)
-    - ./src/prisma.ts --> global Prisma Client initialization
-
----
-
-// Technologies
-
-
-
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Questo progetto è rilasciato con licenza **MIT**.  
+Sei libero di consultarlo, studiarlo e prenderne spunto, ma **non** è garantito il corretto funzionamento e **non** è destinato all’uso in produzione.
