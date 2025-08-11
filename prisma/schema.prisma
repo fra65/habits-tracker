@@ -94,7 +94,6 @@ model habit {
   categoria   category      @relation(fields: [categoriaId], references: [id])
   user        user          @relation(fields: [userId], references: [id])
   habitlog    habitlog[]
-  habitrepeat habitrepeat[]
 
   @@index([categoriaId], map: "habit_categoriaId_fkey")
   @@index([userId], map: "habit_userId_fkey")
@@ -113,18 +112,6 @@ model habitlog {
   user     user    @relation(fields: [userId], references: [id], map: "HabitLog_userId_fkey")
 
   @@unique([habitId, logDate], map: "HabitLog_habitId_logDate_key")
-}
-
-model habitrepeat {
-  id        Int      @id @default(autoincrement())
-  habitId   Int
-  type      String
-  dayOfWeek Int?
-  interval  Int?
-  startDate DateTime
-  habit     habit    @relation(fields: [habitId], references: [id], map: "HabitRepeat_habitId_fkey")
-
-  @@index([habitId], map: "HabitRepeat_habitId_fkey")
 }
 
 enum PRIORIY {
